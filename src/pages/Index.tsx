@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Coffee, LogOut, Settings, LayoutDashboard, Plus, Sparkles } from "lucide-react";
+import { Coffee, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign } from "lucide-react";
+import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -167,7 +168,7 @@ const Index = () => {
           </p>
 
           {/* Quick Actions */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <DashboardCard
               title="Tax Profile"
               description="Set up your filing status and income types"
@@ -186,7 +187,17 @@ const Index = () => {
               icon={<LayoutDashboard className="w-5 h-5" />}
               action="View Reports"
             />
+            <DashboardCard
+              title="Pricing"
+              description="Manage subscription tiers and features"
+              icon={<DollarSign className="w-5 h-5" />}
+              action="Manage"
+              onClick={() => navigate("/pricing")}
+            />
           </div>
+
+          {/* Pricing Manager Section */}
+          <PricingManager />
         </div>
       </main>
     </div>
@@ -216,11 +227,13 @@ const DashboardCard = ({
   description,
   icon,
   action,
+  onClick,
 }: {
   title: string;
   description: string;
   icon: React.ReactNode;
   action: string;
+  onClick?: () => void;
 }) => (
   <div className="p-6 rounded-2xl bg-card border border-border shadow-soft hover:shadow-medium transition-all duration-300 group">
     <div className="flex items-start justify-between mb-4">
@@ -230,7 +243,12 @@ const DashboardCard = ({
     </div>
     <h3 className="text-lg font-display font-bold text-foreground mb-2">{title}</h3>
     <p className="text-sm text-muted-foreground mb-4">{description}</p>
-    <Button variant="outline" size="sm" className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all">
+    <Button 
+      variant="outline" 
+      size="sm" 
+      className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all"
+      onClick={onClick}
+    >
       {action}
     </Button>
   </div>
