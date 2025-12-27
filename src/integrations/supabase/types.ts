@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      income_sources: {
+        Row: {
+          created_at: string
+          employer_ein: string | null
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          payer_tin: string | null
+          platform_type: string | null
+          source_name: string
+          source_type: string
+          updated_at: string
+          user_id: string
+          year_ended: number | null
+          year_started: number | null
+        }
+        Insert: {
+          created_at?: string
+          employer_ein?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          payer_tin?: string | null
+          platform_type?: string | null
+          source_name: string
+          source_type: string
+          updated_at?: string
+          user_id: string
+          year_ended?: number | null
+          year_started?: number | null
+        }
+        Update: {
+          created_at?: string
+          employer_ein?: string | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          payer_tin?: string | null
+          platform_type?: string | null
+          source_name?: string
+          source_type?: string
+          updated_at?: string
+          user_id?: string
+          year_ended?: number | null
+          year_started?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -59,6 +107,57 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_tax_profiles: {
+        Row: {
+          created_at: string
+          filing_status: string | null
+          has_1099_income: boolean | null
+          has_passive_income: boolean | null
+          has_ssdi: boolean | null
+          has_w2_income: boolean | null
+          hearing_impaired: boolean | null
+          high_contrast_mode: boolean | null
+          id: string
+          preferred_font_size: string | null
+          tax_profile_type: string
+          updated_at: string
+          user_id: string
+          vision_impaired: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          filing_status?: string | null
+          has_1099_income?: boolean | null
+          has_passive_income?: boolean | null
+          has_ssdi?: boolean | null
+          has_w2_income?: boolean | null
+          hearing_impaired?: boolean | null
+          high_contrast_mode?: boolean | null
+          id?: string
+          preferred_font_size?: string | null
+          tax_profile_type?: string
+          updated_at?: string
+          user_id: string
+          vision_impaired?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          filing_status?: string | null
+          has_1099_income?: boolean | null
+          has_passive_income?: boolean | null
+          has_ssdi?: boolean | null
+          has_w2_income?: boolean | null
+          hearing_impaired?: boolean | null
+          high_contrast_mode?: boolean | null
+          id?: string
+          preferred_font_size?: string | null
+          tax_profile_type?: string
+          updated_at?: string
+          user_id?: string
+          vision_impaired?: boolean | null
         }
         Relationships: []
       }
