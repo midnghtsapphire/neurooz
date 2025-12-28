@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Coffee, 
   Check, 
@@ -15,94 +16,21 @@ import {
   ArrowRight,
   Star
 } from "lucide-react";
+import { usePricingTiers } from "@/hooks/use-pricing-tiers";
 
-interface PricingTier {
-  id: string;
-  name: string;
-  price: number;
-  yearlyPrice: number;
-  description: string;
-  features: string[];
-  recommended?: boolean;
-  icon: React.ReactNode;
-  savingsRange: [number, number];
-  roi: [number, number];
-}
-
-const pricingTiers: PricingTier[] = [
-  {
-    id: "free",
-    name: "Starter",
-    price: 0,
-    yearlyPrice: 0,
-    description: "Get started with basic tax tracking",
-    icon: <Sparkles className="w-6 h-6" />,
-    features: [
-      "Track up to 50 products",
-      "Basic tax summary",
-      "See potential savings (teaser)",
-      "Tax education content",
-      "Community forum access"
-    ],
-    savingsRange: [0, 0],
-    roi: [0, 0]
-  },
-  {
-    id: "tax-smart",
-    name: "Tax Smart",
-    price: 29,
-    yearlyPrice: 297,
-    description: "Everything you need to maximize deductions",
-    icon: <Calculator className="w-6 h-6" />,
-    recommended: true,
-    features: [
-      "Unlimited products & transactions",
-      "50/20/0 auto-calculation",
-      "Receipt upload with OCR",
-      "Mileage tracking",
-      "Home office deduction calculator",
-      "Schedule C auto-generation",
-      "Form 8995 (QBI deduction)",
-      "Quarterly tax estimates",
-      "Tax form exports (PDF/Excel)",
-      "Mobile app access",
-      "Email support"
-    ],
-    savingsRange: [4300, 7900],
-    roi: [1135, 2171]
-  },
-  {
-    id: "business-builder",
-    name: "Business Builder",
-    price: 39,
-    yearlyPrice: 397,
-    description: "For serious Vine businesses with complex needs",
-    icon: <Building2 className="w-6 h-6" />,
-    features: [
-      "Everything in Tax Smart",
-      "Multi-entity tracking (up to 3 LLCs)",
-      "S-Corp vs LLC comparison calculator",
-      "K-1 generation (partnerships)",
-      "Rental property tracking (Schedule E)",
-      "Team members (up to 3 users)",
-      "Bank sync via Plaid",
-      "Payroll integration",
-      "Business structure optimization",
-      "Workflow automation",
-      "Priority support (24hr response)"
-    ],
-    savingsRange: [14300, 17000],
-    roi: [2955, 3533]
-  }
-];
+const tierIcons: Record<string, React.ReactNode> = {
+  "free": <Sparkles className="w-6 h-6" />,
+  "tax-smart": <Calculator className="w-6 h-6" />,
+  "business-builder": <Building2 className="w-6 h-6" />
+};
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const { data: tiers, isLoading } = usePricingTiers();
   const [isYearly, setIsYearly] = useState(false);
   const [vineIncome, setVineIncome] = useState([35000]);
 
   const calculateSavings = (income: number) => {
-    // Rough estimate based on income
     const fiftyTwentyZero = Math.min(income * 0.04, 3000);
     const homeOffice = Math.min(income * 0.02, 1200);
     const mileage = Math.min(income * 0.015, 800);
@@ -192,87 +120,105 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
-          {pricingTiers.map((tier, index) => (
-            <Card
-              key={tier.id}
-              className={`relative p-8 transition-all duration-300 hover:shadow-glow ${
-                tier.recommended 
-                  ? "border-2 border-primary shadow-medium scale-105" 
-                  : "border border-border shadow-soft hover:border-primary/50"
-              }`}
-              style={{ animationDelay: `${index * 100}ms` }}
-            >
-              {tier.recommended && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground px-4 py-1 font-semibold shadow-medium">
-                    <Star className="w-3 h-3 mr-1" /> RECOMMENDED
-                  </Badge>
+          {isLoading ? (
+            [1, 2, 3].map((i) => (
+              <Card key={i} className="p-8 border border-border shadow-soft">
+                <div className="space-y-4">
+                  <Skeleton className="h-12 w-12 rounded-xl" />
+                  <Skeleton className="h-6 w-24" />
+                  <Skeleton className="h-10 w-20" />
+                  <Skeleton className="h-4 w-full" />
+                  <div className="space-y-2">
+                    {[1, 2, 3, 4, 5].map((j) => (
+                      <Skeleton key={j} className="h-4 w-full" />
+                    ))}
+                  </div>
                 </div>
-              )}
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+              </Card>
+            ))
+          ) : (
+            tiers?.map((tier, index) => (
+              <Card
+                key={tier.id}
+                className={`relative p-8 transition-all duration-300 hover:shadow-glow ${
                   tier.recommended 
-                    ? "bg-primary text-primary-foreground" 
-                    : "bg-muted text-muted-foreground"
-                }`}>
-                  {tier.icon}
-                </div>
-                <div>
-                  <h3 className="text-xl font-display font-bold text-foreground">{tier.name}</h3>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-display font-bold text-foreground">
-                    ${isYearly ? Math.round(tier.yearlyPrice / 12) : tier.price}
-                  </span>
-                  <span className="text-muted-foreground">/month</span>
-                </div>
-                {tier.price > 0 && isYearly && (
-                  <p className="text-sm text-secondary font-medium mt-1">
-                    ${tier.yearlyPrice}/year (save ${tier.price * 12 - tier.yearlyPrice})
-                  </p>
-                )}
-              </div>
-
-              <p className="text-muted-foreground mb-6">{tier.description}</p>
-
-              {tier.roi[1] > 0 && (
-                <div className="bg-gusto-teal-light dark:bg-secondary/10 rounded-xl p-4 mb-6">
-                  <p className="text-sm font-medium text-foreground mb-1">Potential Savings</p>
-                  <p className="text-2xl font-display font-bold text-secondary">
-                    ${tier.savingsRange[0].toLocaleString()} - ${tier.savingsRange[1].toLocaleString()}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    ROI: {tier.roi[0]}% - {tier.roi[1]}%
-                  </p>
-                </div>
-              )}
-
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
-                    <span className="text-sm text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                onClick={() => navigate("/auth")}
-                className={`w-full ${
-                  tier.recommended
-                    ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-medium hover:shadow-glow"
-                    : "bg-muted hover:bg-muted/80 text-foreground"
+                    ? "border-2 border-primary shadow-medium scale-105" 
+                    : "border border-border shadow-soft hover:border-primary/50"
                 }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                {tier.price === 0 ? "Start Free" : "Get Started"}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Card>
-          ))}
+                {tier.recommended && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-primary text-primary-foreground px-4 py-1 font-semibold shadow-medium">
+                      <Star className="w-3 h-3 mr-1" /> RECOMMENDED
+                    </Badge>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    tier.recommended 
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-muted text-muted-foreground"
+                  }`}>
+                    {tierIcons[tier.id] || <Sparkles className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-foreground">{tier.name}</h3>
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-display font-bold text-foreground">
+                      ${isYearly ? Math.round(tier.yearly_price / 12) : tier.price}
+                    </span>
+                    <span className="text-muted-foreground">/month</span>
+                  </div>
+                  {tier.price > 0 && isYearly && (
+                    <p className="text-sm text-secondary font-medium mt-1">
+                      ${tier.yearly_price}/year (save ${tier.price * 12 - tier.yearly_price})
+                    </p>
+                  )}
+                </div>
+
+                <p className="text-muted-foreground mb-6">{tier.description}</p>
+
+                {tier.roi_max > 0 && (
+                  <div className="bg-gusto-teal-light dark:bg-secondary/10 rounded-xl p-4 mb-6">
+                    <p className="text-sm font-medium text-foreground mb-1">Potential Savings</p>
+                    <p className="text-2xl font-display font-bold text-secondary">
+                      ${tier.savings_min.toLocaleString()} - ${tier.savings_max.toLocaleString()}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      ROI: {tier.roi_min}% - {tier.roi_max}%
+                    </p>
+                  </div>
+                )}
+
+                <ul className="space-y-3 mb-8">
+                  {tier.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+                      <span className="text-sm text-muted-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  onClick={() => navigate("/auth")}
+                  className={`w-full ${
+                    tier.recommended
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-medium hover:shadow-glow"
+                      : "bg-muted hover:bg-muted/80 text-foreground"
+                  }`}
+                >
+                  {tier.price === 0 ? "Start Free" : "Get Started"}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Card>
+            ))
+          )}
         </div>
 
         {/* ROI Calculator */}
