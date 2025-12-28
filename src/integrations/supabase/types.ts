@@ -62,6 +62,57 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_tiers: {
+        Row: {
+          created_at: string
+          description: string
+          display_order: number
+          features: string[]
+          id: string
+          name: string
+          price: number
+          recommended: boolean
+          roi_max: number
+          roi_min: number
+          savings_max: number
+          savings_min: number
+          updated_at: string
+          yearly_price: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          display_order?: number
+          features?: string[]
+          id: string
+          name: string
+          price?: number
+          recommended?: boolean
+          roi_max?: number
+          roi_min?: number
+          savings_max?: number
+          savings_min?: number
+          updated_at?: string
+          yearly_price?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          display_order?: number
+          features?: string[]
+          id?: string
+          name?: string
+          price?: number
+          recommended?: boolean
+          roi_max?: number
+          roi_min?: number
+          savings_max?: number
+          savings_min?: number
+          updated_at?: string
+          yearly_price?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -16,101 +17,15 @@ import {
 import { 
   Edit2, 
   Plus, 
-  Trash2, 
   DollarSign,
   Save,
   X,
   Sparkles,
   Calculator,
-  Building2
+  Building2,
+  Loader2
 } from "lucide-react";
-import { toast } from "sonner";
-
-interface PricingTier {
-  id: string;
-  name: string;
-  price: number;
-  yearlyPrice: number;
-  description: string;
-  features: string[];
-  recommended: boolean;
-  savingsMin: number;
-  savingsMax: number;
-  roiMin: number;
-  roiMax: number;
-}
-
-const defaultTiers: PricingTier[] = [
-  {
-    id: "free",
-    name: "Starter",
-    price: 0,
-    yearlyPrice: 0,
-    description: "Get started with basic tax tracking",
-    features: [
-      "Track up to 50 products",
-      "Basic tax summary",
-      "See potential savings (teaser)",
-      "Tax education content",
-      "Community forum access"
-    ],
-    recommended: false,
-    savingsMin: 0,
-    savingsMax: 0,
-    roiMin: 0,
-    roiMax: 0
-  },
-  {
-    id: "tax-smart",
-    name: "Tax Smart",
-    price: 29,
-    yearlyPrice: 297,
-    description: "Everything you need to maximize deductions",
-    features: [
-      "Unlimited products & transactions",
-      "50/20/0 auto-calculation",
-      "Receipt upload with OCR",
-      "Mileage tracking",
-      "Home office deduction calculator",
-      "Schedule C auto-generation",
-      "Form 8995 (QBI deduction)",
-      "Quarterly tax estimates",
-      "Tax form exports (PDF/Excel)",
-      "Mobile app access",
-      "Email support"
-    ],
-    recommended: true,
-    savingsMin: 4300,
-    savingsMax: 7900,
-    roiMin: 1135,
-    roiMax: 2171
-  },
-  {
-    id: "business-builder",
-    name: "Business Builder",
-    price: 39,
-    yearlyPrice: 397,
-    description: "For serious Vine businesses with complex needs",
-    features: [
-      "Everything in Tax Smart",
-      "Multi-entity tracking (up to 3 LLCs)",
-      "S-Corp vs LLC comparison calculator",
-      "K-1 generation (partnerships)",
-      "Rental property tracking (Schedule E)",
-      "Team members (up to 3 users)",
-      "Bank sync via Plaid",
-      "Payroll integration",
-      "Business structure optimization",
-      "Workflow automation",
-      "Priority support (24hr response)"
-    ],
-    recommended: false,
-    savingsMin: 14300,
-    savingsMax: 17000,
-    roiMin: 2955,
-    roiMax: 3533
-  }
-];
+import { usePricingTiers, useUpdatePricingTier, useSetRecommendedTier, PricingTier } from "@/hooks/use-pricing-tiers";
 
 const tierIcons: Record<string, React.ReactNode> = {
   "free": <Sparkles className="w-5 h-5" />,
@@ -119,7 +34,10 @@ const tierIcons: Record<string, React.ReactNode> = {
 };
 
 const PricingManager = () => {
-  const [tiers, setTiers] = useState<PricingTier[]>(defaultTiers);
+  const { data: tiers, isLoading, error } = usePricingTiers();
+  const updateTier = useUpdatePricingTier();
+  const setRecommended = useSetRecommendedTier();
+  
   const [editingTier, setEditingTier] = useState<PricingTier | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newFeature, setNewFeature] = useState("");
@@ -127,12 +45,24 @@ const PricingManager = () => {
   const handleSaveTier = () => {
     if (!editingTier) return;
     
-    setTiers(prev => 
-      prev.map(t => t.id === editingTier.id ? editingTier : t)
-    );
-    setIsDialogOpen(false);
-    setEditingTier(null);
-    toast.success(`${editingTier.name} tier updated successfully`);
+    updateTier.mutate({
+      id: editingTier.id,
+      name: editingTier.name,
+      price: editingTier.price,
+      yearly_price: editingTier.yearly_price,
+      description: editingTier.description,
+      features: editingTier.features,
+      recommended: editingTier.recommended,
+      savings_min: editingTier.savings_min,
+      savings_max: editingTier.savings_max,
+      roi_min: editingTier.roi_min,
+      roi_max: editingTier.roi_max,
+    }, {
+      onSuccess: () => {
+        setIsDialogOpen(false);
+        setEditingTier(null);
+      }
+    });
   };
 
   const handleAddFeature = () => {
@@ -155,14 +85,43 @@ const PricingManager = () => {
   };
 
   const handleSetRecommended = (tierId: string) => {
-    setTiers(prev =>
-      prev.map(t => ({
-        ...t,
-        recommended: t.id === tierId
-      }))
-    );
-    toast.success("Recommended tier updated");
+    setRecommended.mutate(tierId);
   };
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-display font-bold text-foreground">Pricing Tiers</h2>
+            <p className="text-muted-foreground">Manage your subscription pricing and features</p>
+          </div>
+        </div>
+        <div className="grid gap-6">
+          {[1, 2, 3].map((i) => (
+            <Card key={i} className="p-6 border border-border shadow-soft">
+              <div className="flex items-start gap-4">
+                <Skeleton className="w-12 h-12 rounded-xl" />
+                <div className="flex-1 space-y-3">
+                  <Skeleton className="h-6 w-32" />
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-8 w-24" />
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="p-6 border border-destructive/50 bg-destructive/10">
+        <p className="text-destructive">Failed to load pricing tiers. Please try again.</p>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -174,7 +133,7 @@ const PricingManager = () => {
       </div>
 
       <div className="grid gap-6">
-        {tiers.map((tier) => (
+        {tiers?.map((tier) => (
           <Card key={tier.id} className={`p-6 border ${tier.recommended ? "border-primary shadow-medium" : "border-border shadow-soft"}`}>
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-4">
@@ -194,13 +153,13 @@ const PricingManager = () => {
                   <div className="flex items-baseline gap-2 mt-3">
                     <span className="text-3xl font-display font-bold text-foreground">${tier.price}</span>
                     <span className="text-muted-foreground">/month</span>
-                    {tier.yearlyPrice > 0 && (
-                      <span className="text-sm text-secondary ml-2">(${tier.yearlyPrice}/year)</span>
+                    {tier.yearly_price > 0 && (
+                      <span className="text-sm text-secondary ml-2">(${tier.yearly_price}/year)</span>
                     )}
                   </div>
-                  {tier.savingsMax > 0 && (
+                  {tier.savings_max > 0 && (
                     <p className="text-sm text-secondary mt-2">
-                      Saves ${tier.savingsMin.toLocaleString()} - ${tier.savingsMax.toLocaleString()}/year
+                      Saves ${tier.savings_min.toLocaleString()} - ${tier.savings_max.toLocaleString()}/year
                     </p>
                   )}
                   <div className="flex flex-wrap gap-2 mt-4">
@@ -223,6 +182,7 @@ const PricingManager = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleSetRecommended(tier.id)}
+                    disabled={setRecommended.isPending}
                     className="text-xs"
                   >
                     Set Recommended
@@ -274,8 +234,8 @@ const PricingManager = () => {
                             <Label>Yearly Price ($)</Label>
                             <Input
                               type="number"
-                              value={editingTier.yearlyPrice}
-                              onChange={(e) => setEditingTier({ ...editingTier, yearlyPrice: Number(e.target.value) })}
+                              value={editingTier.yearly_price}
+                              onChange={(e) => setEditingTier({ ...editingTier, yearly_price: Number(e.target.value) })}
                             />
                           </div>
                           <div className="flex items-center gap-3 pt-6">
@@ -300,16 +260,16 @@ const PricingManager = () => {
                             <Label>Savings Min ($)</Label>
                             <Input
                               type="number"
-                              value={editingTier.savingsMin}
-                              onChange={(e) => setEditingTier({ ...editingTier, savingsMin: Number(e.target.value) })}
+                              value={editingTier.savings_min}
+                              onChange={(e) => setEditingTier({ ...editingTier, savings_min: Number(e.target.value) })}
                             />
                           </div>
                           <div className="space-y-2">
                             <Label>Savings Max ($)</Label>
                             <Input
                               type="number"
-                              value={editingTier.savingsMax}
-                              onChange={(e) => setEditingTier({ ...editingTier, savingsMax: Number(e.target.value) })}
+                              value={editingTier.savings_max}
+                              onChange={(e) => setEditingTier({ ...editingTier, savings_max: Number(e.target.value) })}
                             />
                           </div>
                         </div>
@@ -319,16 +279,16 @@ const PricingManager = () => {
                             <Label>ROI Min (%)</Label>
                             <Input
                               type="number"
-                              value={editingTier.roiMin}
-                              onChange={(e) => setEditingTier({ ...editingTier, roiMin: Number(e.target.value) })}
+                              value={editingTier.roi_min}
+                              onChange={(e) => setEditingTier({ ...editingTier, roi_min: Number(e.target.value) })}
                             />
                           </div>
                           <div className="space-y-2">
                             <Label>ROI Max (%)</Label>
                             <Input
                               type="number"
-                              value={editingTier.roiMax}
-                              onChange={(e) => setEditingTier({ ...editingTier, roiMax: Number(e.target.value) })}
+                              value={editingTier.roi_max}
+                              onChange={(e) => setEditingTier({ ...editingTier, roi_max: Number(e.target.value) })}
                             />
                           </div>
                         </div>
@@ -367,8 +327,16 @@ const PricingManager = () => {
                           <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                             Cancel
                           </Button>
-                          <Button onClick={handleSaveTier} className="bg-primary text-primary-foreground">
-                            <Save className="w-4 h-4 mr-2" />
+                          <Button 
+                            onClick={handleSaveTier} 
+                            className="bg-primary text-primary-foreground"
+                            disabled={updateTier.isPending}
+                          >
+                            {updateTier.isPending ? (
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            ) : (
+                              <Save className="w-4 h-4 mr-2" />
+                            )}
                             Save Changes
                           </Button>
                         </div>
@@ -382,10 +350,10 @@ const PricingManager = () => {
         ))}
       </div>
 
-      <Card className="p-6 border border-dashed border-border bg-muted/30">
+      <Card className="p-6 border border-secondary/30 bg-secondary/5">
         <div className="text-center">
-          <p className="text-muted-foreground text-sm">
-            Pricing changes are saved locally. To persist changes, connect to a database.
+          <p className="text-secondary text-sm font-medium">
+            ✓ Pricing changes are saved to the database and shared across all users
           </p>
         </div>
       </Card>
