@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +14,15 @@ import {
   Building2,
   Sparkles,
   ArrowRight,
-  Star
+  Star,
+  Loader2,
+  Settings
 } from "lucide-react";
 import { usePricingTiers } from "@/hooks/use-pricing-tiers";
+import { useSubscription } from "@/hooks/use-subscription";
+import { getStripePriceId } from "@/lib/stripe-config";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const tierIcons: Record<string, React.ReactNode> = {
   "free": <Sparkles className="w-6 h-6" />,
@@ -26,9 +32,88 @@ const tierIcons: Record<string, React.ReactNode> = {
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { data: tiers, isLoading } = usePricingTiers();
+  const { subscribed, priceId: activePriceId, isLoading: subLoading, refresh: refreshSubscription } = useSubscription();
   const [isYearly, setIsYearly] = useState(false);
   const [vineIncome, setVineIncome] = useState([35000]);
+  const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    // Check for success/cancel params
+    if (searchParams.get("success") === "true") {
+      toast.success("Subscription activated successfully!");
+      refreshSubscription();
+    } else if (searchParams.get("canceled") === "true") {
+      toast.info("Checkout was canceled");
+    }
+
+    // Get current user
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [searchParams, refreshSubscription]);
+
+  const handleCheckout = async (tierId: string) => {
+    const priceId = getStripePriceId(tierId, isYearly);
+    
+    if (!priceId) {
+      toast.error("This plan is not available for purchase");
+      return;
+    }
+
+    if (!user) {
+      toast.info("Please sign in to subscribe");
+      navigate("/auth");
+      return;
+    }
+
+    setCheckoutLoading(tierId);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: { priceId, isYearly },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to start checkout. Please try again.");
+    } finally {
+      setCheckoutLoading(null);
+    }
+  };
+
+  const handleManageSubscription = async () => {
+    setPortalLoading(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke("customer-portal");
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (error) {
+      console.error("Portal error:", error);
+      toast.error("Failed to open subscription management. Please try again.");
+    } finally {
+      setPortalLoading(false);
+    }
+  };
 
   const calculateSavings = (income: number) => {
     const fiftyTwentyZero = Math.min(income * 0.04, 3000);
@@ -53,6 +138,12 @@ const Pricing = () => {
   const yearlySubscription = 348;
   const roiPercentage = Math.round((savings.total / yearlySubscription) * 100);
 
+  const isCurrentPlan = (tierId: string): boolean => {
+    if (!subscribed || !activePriceId) return false;
+    const tierPriceId = getStripePriceId(tierId, isYearly);
+    return tierPriceId === activePriceId;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -64,18 +155,40 @@ const Pricing = () => {
             </div>
             <span className="text-xl font-display font-bold text-foreground">NomadTaxes</span>
           </div>
-          <Button
-            onClick={() => navigate("/auth")}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-          >
-            Get Started
-          </Button>
+          <div className="flex items-center gap-4">
+            {subscribed && (
+              <Button
+                variant="outline"
+                onClick={handleManageSubscription}
+                disabled={portalLoading}
+              >
+                {portalLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                ) : (
+                  <Settings className="w-4 h-4 mr-2" />
+                )}
+                Manage Subscription
+              </Button>
+            )}
+            <Button
+              onClick={() => navigate(user ? "/" : "/auth")}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+            >
+              {user ? "Dashboard" : "Get Started"}
+            </Button>
+          </div>
         </div>
       </header>
 
       <main className="container mx-auto px-6 py-16">
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-16 animate-fade-in">
+          {subscribed && (
+            <Badge className="mb-4 bg-green-500/10 text-green-500 border-green-500/20 px-4 py-2">
+              <Check className="w-4 h-4 mr-2" />
+              You have an active subscription
+            </Badge>
+          )}
           <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/20 px-4 py-2">
             <TrendingUp className="w-4 h-4 mr-2" />
             Less than 1 quarterly tax payment
@@ -120,7 +233,7 @@ const Pricing = () => {
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-20">
-          {isLoading ? (
+          {isLoading || subLoading ? (
             [1, 2, 3].map((i) => (
               <Card key={i} className="p-8 border border-border shadow-soft">
                 <div className="space-y-4">
@@ -137,87 +250,122 @@ const Pricing = () => {
               </Card>
             ))
           ) : (
-            tiers?.map((tier, index) => (
-              <Card
-                key={tier.id}
-                className={`relative p-8 transition-all duration-300 hover:shadow-glow ${
-                  tier.recommended 
-                    ? "border-2 border-primary shadow-medium scale-105" 
-                    : "border border-border shadow-soft hover:border-primary/50"
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {tier.recommended && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground px-4 py-1 font-semibold shadow-medium">
-                      <Star className="w-3 h-3 mr-1" /> RECOMMENDED
-                    </Badge>
-                  </div>
-                )}
-
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                    tier.recommended 
-                      ? "bg-primary text-primary-foreground" 
-                      : "bg-muted text-muted-foreground"
-                  }`}>
-                    {tierIcons[tier.id] || <Sparkles className="w-6 h-6" />}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-display font-bold text-foreground">{tier.name}</h3>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-display font-bold text-foreground">
-                      ${isYearly ? Math.round(tier.yearly_price / 12) : tier.price}
-                    </span>
-                    <span className="text-muted-foreground">/month</span>
-                  </div>
-                  {tier.price > 0 && isYearly && (
-                    <p className="text-sm text-secondary font-medium mt-1">
-                      ${tier.yearly_price}/year (save ${tier.price * 12 - tier.yearly_price})
-                    </p>
-                  )}
-                </div>
-
-                <p className="text-muted-foreground mb-6">{tier.description}</p>
-
-                {tier.roi_max > 0 && (
-                  <div className="bg-gusto-teal-light dark:bg-secondary/10 rounded-xl p-4 mb-6">
-                    <p className="text-sm font-medium text-foreground mb-1">Potential Savings</p>
-                    <p className="text-2xl font-display font-bold text-secondary">
-                      ${tier.savings_min.toLocaleString()} - ${tier.savings_max.toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      ROI: {tier.roi_min}% - {tier.roi_max}%
-                    </p>
-                  </div>
-                )}
-
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
-                      <span className="text-sm text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={() => navigate("/auth")}
-                  className={`w-full ${
-                    tier.recommended
-                      ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-medium hover:shadow-glow"
-                      : "bg-muted hover:bg-muted/80 text-foreground"
+            tiers?.map((tier, index) => {
+              const isCurrent = isCurrentPlan(tier.id);
+              const hasPriceId = getStripePriceId(tier.id, isYearly) !== null;
+              
+              return (
+                <Card
+                  key={tier.id}
+                  className={`relative p-8 transition-all duration-300 hover:shadow-glow ${
+                    isCurrent
+                      ? "border-2 border-green-500 shadow-medium"
+                      : tier.recommended 
+                        ? "border-2 border-primary shadow-medium scale-105" 
+                        : "border border-border shadow-soft hover:border-primary/50"
                   }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {tier.price === 0 ? "Start Free" : "Get Started"}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </Card>
-            ))
+                  {isCurrent && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-green-500 text-white px-4 py-1 font-semibold shadow-medium">
+                        <Check className="w-3 h-3 mr-1" /> YOUR PLAN
+                      </Badge>
+                    </div>
+                  )}
+                  {!isCurrent && tier.recommended && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                      <Badge className="bg-primary text-primary-foreground px-4 py-1 font-semibold shadow-medium">
+                        <Star className="w-3 h-3 mr-1" /> RECOMMENDED
+                      </Badge>
+                    </div>
+                  )}
+
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                      isCurrent
+                        ? "bg-green-500 text-white"
+                        : tier.recommended 
+                          ? "bg-primary text-primary-foreground" 
+                          : "bg-muted text-muted-foreground"
+                    }`}>
+                      {tierIcons[tier.id] || <Sparkles className="w-6 h-6" />}
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-display font-bold text-foreground">{tier.name}</h3>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-display font-bold text-foreground">
+                        ${isYearly ? Math.round(tier.yearly_price / 12) : tier.price}
+                      </span>
+                      <span className="text-muted-foreground">/month</span>
+                    </div>
+                    {tier.price > 0 && isYearly && (
+                      <p className="text-sm text-secondary font-medium mt-1">
+                        ${tier.yearly_price}/year (save ${tier.price * 12 - tier.yearly_price})
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-muted-foreground mb-6">{tier.description}</p>
+
+                  {tier.roi_max > 0 && (
+                    <div className="bg-gusto-teal-light dark:bg-secondary/10 rounded-xl p-4 mb-6">
+                      <p className="text-sm font-medium text-foreground mb-1">Potential Savings</p>
+                      <p className="text-2xl font-display font-bold text-secondary">
+                        ${tier.savings_min.toLocaleString()} - ${tier.savings_max.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        ROI: {tier.roi_min}% - {tier.roi_max}%
+                      </p>
+                    </div>
+                  )}
+
+                  <ul className="space-y-3 mb-8">
+                    {tier.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <Check className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
+                        <span className="text-sm text-muted-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {isCurrent ? (
+                    <Button
+                      onClick={handleManageSubscription}
+                      disabled={portalLoading}
+                      className="w-full bg-green-500 hover:bg-green-600 text-white"
+                    >
+                      {portalLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : (
+                        <Settings className="w-4 h-4 mr-2" />
+                      )}
+                      Manage Plan
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => tier.price === 0 ? navigate("/auth") : handleCheckout(tier.id)}
+                      disabled={checkoutLoading === tier.id || !hasPriceId && tier.price > 0}
+                      className={`w-full ${
+                        tier.recommended
+                          ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-medium hover:shadow-glow"
+                          : "bg-muted hover:bg-muted/80 text-foreground"
+                      }`}
+                    >
+                      {checkoutLoading === tier.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : null}
+                      {tier.price === 0 ? "Start Free" : subscribed ? "Switch Plan" : "Get Started"}
+                      {!checkoutLoading && <ArrowRight className="w-4 h-4 ml-2" />}
+                    </Button>
+                  )}
+                </Card>
+              );
+            })
           )}
         </div>
 
