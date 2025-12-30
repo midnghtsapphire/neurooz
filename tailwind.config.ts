@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Nunito', 'system-ui', 'sans-serif'],
+        sans: ['Nunito', 'system-ui', 'sans-serif'],
+        display: ['Cormorant Garamond', 'serif'],
+        serif: ['Cormorant Garamond', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,15 +62,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        gusto: {
-          coral: "hsl(var(--gusto-coral))",
-          "coral-dark": "hsl(var(--gusto-coral-dark))",
-          teal: "hsl(var(--gusto-teal))",
-          "teal-light": "hsl(var(--gusto-teal-light))",
-          yellow: "hsl(var(--gusto-yellow))",
-          cream: "hsl(var(--gusto-cream))",
-          navy: "hsl(var(--gusto-navy))",
-          gray: "hsl(var(--gusto-gray))",
+        vine: {
+          forest: "hsl(var(--vine-forest))",
+          leaf: "hsl(var(--vine-leaf))",
+          spring: "hsl(var(--vine-spring))",
+          sage: "hsl(var(--vine-sage))",
+          grape: "hsl(var(--vine-grape))",
+          wine: "hsl(var(--vine-wine))",
+          harvest: "hsl(var(--vine-harvest))",
+          cream: "hsl(var(--vine-cream))",
+          earth: "hsl(var(--vine-earth))",
+          bark: "hsl(var(--vine-bark))",
         },
       },
       borderRadius: {
@@ -104,6 +107,14 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        grow: {
+          "0%": { transform: "scale(0.95)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        },
+        sway: {
+          "0%, 100%": { transform: "rotate(-1deg)" },
+          "50%": { transform: "rotate(1deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -112,6 +123,8 @@ export default {
         "slide-in": "slide-in 0.3s ease-out forwards",
         "scale-in": "scale-in 0.3s ease-out forwards",
         float: "float 3s ease-in-out infinite",
+        grow: "grow 0.5s ease-out",
+        sway: "sway 4s ease-in-out infinite",
       },
     },
   },
