@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 
@@ -180,6 +180,13 @@ const Index = () => {
           {/* Quick Actions */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
             <DashboardCard
+              title="Vine Tracker"
+              description="Track monthly ETV with real-time SGA & TWP status"
+              icon={<TrendingUp className="w-5 h-5" />}
+              action="Open Tracker"
+              onClick={() => navigate("/vine-tracker")}
+            />
+            <DashboardCard
               title="Projects"
               description="Manage your projects and action items"
               icon={<FolderKanban className="w-5 h-5" />}
@@ -206,12 +213,6 @@ const Index = () => {
               icon={<FileText className="w-5 h-5" />}
               action="View Forms"
               onClick={() => navigate("/saved-forms")}
-            />
-            <DashboardCard
-              title="Tax Profile"
-              description="Set up your filing status and income types"
-              icon={<Settings className="w-5 h-5" />}
-              action="Configure"
             />
             <DashboardCard
               title="Income Sources"
