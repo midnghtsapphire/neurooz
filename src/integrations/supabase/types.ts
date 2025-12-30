@@ -381,6 +381,93 @@ export type Database = {
         }
         Relationships: []
       }
+      products_review_insights: {
+        Row: {
+          asin: string | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          disposition: string | null
+          donated_to: string | null
+          donation_receipt_number: string | null
+          etv: number
+          id: string
+          is_brand: boolean
+          manager_hours_spent: number | null
+          notes: string | null
+          order_date: string
+          photos: string[] | null
+          pricing_notes: string | null
+          product_name: string
+          reduced_basis: number | null
+          reduction_percentage: number | null
+          review_published: boolean | null
+          review_url: string | null
+          sale_price_to_rmr: number | null
+          testing_complete_date: string | null
+          testing_start_date: string | null
+          transfer_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          asin?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          disposition?: string | null
+          donated_to?: string | null
+          donation_receipt_number?: string | null
+          etv?: number
+          id?: string
+          is_brand?: boolean
+          manager_hours_spent?: number | null
+          notes?: string | null
+          order_date: string
+          photos?: string[] | null
+          pricing_notes?: string | null
+          product_name: string
+          reduced_basis?: number | null
+          reduction_percentage?: number | null
+          review_published?: boolean | null
+          review_url?: string | null
+          sale_price_to_rmr?: number | null
+          testing_complete_date?: string | null
+          testing_start_date?: string | null
+          transfer_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          asin?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          disposition?: string | null
+          donated_to?: string | null
+          donation_receipt_number?: string | null
+          etv?: number
+          id?: string
+          is_brand?: boolean
+          manager_hours_spent?: number | null
+          notes?: string | null
+          order_date?: string
+          photos?: string[] | null
+          pricing_notes?: string | null
+          product_name?: string
+          reduced_basis?: number | null
+          reduction_percentage?: number | null
+          review_published?: boolean | null
+          review_url?: string | null
+          sale_price_to_rmr?: number | null
+          testing_complete_date?: string | null
+          testing_start_date?: string | null
+          transfer_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
