@@ -1,0 +1,283 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { supabase } from "@/integrations/supabase/client";
+import { BusinessStructureStep } from "@/components/business-setup/BusinessStructureStep";
+import { RoleSelectionStep } from "@/components/business-setup/RoleSelectionStep";
+import { PersonalInfoStep, PersonalInfoData } from "@/components/business-setup/PersonalInfoStep";
+import { TaxFormsStep } from "@/components/business-setup/TaxFormsStep";
+import { 
+  BusinessStructure, 
+  BusinessRole, 
+  useCreateBusiness, 
+  useCreateBusinessMember,
+  useCreateTaxForm 
+} from "@/hooks/use-businesses";
+import { useToast } from "@/hooks/use-toast";
+
+const STEPS = [
+  { id: 1, name: "Business Structure" },
+  { id: 2, name: "Your Role" },
+  { id: 3, name: "Personal Info" },
+  { id: 4, name: "Tax Forms" },
+];
+
+const initialPersonalInfo: PersonalInfoData = {
+  businessName: "",
+  fullName: "",
+  email: "",
+  addressLine1: "",
+  addressLine2: "",
+  city: "",
+  state: "",
+  zipCode: "",
+  ssnLastFour: "",
+  ownershipPercentage: 100,
+  isPassive: false,
+  ein: "",
+};
+
+export default function BusinessSetup() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Form state
+  const [businessStructure, setBusinessStructure] = useState<BusinessStructure | null>(null);
+  const [role, setRole] = useState<BusinessRole | null>(null);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfoData>(initialPersonalInfo);
+
+  // Mutations
+  const createBusiness = useCreateBusiness();
+  const createMember = useCreateBusinessMember();
+  const createTaxForm = useCreateTaxForm();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
+      setUserId(user.id);
+      setPersonalInfo(prev => ({ ...prev, email: user.email || "" }));
+      setLoading(false);
+    };
+    checkAuth();
+  }, [navigate]);
+
+  const progress = (currentStep / STEPS.length) * 100;
+
+  const canProceed = () => {
+    switch (currentStep) {
+      case 1:
+        return !!businessStructure;
+      case 2:
+        return !!role;
+      case 3:
+        return personalInfo.fullName && personalInfo.email && personalInfo.addressLine1 && 
+               personalInfo.city && personalInfo.state && personalInfo.zipCode;
+      case 4:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const handleNext = () => {
+    if (currentStep < STEPS.length) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const handleComplete = async () => {
+    if (!userId || !businessStructure || !role) return;
+
+    try {
+      // Create the business
+      const business = await createBusiness.mutateAsync({
+        user_id: userId,
+        name: personalInfo.businessName || `${personalInfo.fullName}'s Business`,
+        structure: businessStructure,
+        ein: personalInfo.ein || null,
+        state: personalInfo.state || null,
+        formation_date: null,
+        is_active: true,
+      });
+
+      // Create member record
+      await createMember.mutateAsync({
+        business_id: business.id,
+        user_id: userId,
+        name: personalInfo.fullName,
+        email: personalInfo.email,
+        role: role,
+        ownership_percentage: personalInfo.ownershipPercentage,
+        is_passive: personalInfo.isPassive,
+        ssn_last_four: personalInfo.ssnLastFour || null,
+        address_line1: personalInfo.addressLine1 || null,
+        address_line2: personalInfo.addressLine2 || null,
+        city: personalInfo.city || null,
+        state: personalInfo.state || null,
+        zip_code: personalInfo.zipCode || null,
+      });
+
+      toast({
+        title: "Setup Complete!",
+        description: "Your business has been configured. You can now manage your tax forms.",
+      });
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error completing setup:", error);
+    }
+  };
+
+  const handleStartForm = (formType: string) => {
+    toast({
+      title: `Opening ${formType}`,
+      description: "Tax form editor coming soon. For now, this form has been added to your tracking list.",
+    });
+    // TODO: Navigate to form editor or open form dialog
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-primary">Business Setup</h1>
+            <Button variant="ghost" onClick={() => navigate("/")}>
+              Exit
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Progress */}
+      <div className="border-b bg-card/50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            {STEPS.map((step, index) => (
+              <div
+                key={step.id}
+                className={`flex items-center ${index < STEPS.length - 1 ? "flex-1" : ""}`}
+              >
+                <div className="flex items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      step.id < currentStep
+                        ? "bg-primary text-primary-foreground"
+                        : step.id === currentStep
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    {step.id < currentStep ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      step.id
+                    )}
+                  </div>
+                  <span className="ml-2 text-sm hidden sm:inline">{step.name}</span>
+                </div>
+                {index < STEPS.length - 1 && (
+                  <div className="flex-1 h-0.5 bg-muted mx-4" />
+                )}
+              </div>
+            ))}
+          </div>
+          <Progress value={progress} className="h-1" />
+        </div>
+      </div>
+
+      {/* Content */}
+      <main className="container mx-auto px-4 py-8">
+        {currentStep === 1 && (
+          <BusinessStructureStep
+            selected={businessStructure}
+            onSelect={setBusinessStructure}
+          />
+        )}
+
+        {currentStep === 2 && businessStructure && (
+          <RoleSelectionStep
+            businessStructure={businessStructure}
+            selected={role}
+            onSelect={setRole}
+          />
+        )}
+
+        {currentStep === 3 && role && (
+          <PersonalInfoStep
+            role={role}
+            data={personalInfo}
+            onChange={setPersonalInfo}
+          />
+        )}
+
+        {currentStep === 4 && businessStructure && role && (
+          <TaxFormsStep
+            businessStructure={businessStructure}
+            role={role}
+            onStartForm={handleStartForm}
+          />
+        )}
+      </main>
+
+      {/* Footer Navigation */}
+      <footer className="fixed bottom-0 left-0 right-0 border-t bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between">
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              disabled={currentStep === 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+
+            {currentStep < STEPS.length ? (
+              <Button onClick={handleNext} disabled={!canProceed()}>
+                Next
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </Button>
+            ) : (
+              <Button 
+                onClick={handleComplete}
+                disabled={createBusiness.isPending || createMember.isPending}
+              >
+                {createBusiness.isPending || createMember.isPending ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Check className="h-4 w-4 mr-2" />
+                )}
+                Complete Setup
+              </Button>
+            )}
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

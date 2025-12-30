@@ -187,6 +187,13 @@ const Index = () => {
               onClick={() => navigate("/projects")}
             />
             <DashboardCard
+              title="Business Setup"
+              description="Configure your business structure and tax forms"
+              icon={<Settings className="w-5 h-5" />}
+              action="Get Started"
+              onClick={() => navigate("/business-setup")}
+            />
+            <DashboardCard
               title="Tax Profile"
               description="Set up your filing status and income types"
               icon={<Settings className="w-5 h-5" />}

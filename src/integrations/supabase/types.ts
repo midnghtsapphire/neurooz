@@ -58,6 +58,110 @@ export type Database = {
           },
         ]
       }
+      business_members: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          business_id: string
+          city: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_passive: boolean | null
+          name: string
+          ownership_percentage: number | null
+          role: Database["public"]["Enums"]["business_role"]
+          ssn_last_four: string | null
+          state: string | null
+          updated_at: string
+          user_id: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          business_id: string
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_passive?: boolean | null
+          name: string
+          ownership_percentage?: number | null
+          role: Database["public"]["Enums"]["business_role"]
+          ssn_last_four?: string | null
+          state?: string | null
+          updated_at?: string
+          user_id?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          business_id?: string
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_passive?: boolean | null
+          name?: string
+          ownership_percentage?: number | null
+          role?: Database["public"]["Enums"]["business_role"]
+          ssn_last_four?: string | null
+          state?: string | null
+          updated_at?: string
+          user_id?: string | null
+          zip_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_members_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      businesses: {
+        Row: {
+          created_at: string
+          ein: string | null
+          formation_date: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          state: string | null
+          structure: Database["public"]["Enums"]["business_structure"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ein?: string | null
+          formation_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          state?: string | null
+          structure: Database["public"]["Enums"]["business_structure"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ein?: string | null
+          formation_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          state?: string | null
+          structure?: Database["public"]["Enums"]["business_structure"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       income_sources: {
         Row: {
           created_at: string
@@ -262,6 +366,63 @@ export type Database = {
         }
         Relationships: []
       }
+      tax_forms: {
+        Row: {
+          business_id: string | null
+          completed_at: string | null
+          created_at: string
+          form_data: Json | null
+          form_type: string
+          id: string
+          member_id: string | null
+          status: string | null
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          form_data?: Json | null
+          form_type: string
+          id?: string
+          member_id?: string | null
+          status?: string | null
+          tax_year: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          form_data?: Json | null
+          form_type?: string
+          id?: string
+          member_id?: string | null
+          status?: string | null
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tax_forms_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tax_forms_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "business_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -353,6 +514,13 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "managing_member" | "passive_member"
+      business_role: "owner" | "partner" | "employee" | "contractor"
+      business_structure:
+        | "sole_proprietor"
+        | "single_member_llc"
+        | "llc_s_corp"
+        | "partnership"
+        | "c_corp"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -481,6 +649,14 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "managing_member", "passive_member"],
+      business_role: ["owner", "partner", "employee", "contractor"],
+      business_structure: [
+        "sole_proprietor",
+        "single_member_llc",
+        "llc_s_corp",
+        "partnership",
+        "c_corp",
+      ],
     },
   },
 } as const
