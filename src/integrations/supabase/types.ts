@@ -630,6 +630,48 @@ export type Database = {
           },
         ]
       }
+      time_logs: {
+        Row: {
+          activity_category: string
+          activity_description: string
+          created_at: string
+          hours: number
+          id: string
+          llc: string
+          log_date: string
+          output_created: string | null
+          products_involved: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activity_category: string
+          activity_description: string
+          created_at?: string
+          hours: number
+          id?: string
+          llc: string
+          log_date: string
+          output_created?: string | null
+          products_involved?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activity_category?: string
+          activity_description?: string
+          created_at?: string
+          hours?: number
+          id?: string
+          llc?: string
+          log_date?: string
+          output_created?: string | null
+          products_involved?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_disability_profiles: {
         Row: {
           created_at: string
