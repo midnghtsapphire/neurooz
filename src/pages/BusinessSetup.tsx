@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BusinessStructureStep } from "@/components/business-setup/BusinessStructureStep";
 import { RoleSelectionStep } from "@/components/business-setup/RoleSelectionStep";
 import { PersonalInfoStep, PersonalInfoData } from "@/components/business-setup/PersonalInfoStep";
+import { CapitalContributionStep, CapitalContributionData } from "@/components/business-setup/CapitalContributionStep";
 import { TaxFormsStep } from "@/components/business-setup/TaxFormsStep";
 import { 
   BusinessStructure, 
@@ -21,7 +22,8 @@ const STEPS = [
   { id: 1, name: "Business Structure" },
   { id: 2, name: "Your Role" },
   { id: 3, name: "Personal Info" },
-  { id: 4, name: "Tax Forms" },
+  { id: 4, name: "Capital" },
+  { id: 5, name: "Tax Forms" },
 ];
 
 const initialPersonalInfo: PersonalInfoData = {
@@ -39,6 +41,13 @@ const initialPersonalInfo: PersonalInfoData = {
   ein: "",
 };
 
+const initialCapitalContribution: CapitalContributionData = {
+  totalCapital: 0,
+  managingMemberShare: 0,
+  passiveMemberShare: 0,
+  customAmount: "",
+};
+
 export default function BusinessSetup() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -50,6 +59,7 @@ export default function BusinessSetup() {
   const [businessStructure, setBusinessStructure] = useState<BusinessStructure | null>(null);
   const [role, setRole] = useState<BusinessRole | null>(null);
   const [personalInfo, setPersonalInfo] = useState<PersonalInfoData>(initialPersonalInfo);
+  const [capitalContribution, setCapitalContribution] = useState<CapitalContributionData>(initialCapitalContribution);
 
   // Mutations
   const createBusiness = useCreateBusiness();
@@ -82,6 +92,8 @@ export default function BusinessSetup() {
         return personalInfo.fullName && personalInfo.email && personalInfo.addressLine1 && 
                personalInfo.city && personalInfo.state && personalInfo.zipCode;
       case 4:
+        return capitalContribution.totalCapital >= 10;
+      case 5:
         return true;
       default:
         return false;
@@ -235,7 +247,14 @@ export default function BusinessSetup() {
           />
         )}
 
-        {currentStep === 4 && businessStructure && role && (
+        {currentStep === 4 && (
+          <CapitalContributionStep
+            data={capitalContribution}
+            onChange={setCapitalContribution}
+          />
+        )}
+
+        {currentStep === 5 && businessStructure && role && (
           <TaxFormsStep
             businessStructure={businessStructure}
             role={role}
