@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Coffee, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 
@@ -50,16 +50,25 @@ const Index = () => {
           <div className="container mx-auto px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                <Coffee className="w-6 h-6 text-primary-foreground" />
+                <Grape className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="text-xl font-display font-bold text-foreground">NomadTaxes</span>
+              <span className="text-xl font-display font-bold text-foreground">VineTaxes</span>
             </div>
-            <Button
-              onClick={() => navigate("/auth")}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft hover:shadow-medium transition-all"
-            >
-              Get Started
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => navigate("/projects")}
+                variant="ghost"
+                className="font-medium"
+              >
+                Projects
+              </Button>
+              <Button
+                onClick={() => navigate("/auth")}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft hover:shadow-medium transition-all"
+              >
+                Get Started
+              </Button>
+            </div>
           </div>
         </header>
 
@@ -69,30 +78,31 @@ const Index = () => {
             <div className="max-w-3xl mx-auto animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary font-medium text-sm mb-6">
                 <Sparkles className="w-4 h-4" />
-                Simplified tax management for modern workers
+                Tax tracking that grows with you
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground leading-tight mb-6 text-balance">
-                Track income, manage taxes,{" "}
-                <span className="text-primary">stay organized</span>
+                Organize your taxes,{" "}
+                <span className="text-primary">harvest peace of mind</span>
               </h1>
               <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-                Whether you're a W2 employee, freelancer, or managing passive income — 
-                NomadTaxes makes tax tracking effortless and beautiful.
+                From W2s to 1099s, freelance gigs to passive income — 
+                VineTaxes helps you cultivate order from tax season chaos.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/projects")}
                   size="lg"
                   className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-medium hover:shadow-glow transition-all h-14 px-8 text-lg"
                 >
-                  Start for Free
+                  View Projects
                 </Button>
                 <Button
+                  onClick={() => navigate("/auth")}
                   variant="outline"
                   size="lg"
                   className="border-2 border-border hover:border-primary hover:text-primary font-semibold h-14 px-8 text-lg transition-all"
                 >
-                  Learn More
+                  Sign In
                 </Button>
               </div>
             </div>
@@ -102,19 +112,19 @@ const Index = () => {
           <section className="py-20 border-t border-border">
             <div className="grid md:grid-cols-3 gap-8">
               <FeatureCard
-                icon={<LayoutDashboard className="w-6 h-6" />}
-                title="Smart Dashboard"
-                description="Get a clear overview of all your income sources, tax obligations, and filing status in one place."
+                icon={<FolderKanban className="w-6 h-6" />}
+                title="Project Tracking"
+                description="Organize your work into projects with custom colors and keep everything in one place."
               />
               <FeatureCard
-                icon={<Plus className="w-6 h-6" />}
-                title="Multi-source Income"
-                description="Track W2, 1099, SSDI, and passive income with custom categories and smart organization."
+                icon={<CheckCircle className="w-6 h-6" />}
+                title="Action Items"
+                description="Create tasks with priorities and due dates. Check them off as you complete them."
               />
               <FeatureCard
-                icon={<Settings className="w-6 h-6" />}
-                title="Accessibility Built-in"
-                description="High contrast mode, font sizing, and screen reader support for everyone."
+                icon={<Calendar className="w-6 h-6" />}
+                title="Stay on Schedule"
+                description="Never miss a deadline with due date tracking and priority-based organization."
               />
             </div>
           </section>
@@ -123,7 +133,7 @@ const Index = () => {
         {/* Footer */}
         <footer className="border-t border-border py-8 mt-20">
           <div className="container mx-auto px-6 text-center text-muted-foreground">
-            <p>© 2024 NomadTaxes. Built with ❤️ for modern workers.</p>
+            <p>© 2024 VineTaxes. Cultivating tax clarity.</p>
           </div>
         </footer>
       </div>
@@ -137,9 +147,9 @@ const Index = () => {
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <Coffee className="w-6 h-6 text-primary-foreground" />
+              <Grape className="w-6 h-6 text-primary-foreground" />
             </div>
-            <span className="text-xl font-display font-bold text-foreground">NomadTaxes</span>
+            <span className="text-xl font-display font-bold text-foreground">VineTaxes</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground hidden sm:block">
