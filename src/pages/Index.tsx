@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 
@@ -192,6 +192,13 @@ const Index = () => {
               icon={<Settings className="w-5 h-5" />}
               action="Get Started"
               onClick={() => navigate("/business-setup")}
+            />
+            <DashboardCard
+              title="Tax Forms"
+              description="Fill out W-4, W-9, 1099-NEC, and Schedule C forms"
+              icon={<ClipboardList className="w-5 h-5" />}
+              action="Edit Forms"
+              onClick={() => navigate("/tax-forms")}
             />
             <DashboardCard
               title="Tax Profile"
