@@ -162,6 +162,39 @@ export type Database = {
         }
         Relationships: []
       }
+      disability_tax_rules: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          rule_key: string
+          rule_value: number
+          tax_year: number
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          rule_key: string
+          rule_value: number
+          tax_year?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          rule_key?: string
+          rule_value?: number
+          tax_year?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       income_sources: {
         Row: {
           created_at: string
@@ -207,6 +240,93 @@ export type Database = {
           user_id?: string
           year_ended?: number | null
           year_started?: number | null
+        }
+        Relationships: []
+      }
+      irwe_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          examples: string[] | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          examples?: string[] | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          examples?: string[] | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      monthly_vine_income: {
+        Row: {
+          brand_items_etv: number
+          broken_items_etv: number
+          countable_income: number
+          created_at: string
+          gross_etv: number
+          id: string
+          irwe_deductions: number
+          is_twp_month: boolean
+          month: number
+          non_brand_items_etv: number
+          notes: string | null
+          updated_at: string
+          user_id: string
+          value_adjustment: number
+          year: number
+        }
+        Insert: {
+          brand_items_etv?: number
+          broken_items_etv?: number
+          countable_income?: number
+          created_at?: string
+          gross_etv?: number
+          id?: string
+          irwe_deductions?: number
+          is_twp_month?: boolean
+          month: number
+          non_brand_items_etv?: number
+          notes?: string | null
+          updated_at?: string
+          user_id: string
+          value_adjustment?: number
+          year: number
+        }
+        Update: {
+          brand_items_etv?: number
+          broken_items_etv?: number
+          countable_income?: number
+          created_at?: string
+          gross_etv?: number
+          id?: string
+          irwe_deductions?: number
+          is_twp_month?: boolean
+          month?: number
+          non_brand_items_etv?: number
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+          value_adjustment?: number
+          year?: number
         }
         Relationships: []
       }
@@ -419,6 +539,110 @@ export type Database = {
             columns: ["member_id"]
             isOneToOne: false
             referencedRelation: "business_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_disability_profiles: {
+        Row: {
+          created_at: string
+          disability_notes: string | null
+          disability_type: string | null
+          epe_start_date: string | null
+          id: string
+          in_epe_period: boolean
+          monthly_ssdi_amount: number | null
+          monthly_ssi_amount: number | null
+          receives_ssdi: boolean
+          receives_ssi: boolean
+          twp_months_used: number
+          twp_start_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          disability_notes?: string | null
+          disability_type?: string | null
+          epe_start_date?: string | null
+          id?: string
+          in_epe_period?: boolean
+          monthly_ssdi_amount?: number | null
+          monthly_ssi_amount?: number | null
+          receives_ssdi?: boolean
+          receives_ssi?: boolean
+          twp_months_used?: number
+          twp_start_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          disability_notes?: string | null
+          disability_type?: string | null
+          epe_start_date?: string | null
+          id?: string
+          in_epe_period?: boolean
+          monthly_ssdi_amount?: number | null
+          monthly_ssi_amount?: number | null
+          receives_ssdi?: boolean
+          receives_ssi?: boolean
+          twp_months_used?: number
+          twp_start_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_irwe_expenses: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          doctor_verified: boolean
+          end_date: string | null
+          expense_name: string
+          id: string
+          is_recurring: boolean
+          monthly_amount: number
+          notes: string | null
+          start_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          doctor_verified?: boolean
+          end_date?: string | null
+          expense_name: string
+          id?: string
+          is_recurring?: boolean
+          monthly_amount?: number
+          notes?: string | null
+          start_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          doctor_verified?: boolean
+          end_date?: string | null
+          expense_name?: string
+          id?: string
+          is_recurring?: boolean
+          monthly_amount?: number
+          notes?: string | null
+          start_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_irwe_expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "irwe_categories"
             referencedColumns: ["id"]
           },
         ]
