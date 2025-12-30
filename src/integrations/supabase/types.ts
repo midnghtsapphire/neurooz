@@ -140,6 +140,57 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_events: {
+        Row: {
+          amount: number | null
+          created_at: string
+          currency: string | null
+          customer_email: string | null
+          customer_id: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          price_id: string | null
+          processed_at: string
+          product_id: string | null
+          status: string | null
+          stripe_event_id: string
+          subscription_id: string | null
+        }
+        Insert: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          customer_email?: string | null
+          customer_id?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          price_id?: string | null
+          processed_at?: string
+          product_id?: string | null
+          status?: string | null
+          stripe_event_id: string
+          subscription_id?: string | null
+        }
+        Update: {
+          amount?: number | null
+          created_at?: string
+          currency?: string | null
+          customer_email?: string | null
+          customer_id?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          price_id?: string | null
+          processed_at?: string
+          product_id?: string | null
+          status?: string | null
+          stripe_event_id?: string
+          subscription_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
