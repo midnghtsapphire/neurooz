@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 
@@ -185,6 +185,13 @@ const Index = () => {
               icon={<TrendingUp className="w-5 h-5" />}
               action="Open Tracker"
               onClick={() => navigate("/vine-tracker")}
+            />
+            <DashboardCard
+              title="Rental Management"
+              description="Manage inventory, rentals, and inter-company transfers"
+              icon={<Package className="w-5 h-5" />}
+              action="Open Rentals"
+              onClick={() => navigate("/rental-management")}
             />
             <DashboardCard
               title="Projects"

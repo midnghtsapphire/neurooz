@@ -243,6 +243,77 @@ export type Database = {
         }
         Relationships: []
       }
+      inter_company_transfers: {
+        Row: {
+          check_number: string | null
+          comparable_evidence: string | null
+          created_at: string
+          from_entity: string
+          id: string
+          invoice_number: string | null
+          notes: string | null
+          original_etv: number | null
+          payment_due_date: string | null
+          payment_method: string | null
+          payment_received_date: string | null
+          pricing_method: string | null
+          product_name: string
+          sale_price: number | null
+          source_product_id: string | null
+          to_entity: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          check_number?: string | null
+          comparable_evidence?: string | null
+          created_at?: string
+          from_entity: string
+          id?: string
+          invoice_number?: string | null
+          notes?: string | null
+          original_etv?: number | null
+          payment_due_date?: string | null
+          payment_method?: string | null
+          payment_received_date?: string | null
+          pricing_method?: string | null
+          product_name: string
+          sale_price?: number | null
+          source_product_id?: string | null
+          to_entity: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          check_number?: string | null
+          comparable_evidence?: string | null
+          created_at?: string
+          from_entity?: string
+          id?: string
+          invoice_number?: string | null
+          notes?: string | null
+          original_etv?: number | null
+          payment_due_date?: string | null
+          payment_method?: string | null
+          payment_received_date?: string | null
+          pricing_method?: string | null
+          product_name?: string
+          sale_price?: number | null
+          source_product_id?: string | null
+          to_entity?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inter_company_transfers_source_product_id_fkey"
+            columns: ["source_product_id"]
+            isOneToOne: false
+            referencedRelation: "products_review_insights"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       irwe_categories: {
         Row: {
           created_at: string
@@ -521,6 +592,227 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      rental_customers: {
+        Row: {
+          address: string | null
+          created_at: string
+          drivers_license: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string | null
+          total_rentals: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          drivers_license?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone?: string | null
+          total_rentals?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          drivers_license?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          total_rentals?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      rental_inventory: {
+        Row: {
+          category: string | null
+          condition: string | null
+          created_at: string
+          current_book_value: number | null
+          daily_rate: number | null
+          depreciation_method: string | null
+          description: string | null
+          id: string
+          location: string | null
+          original_etv: number | null
+          photo_url: string | null
+          product_name: string
+          purchase_price: number | null
+          source: string | null
+          source_product_id: string | null
+          status: string | null
+          times_rented: number | null
+          total_rental_income: number | null
+          updated_at: string
+          user_id: string
+          weekly_rate: number | null
+        }
+        Insert: {
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          current_book_value?: number | null
+          daily_rate?: number | null
+          depreciation_method?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          original_etv?: number | null
+          photo_url?: string | null
+          product_name: string
+          purchase_price?: number | null
+          source?: string | null
+          source_product_id?: string | null
+          status?: string | null
+          times_rented?: number | null
+          total_rental_income?: number | null
+          updated_at?: string
+          user_id: string
+          weekly_rate?: number | null
+        }
+        Update: {
+          category?: string | null
+          condition?: string | null
+          created_at?: string
+          current_book_value?: number | null
+          daily_rate?: number | null
+          depreciation_method?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          original_etv?: number | null
+          photo_url?: string | null
+          product_name?: string
+          purchase_price?: number | null
+          source?: string | null
+          source_product_id?: string | null
+          status?: string | null
+          times_rented?: number | null
+          total_rental_income?: number | null
+          updated_at?: string
+          user_id?: string
+          weekly_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_inventory_source_product_id_fkey"
+            columns: ["source_product_id"]
+            isOneToOne: false
+            referencedRelation: "products_review_insights"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rental_transactions: {
+        Row: {
+          agreement_signed: boolean | null
+          created_at: string
+          customer_id: string | null
+          daily_rate: number | null
+          damage_description: string | null
+          days_rented: number | null
+          deposit_refunded: number | null
+          has_damage: boolean | null
+          id: string
+          inventory_id: string | null
+          net_revenue: number | null
+          notes: string | null
+          payment_method: string | null
+          payment_received: boolean | null
+          rental_end_date: string | null
+          rental_start_date: string
+          repair_cost: number | null
+          return_condition: string | null
+          returned_on_time: boolean | null
+          security_deposit: number | null
+          subtotal: number | null
+          total_charged: number | null
+          transaction_number: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agreement_signed?: boolean | null
+          created_at?: string
+          customer_id?: string | null
+          daily_rate?: number | null
+          damage_description?: string | null
+          days_rented?: number | null
+          deposit_refunded?: number | null
+          has_damage?: boolean | null
+          id?: string
+          inventory_id?: string | null
+          net_revenue?: number | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_received?: boolean | null
+          rental_end_date?: string | null
+          rental_start_date: string
+          repair_cost?: number | null
+          return_condition?: string | null
+          returned_on_time?: boolean | null
+          security_deposit?: number | null
+          subtotal?: number | null
+          total_charged?: number | null
+          transaction_number?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agreement_signed?: boolean | null
+          created_at?: string
+          customer_id?: string | null
+          daily_rate?: number | null
+          damage_description?: string | null
+          days_rented?: number | null
+          deposit_refunded?: number | null
+          has_damage?: boolean | null
+          id?: string
+          inventory_id?: string | null
+          net_revenue?: number | null
+          notes?: string | null
+          payment_method?: string | null
+          payment_received?: boolean | null
+          rental_end_date?: string | null
+          rental_start_date?: string
+          repair_cost?: number | null
+          return_condition?: string | null
+          returned_on_time?: boolean | null
+          security_deposit?: number | null
+          subtotal?: number | null
+          total_charged?: number | null
+          transaction_number?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "rental_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rental_transactions_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "rental_inventory"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_events: {
         Row: {
