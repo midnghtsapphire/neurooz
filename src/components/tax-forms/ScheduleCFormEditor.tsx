@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescripti
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ScheduleCData } from "@/lib/tax-form-schemas";
 import { 
   calculateVineValueReduction, 
@@ -22,10 +23,12 @@ import {
   BUSINESS_CODES,
   QUARTERLY_DUE_DATES,
 } from "@/lib/tax-calculations";
-import { Calculator, Info, Lightbulb, DollarSign, TrendingDown, FileText } from "lucide-react";
+import { IRWECalculator } from "@/components/irwe/IRWECalculator";
+import { Calculator, Info, Lightbulb, DollarSign, TrendingDown, FileText, Shield, ChevronDown } from "lucide-react";
 
 interface ScheduleCFormEditorProps {
   form: UseFormReturn<ScheduleCData>;
+  userId?: string;
 }
 
 function CurrencyInput({ 
@@ -56,7 +59,10 @@ function CurrencyInput({
   );
 }
 
-export function ScheduleCFormEditor({ form }: ScheduleCFormEditorProps) {
+export function ScheduleCFormEditor({ form, userId }: ScheduleCFormEditorProps) {
+  const [irweOpen, setIrweOpen] = useState(false);
+  const [irweTotal, setIrweTotal] = useState(0);
+  const [countableIncome, setCountableIncome] = useState(0);
   const values = form.watch();
   
   // Calculate Vine value reduction
@@ -747,6 +753,43 @@ export function ScheduleCFormEditor({ form }: ScheduleCFormEditorProps) {
         </CardContent>
       </Card>
 
+      {/* IRWE Calculator for SSDI Recipients */}
+      {userId && (
+        <Collapsible open={irweOpen} onOpenChange={setIrweOpen}>
+          <Card className="border-amber-500/50">
+            <CollapsibleTrigger asChild>
+              <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-amber-500" />
+                    <CardTitle className="text-lg">SSDI/SSI: IRWE Calculator</CardTitle>
+                    <Badge variant="outline" className="bg-amber-500/10 text-amber-700 border-amber-500/30">
+                      Disability Benefits
+                    </Badge>
+                  </div>
+                  <ChevronDown className={`h-5 w-5 transition-transform ${irweOpen ? "rotate-180" : ""}`} />
+                </div>
+                <CardDescription>
+                  Calculate Impairment-Related Work Expenses to reduce countable income for SGA determination
+                </CardDescription>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="pt-0">
+                <IRWECalculator
+                  userId={userId}
+                  monthlyGrossIncome={grossIncome / 12}
+                  onIRWEChange={(irwe, countable) => {
+                    setIrweTotal(irwe);
+                    setCountableIncome(countable);
+                  }}
+                />
+              </CardContent>
+            </CollapsibleContent>
+          </Card>
+        </Collapsible>
+      )}
+
       {/* Net Profit Summary */}
       <Card className="border-primary">
         <CardHeader>
@@ -759,6 +802,32 @@ export function ScheduleCFormEditor({ form }: ScheduleCFormEditorProps) {
               {formatCurrency(netProfit)}
             </p>
           </div>
+          
+          {userId && irweTotal > 0 && (
+            <div className="p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
+              <p className="text-sm font-medium text-amber-700 dark:text-amber-400 mb-2 flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                SSDI Income Impact
+              </p>
+              <div className="space-y-1 text-sm text-muted-foreground">
+                <div className="flex justify-between">
+                  <span>Monthly Net Profit:</span>
+                  <span>{formatCurrency(netProfit / 12)}</span>
+                </div>
+                <div className="flex justify-between text-amber-600">
+                  <span>Monthly IRWE Deductions:</span>
+                  <span>-{formatCurrency(irweTotal)}</span>
+                </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between font-medium">
+                  <span>Countable Income for SGA:</span>
+                  <span className={countableIncome < 1620 ? "text-green-600" : "text-destructive"}>
+                    {formatCurrency(countableIncome)}/mo
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
