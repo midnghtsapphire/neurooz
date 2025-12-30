@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Pricing from "./pages/Pricing";
 import BusinessSetup from "./pages/BusinessSetup";
 import TaxFormEditor from "./pages/TaxFormEditor";
+import SavedForms from "./pages/SavedForms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,8 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/business-setup" element={<BusinessSetup />} />
           <Route path="/tax-forms" element={<TaxFormEditor />} />
+          <Route path="/tax-forms/edit/:formId" element={<TaxFormEditor />} />
+          <Route path="/saved-forms" element={<SavedForms />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
