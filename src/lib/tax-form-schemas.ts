@@ -144,12 +144,26 @@ export const form1099NECSchema = z.object({
 
 export type Form1099NECData = z.infer<typeof form1099NECSchema>;
 
-// Schedule C Form Schema (Profit or Loss From Business) - Simplified
+// Schedule C Form Schema (Profit or Loss From Business) - Enhanced for Amazon Vine
 export const scheduleCSchema = z.object({
+  // Business Info
+  businessName: z.string().min(1, "Business name is required").max(100),
+  principalBusinessCode: z.string().max(10).optional(),
+  businessAddress: addressSchema.optional(),
+  accountingMethod: z.enum(["cash", "accrual", "other"]).default("cash"),
+  filingStatus: z.enum(["single", "married_filing_jointly", "head_of_household"]).default("single"),
+  
   // Part I: Income
   grossReceipts: z.number().min(0, "Enter gross receipts"),
   returns: z.number().min(0).default(0),
   costOfGoodsSold: z.number().min(0).default(0),
+  
+  // Amazon Vine 50/20/0 Method Fields
+  isVineIncome: z.boolean().default(true),
+  brandItemsEtv: z.number().min(0).default(0),
+  nonBrandItemsEtv: z.number().min(0).default(0),
+  brokenItemsEtv: z.number().min(0).default(0),
+  vineValueAdjustment: z.number().min(0).default(0), // Auto-calculated
   
   // Part II: Expenses (simplified)
   advertising: z.number().min(0).default(0),
@@ -172,15 +186,19 @@ export const scheduleCSchema = z.object({
   otherExpenses: z.number().min(0).default(0),
   otherExpensesDescription: z.string().max(500).optional(),
   
-  // Business info
-  businessName: z.string().min(1, "Business name is required").max(100),
-  principalBusinessCode: z.string().max(10).optional(),
-  businessAddress: addressSchema.optional(),
-  accountingMethod: z.enum(["cash", "accrual", "other"]).default("cash"),
+  // Home Office
+  useHomeOffice: z.boolean().default(false),
+  homeOfficeSquareFeet: z.number().min(0).max(300).default(0),
+  homeOfficeDeduction: z.number().min(0).default(0), // Auto-calculated
   
   // Vehicle info
   vehicleMiles: z.number().min(0).default(0),
   vehicleBusinessMiles: z.number().min(0).default(0),
+  mileageDeduction: z.number().min(0).default(0), // Auto-calculated
+  
+  // QBI Deduction
+  claimQbiDeduction: z.boolean().default(true),
+  estimatedOtherIncome: z.number().min(0).default(0), // For QBI eligibility calculation
 });
 
 export type ScheduleCData = z.infer<typeof scheduleCSchema>;
@@ -233,10 +251,20 @@ export const formDefaults: Record<TaxFormType, unknown> = {
     stateIncome: 0,
   },
   "Schedule C": {
-    businessName: "",
+    businessName: "Product Review Services",
+    principalBusinessCode: "561990",
+    accountingMethod: "cash",
+    filingStatus: "single",
     grossReceipts: 0,
     returns: 0,
     costOfGoodsSold: 0,
+    // Vine 50/20/0 fields
+    isVineIncome: true,
+    brandItemsEtv: 0,
+    nonBrandItemsEtv: 0,
+    brokenItemsEtv: 0,
+    vineValueAdjustment: 0,
+    // Expenses
     advertising: 0,
     carAndTruck: 0,
     commissions: 0,
@@ -255,8 +283,17 @@ export const formDefaults: Record<TaxFormType, unknown> = {
     utilities: 0,
     wages: 0,
     otherExpenses: 0,
-    accountingMethod: "cash",
+    otherExpensesDescription: "Product value adjustment - 50/20/0 method (open box value reduction after product testing)",
+    // Home office
+    useHomeOffice: false,
+    homeOfficeSquareFeet: 0,
+    homeOfficeDeduction: 0,
+    // Vehicle
     vehicleMiles: 0,
     vehicleBusinessMiles: 0,
+    mileageDeduction: 0,
+    // QBI
+    claimQbiDeduction: true,
+    estimatedOtherIncome: 0,
   },
 };
