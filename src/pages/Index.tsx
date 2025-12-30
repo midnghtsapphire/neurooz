@@ -178,7 +178,14 @@ const Index = () => {
           </p>
 
           {/* Quick Actions */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+            <DashboardCard
+              title="Projects"
+              description="Manage your projects and action items"
+              icon={<FolderKanban className="w-5 h-5" />}
+              action="View Projects"
+              onClick={() => navigate("/projects")}
+            />
             <DashboardCard
               title="Tax Profile"
               description="Set up your filing status and income types"
