@@ -1039,6 +1039,69 @@ export type Database = {
         }
         Relationships: []
       }
+      tax_deduction_rules: {
+        Row: {
+          applicable_forms: string[] | null
+          business_types: string[] | null
+          can_be_increased: boolean | null
+          category: string
+          created_at: string
+          deduction_name: string
+          display_order: number | null
+          id: string
+          increase_amounts: Json | null
+          increase_conditions: string[] | null
+          irs_reference: string | null
+          is_active: boolean | null
+          max_amount: number | null
+          max_amount_description: string | null
+          notes: string | null
+          proof_required: string[] | null
+          tax_year: number
+          updated_at: string
+        }
+        Insert: {
+          applicable_forms?: string[] | null
+          business_types?: string[] | null
+          can_be_increased?: boolean | null
+          category: string
+          created_at?: string
+          deduction_name: string
+          display_order?: number | null
+          id?: string
+          increase_amounts?: Json | null
+          increase_conditions?: string[] | null
+          irs_reference?: string | null
+          is_active?: boolean | null
+          max_amount?: number | null
+          max_amount_description?: string | null
+          notes?: string | null
+          proof_required?: string[] | null
+          tax_year?: number
+          updated_at?: string
+        }
+        Update: {
+          applicable_forms?: string[] | null
+          business_types?: string[] | null
+          can_be_increased?: boolean | null
+          category?: string
+          created_at?: string
+          deduction_name?: string
+          display_order?: number | null
+          id?: string
+          increase_amounts?: Json | null
+          increase_conditions?: string[] | null
+          irs_reference?: string | null
+          is_active?: boolean | null
+          max_amount?: number | null
+          max_amount_description?: string | null
+          notes?: string | null
+          proof_required?: string[] | null
+          tax_year?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tax_forms: {
         Row: {
           business_id: string | null
