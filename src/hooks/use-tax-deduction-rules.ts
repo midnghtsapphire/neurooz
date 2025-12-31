@@ -68,7 +68,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
   qbi: "Qualified Business Income",
   disability: "Disability (IRWE)",
   charitable: "Charitable Contributions",
-  vine: "Amazon Vine",
+  vine: "Product Reviews & Content Creation",
   team_building: "Team Building (100%)",
   donations: "Donations & Charity",
   rental_business: "Rental Business",
@@ -87,10 +87,27 @@ export const CATEGORY_ICONS: Record<string, string> = {
   qbi: "TrendingUp",
   disability: "Accessibility",
   charitable: "Gift",
-  vine: "Package",
+  vine: "Camera",
   team_building: "Users",
   donations: "Heart",
   rental_business: "Building",
   expert_tips: "Lightbulb",
   back_taxes: "FileText",
+};
+
+// Subcategory labels for better organization
+export const SUBCATEGORY_LABELS: Record<string, Record<string, string>> = {
+  vine: {
+    blogger: "Blogger/Author",
+    musician: "Musician/Performer",
+    tech: "Tech Reviewer",
+    beauty: "Beauty/Makeup",
+    kitchen: "Kitchen/Food",
+    general: "General Reviews",
+  },
+  vehicle: {
+    heavy: "Heavy Vehicles (6,000+ lbs)",
+    luxury: "Standard Vehicles",
+    mileage: "Mileage Tracking",
+  },
 };
