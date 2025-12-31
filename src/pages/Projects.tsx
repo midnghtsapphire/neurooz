@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useProjects, useActionItems, useDeleteProject, Project } from "@/hooks/use-projects";
 import { useProjectItems } from "@/hooks/use-project-items";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -8,17 +8,110 @@ import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 import { CreateActionItemDialog } from "@/components/CreateActionItemDialog";
 import { BulkUploadDialog } from "@/components/BulkUploadDialog";
 import { GardenRewards } from "@/components/GardenRewards";
+import { ProjectFilterBar, ProjectFilters } from "@/components/ProjectFilterBar";
+import { EnvironmentSelector, Environment, EnvironmentBadge } from "@/components/EnvironmentSelector";
+import { ExportMenu } from "@/components/ExportMenu";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
+const defaultFilters: ProjectFilters = {
+  search: "",
+  assignedTo: "",
+  status: "all",
+  dateFrom: undefined,
+  dateTo: undefined,
+  projectId: "",
+};
+
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [environment, setEnvironment] = useState<Environment>("sandbox");
+  const [filters, setFilters] = useState<ProjectFilters>(defaultFilters);
+  
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: allActionItems = [] } = useActionItems();
   const { data: projectActionItems = [] } = useActionItems(selectedProject?.id);
   const { data: projectItems = [] } = useProjectItems(selectedProject?.id);
   const deleteProject = useDeleteProject();
+
+  // Get unique assignees from projects
+  const assignees = useMemo(() => {
+    const uniqueAssignees = new Set<string>();
+    projects.forEach((p) => {
+      if (p.assigned_to) uniqueAssignees.add(p.assigned_to);
+    });
+    return Array.from(uniqueAssignees).sort();
+  }, [projects]);
+
+  // Filter projects based on criteria
+  const filteredProjects = useMemo(() => {
+    return projects.filter((project) => {
+      // Search filter
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const matchesName = project.name.toLowerCase().includes(searchLower);
+        const matchesDesc = project.description?.toLowerCase().includes(searchLower);
+        if (!matchesName && !matchesDesc) return false;
+      }
+
+      // Assigned to filter
+      if (filters.assignedTo && project.assigned_to !== filters.assignedTo) {
+        return false;
+      }
+
+      // Status filter
+      if (filters.status === "active" && project.is_completed) return false;
+      if (filters.status === "completed" && !project.is_completed) return false;
+
+      // Date filters
+      if (filters.dateFrom) {
+        const projectDate = new Date(project.created_at);
+        if (projectDate < filters.dateFrom) return false;
+      }
+      if (filters.dateTo) {
+        const projectDate = new Date(project.created_at);
+        if (projectDate > filters.dateTo) return false;
+      }
+
+      // Project filter (for action items view)
+      if (filters.projectId && project.id !== filters.projectId) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [projects, filters]);
+
+  // Filter action items based on criteria
+  const filteredActionItems = useMemo(() => {
+    return allActionItems.filter((item) => {
+      // Search filter
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const matchesTitle = item.title.toLowerCase().includes(searchLower);
+        const matchesDesc = item.description?.toLowerCase().includes(searchLower);
+        if (!matchesTitle && !matchesDesc) return false;
+      }
+
+      // Project filter
+      if (filters.projectId && item.project_id !== filters.projectId) {
+        return false;
+      }
+
+      // Date filters
+      if (filters.dateFrom) {
+        const itemDate = new Date(item.created_at);
+        if (itemDate < filters.dateFrom) return false;
+      }
+      if (filters.dateTo) {
+        const itemDate = new Date(item.created_at);
+        if (itemDate > filters.dateTo) return false;
+      }
+
+      return true;
+    });
+  }, [allActionItems, filters]);
 
   const getActionItemCount = (projectId: string) => {
     return allActionItems.filter((item) => item.project_id === projectId).length;
@@ -133,12 +226,22 @@ export default function Projects() {
       />
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <FolderKanban className="h-6 w-6" />
-              Projects
-            </h1>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold flex items-center gap-2">
+                <FolderKanban className="h-6 w-6" />
+                Projects
+              </h1>
+              <EnvironmentBadge environment={environment} />
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <EnvironmentSelector value={environment} onChange={setEnvironment} />
+              <ExportMenu 
+                data={{ 
+                  projects: filteredProjects, 
+                  actionItems: filteredActionItems 
+                }} 
+              />
               <CreateActionItemDialog projects={projects} />
               <CreateProjectDialog />
             </div>
@@ -147,16 +250,32 @@ export default function Projects() {
       </header>
 
       <main className="container mx-auto px-4 py-6">
-        {projects.length === 0 ? (
+        {/* Filter Bar */}
+        <ProjectFilterBar 
+          filters={filters}
+          onFiltersChange={setFilters}
+          projects={projects}
+          assignees={assignees}
+        />
+
+        {filteredProjects.length === 0 && projects.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
             <FolderKanban className="h-16 w-16 mx-auto mb-4 opacity-50" />
             <h2 className="text-xl font-semibold mb-2">No projects yet</h2>
             <p className="mb-6">Create your first project to start organizing tasks</p>
             <CreateProjectDialog />
           </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground">
+            <FolderKanban className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>No projects match your filters</p>
+            <Button variant="link" onClick={() => setFilters(defaultFilters)}>
+              Clear filters
+            </Button>
+          </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <ProjectCard
                 key={project.id}
                 project={project}
@@ -169,14 +288,14 @@ export default function Projects() {
         )}
 
         {/* Unassigned action items section */}
-        {allActionItems.filter((i) => !i.project_id).length > 0 && (
+        {filteredActionItems.filter((i) => !i.project_id).length > 0 && (
           <div className="mt-10">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <ListTodo className="h-5 w-5" />
               Unassigned Action Items
             </h2>
             <div className="space-y-3">
-              {allActionItems
+              {filteredActionItems
                 .filter((item) => !item.project_id)
                 .map((item) => (
                   <ActionItemRow key={item.id} item={item} />
@@ -191,7 +310,7 @@ export default function Projects() {
             <Leaf className="h-6 w-6 text-green-600" />
             <h2 className="text-xl font-bold text-green-800">Your Garden Progress</h2>
           </div>
-          <GardenRewards actionItems={allActionItems} />
+          <GardenRewards actionItems={filteredActionItems} />
         </div>
       </main>
     </div>
