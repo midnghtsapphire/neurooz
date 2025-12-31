@@ -237,6 +237,113 @@ export type Database = {
         }
         Relationships: []
       }
+      donation_records: {
+        Row: {
+          acknowledgment_date: string | null
+          acknowledgment_received: boolean | null
+          appraisal_required: boolean | null
+          appraiser_ein: string | null
+          appraiser_name: string | null
+          charity_address: string | null
+          charity_city: string | null
+          charity_ein: string | null
+          charity_name: string
+          charity_state: string | null
+          charity_zip: string | null
+          comparable_evidence: string | null
+          condition_at_donation: string | null
+          cost_basis: number | null
+          created_at: string
+          donation_date: string
+          fair_market_value: number | null
+          form_8283_section: string | null
+          id: string
+          included_in_tax_year: number | null
+          is_501c3: boolean | null
+          notes: string | null
+          original_etv: number | null
+          photo_urls: string[] | null
+          product_name: string
+          receipt_number: string | null
+          source_product_id: string | null
+          updated_at: string
+          user_id: string
+          valuation_method: string | null
+        }
+        Insert: {
+          acknowledgment_date?: string | null
+          acknowledgment_received?: boolean | null
+          appraisal_required?: boolean | null
+          appraiser_ein?: string | null
+          appraiser_name?: string | null
+          charity_address?: string | null
+          charity_city?: string | null
+          charity_ein?: string | null
+          charity_name: string
+          charity_state?: string | null
+          charity_zip?: string | null
+          comparable_evidence?: string | null
+          condition_at_donation?: string | null
+          cost_basis?: number | null
+          created_at?: string
+          donation_date?: string
+          fair_market_value?: number | null
+          form_8283_section?: string | null
+          id?: string
+          included_in_tax_year?: number | null
+          is_501c3?: boolean | null
+          notes?: string | null
+          original_etv?: number | null
+          photo_urls?: string[] | null
+          product_name: string
+          receipt_number?: string | null
+          source_product_id?: string | null
+          updated_at?: string
+          user_id: string
+          valuation_method?: string | null
+        }
+        Update: {
+          acknowledgment_date?: string | null
+          acknowledgment_received?: boolean | null
+          appraisal_required?: boolean | null
+          appraiser_ein?: string | null
+          appraiser_name?: string | null
+          charity_address?: string | null
+          charity_city?: string | null
+          charity_ein?: string | null
+          charity_name?: string
+          charity_state?: string | null
+          charity_zip?: string | null
+          comparable_evidence?: string | null
+          condition_at_donation?: string | null
+          cost_basis?: number | null
+          created_at?: string
+          donation_date?: string
+          fair_market_value?: number | null
+          form_8283_section?: string | null
+          id?: string
+          included_in_tax_year?: number | null
+          is_501c3?: boolean | null
+          notes?: string | null
+          original_etv?: number | null
+          photo_urls?: string[] | null
+          product_name?: string
+          receipt_number?: string | null
+          source_product_id?: string | null
+          updated_at?: string
+          user_id?: string
+          valuation_method?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donation_records_source_product_id_fkey"
+            columns: ["source_product_id"]
+            isOneToOne: false
+            referencedRelation: "products_review_insights"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       income_sources: {
         Row: {
           created_at: string
@@ -987,6 +1094,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      saved_charities: {
+        Row: {
+          address: string | null
+          charity_name: string
+          city: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          ein: string | null
+          id: string
+          is_501c3: boolean | null
+          notes: string | null
+          state: string | null
+          total_donations: number | null
+          updated_at: string
+          user_id: string
+          zip: string | null
+        }
+        Insert: {
+          address?: string | null
+          charity_name: string
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          ein?: string | null
+          id?: string
+          is_501c3?: boolean | null
+          notes?: string | null
+          state?: string | null
+          total_donations?: number | null
+          updated_at?: string
+          user_id: string
+          zip?: string | null
+        }
+        Update: {
+          address?: string | null
+          charity_name?: string
+          city?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          ein?: string | null
+          id?: string
+          is_501c3?: boolean | null
+          notes?: string | null
+          state?: string | null
+          total_donations?: number | null
+          updated_at?: string
+          user_id?: string
+          zip?: string | null
+        }
+        Relationships: []
       }
       subscription_events: {
         Row: {
