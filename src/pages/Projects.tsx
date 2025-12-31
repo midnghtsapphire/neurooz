@@ -4,8 +4,9 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { ActionItemRow } from "@/components/ActionItemRow";
 import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 import { CreateActionItemDialog } from "@/components/CreateActionItemDialog";
+import { GardenRewards } from "@/components/GardenRewards";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, FolderKanban, ListTodo } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 export default function Projects() {
@@ -70,6 +71,11 @@ export default function Projects() {
               ))}
             </div>
           )}
+
+          {/* Project Garden */}
+          <div className="mt-10 pt-6 border-t">
+            <GardenRewards actionItems={projectActionItems} />
+          </div>
         </main>
       </div>
     );
@@ -144,6 +150,15 @@ export default function Projects() {
             </div>
           </div>
         )}
+
+        {/* Garden Rewards Section - All Tasks */}
+        <div className="mt-12 pt-8 border-t">
+          <div className="flex items-center gap-2 mb-6 justify-center">
+            <Leaf className="h-6 w-6 text-green-600" />
+            <h2 className="text-xl font-bold text-green-800">Your Garden Progress</h2>
+          </div>
+          <GardenRewards actionItems={allActionItems} />
+        </div>
       </main>
     </div>
   );
