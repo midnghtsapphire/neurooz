@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Loader2, Search, Calculator, Car, Home, Utensils, Heart, PiggyBank, TrendingUp, Accessibility, Gift, Package, BookOpen, Users, Building, Lightbulb, FileText } from "lucide-react";
+import { Loader2, Search, Calculator, Car, Home, Utensils, Heart, PiggyBank, TrendingUp, Accessibility, Gift, Package, BookOpen, Users, Building, Lightbulb, FileText, Files, CreditCard, Landmark, Percent } from "lucide-react";
 import { useTaxDeductionRulesByCategory, CATEGORY_LABELS } from "@/hooks/use-tax-deduction-rules";
 import { TaxDeductionRulesCard } from "./TaxDeductionRulesCard";
 
@@ -24,6 +24,12 @@ const CATEGORY_ICON_MAP: Record<string, React.ReactNode> = {
   rental_business: <Building className="h-4 w-4" />,
   expert_tips: <Lightbulb className="h-4 w-4" />,
   back_taxes: <FileText className="h-4 w-4" />,
+  // 1099 Categories
+  "1099_nec": <FileText className="h-4 w-4" />,
+  "1099_misc": <Files className="h-4 w-4" />,
+  "1099_k": <CreditCard className="h-4 w-4" />,
+  "1099_int_div": <Landmark className="h-4 w-4" />,
+  "1099_percentages": <Percent className="h-4 w-4" />,
 };
 
 export function TaxDeductionRulesPanel() {
