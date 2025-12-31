@@ -2,7 +2,7 @@ import { Project, useUpdateProject } from "@/hooks/use-projects";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Trash2, FolderOpen, User, CheckCircle2 } from "lucide-react";
+import { Trash2, FolderOpen, User, CheckCircle2, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProjectCardProps {
@@ -10,9 +10,10 @@ interface ProjectCardProps {
   actionItemCount: number;
   onSelect: () => void;
   onDelete: () => void;
+  onEdit: () => void;
 }
 
-export function ProjectCard({ project, actionItemCount, onSelect, onDelete }: ProjectCardProps) {
+export function ProjectCard({ project, actionItemCount, onSelect, onDelete, onEdit }: ProjectCardProps) {
   const updateProject = useUpdateProject();
 
   const handleToggleComplete = (e: React.MouseEvent) => {
@@ -52,17 +53,30 @@ export function ProjectCard({ project, actionItemCount, onSelect, onDelete }: Pr
               <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
             )}
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete();
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-primary"
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
+            >
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>

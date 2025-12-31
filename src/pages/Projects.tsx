@@ -13,6 +13,7 @@ import { EnvironmentSelector, Environment, EnvironmentBadge } from "@/components
 import { ExportMenu } from "@/components/ExportMenu";
 import { EmploymentRulesDialog } from "@/components/EmploymentRulesDialog";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
+import { EditProjectDialog } from "@/components/EditProjectDialog";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -28,6 +29,7 @@ const defaultFilters: ProjectFilters = {
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [environment, setEnvironment] = useState<Environment>("sandbox");
   const [filters, setFilters] = useState<ProjectFilters>(defaultFilters);
   
@@ -286,10 +288,18 @@ export default function Projects() {
                 actionItemCount={getActionItemCount(project.id)}
                 onSelect={() => setSelectedProject(project)}
                 onDelete={() => deleteProject.mutate(project.id)}
+                onEdit={() => setEditingProject(project)}
               />
             ))}
           </div>
         )}
+
+        {/* Edit Project Dialog */}
+        <EditProjectDialog
+          project={editingProject}
+          open={!!editingProject}
+          onOpenChange={(open) => !open && setEditingProject(null)}
+        />
 
         {/* Unassigned action items section */}
         {filteredActionItems.filter((i) => !i.project_id).length > 0 && (
