@@ -157,7 +157,20 @@ const Index = () => {
 
   // Authenticated Dashboard
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Magnolia Flowers */}
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute top-20 right-0 w-40 lg:w-56 opacity-25 pointer-events-none select-none transform translate-x-1/4"
+        aria-hidden="true"
+      />
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute bottom-20 left-0 w-36 lg:w-48 opacity-20 pointer-events-none select-none transform -translate-x-1/4 rotate-180"
+        aria-hidden="true"
+      />
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">

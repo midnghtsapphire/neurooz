@@ -9,6 +9,7 @@ import { RentalInventoryTab } from "@/components/rental/RentalInventoryTab";
 import { RentalTransactionsTab } from "@/components/rental/RentalTransactionsTab";
 import { RentalCustomersTab } from "@/components/rental/RentalCustomersTab";
 import { InterCompanyTransfersTab } from "@/components/rental/InterCompanyTransfersTab";
+import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const RentalManagement = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -45,7 +46,20 @@ const RentalManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Magnolia Flowers */}
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute top-24 right-0 w-44 opacity-20 pointer-events-none select-none transform translate-x-1/3"
+        aria-hidden="true"
+      />
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute bottom-10 left-0 w-40 opacity-15 pointer-events-none select-none transform -translate-x-1/3 rotate-180"
+        aria-hidden="true"
+      />
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center gap-4">

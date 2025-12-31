@@ -6,6 +6,7 @@ import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 import { CreateActionItemDialog } from "@/components/CreateActionItemDialog";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FolderKanban, ListTodo } from "lucide-react";
+import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -76,7 +77,20 @@ export default function Projects() {
 
   // Projects list view
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Decorative Magnolia Flowers */}
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute top-16 right-0 w-40 opacity-25 pointer-events-none select-none transform translate-x-1/4"
+        aria-hidden="true"
+      />
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute bottom-0 left-0 w-36 opacity-20 pointer-events-none select-none transform -translate-x-1/4 rotate-12"
+        aria-hidden="true"
+      />
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
