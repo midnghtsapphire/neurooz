@@ -491,6 +491,54 @@ export type Database = {
         }
         Relationships: []
       }
+      employment_rules: {
+        Row: {
+          age_group: string | null
+          category: string
+          created_at: string
+          documentation_needed: string[] | null
+          id: string
+          is_active: boolean | null
+          requirements: string[] | null
+          rule_description: string | null
+          rule_key: string
+          rule_title: string
+          source_url: string | null
+          tax_implications: string | null
+          updated_at: string
+        }
+        Insert: {
+          age_group?: string | null
+          category: string
+          created_at?: string
+          documentation_needed?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          requirements?: string[] | null
+          rule_description?: string | null
+          rule_key: string
+          rule_title: string
+          source_url?: string | null
+          tax_implications?: string | null
+          updated_at?: string
+        }
+        Update: {
+          age_group?: string | null
+          category?: string
+          created_at?: string
+          documentation_needed?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          requirements?: string[] | null
+          rule_description?: string | null
+          rule_key?: string
+          rule_title?: string
+          source_url?: string | null
+          tax_implications?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       form_1099_investment_income: {
         Row: {
           bond_premium: number | null
