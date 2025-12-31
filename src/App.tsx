@@ -12,6 +12,7 @@ import TaxFormEditor from "./pages/TaxFormEditor";
 import SavedForms from "./pages/SavedForms";
 import VineTracker from "./pages/VineTracker";
 import RentalManagement from "./pages/RentalManagement";
+import TaxRules from "./pages/TaxRules";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/saved-forms" element={<SavedForms />} />
           <Route path="/vine-tracker" element={<VineTracker />} />
           <Route path="/rental-management" element={<RentalManagement />} />
+          <Route path="/tax-rules" element={<TaxRules />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
