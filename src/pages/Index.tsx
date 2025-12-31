@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -232,6 +232,29 @@ const Index = () => {
           <p className="text-muted-foreground mb-8">
             Here's your tax overview. Let's keep things organized.
           </p>
+
+          {/* Quick Actions */}
+          {/* Featured Tax Credits Calculator */}
+          <div 
+            onClick={() => navigate("/tax-credits-calculator")}
+            className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 border-2 border-primary/30 shadow-medium hover:shadow-glow transition-all duration-300 cursor-pointer group"
+          >
+            <div className="flex items-center gap-6">
+              <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-soft group-hover:scale-110 transition-transform">
+                <Calculator className="w-8 h-8" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-display font-bold text-foreground mb-1">Tax Credits Calculator</h3>
+                <p className="text-muted-foreground">Discover which tax credits you qualify for based on income, family size, and purchases. Includes Child Tax Credit, EITC, EV credits, and more.</p>
+              </div>
+              <Button 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft"
+                onClick={(e) => { e.stopPropagation(); navigate("/tax-credits-calculator"); }}
+              >
+                Calculate Now
+              </Button>
+            </div>
+          </div>
 
           {/* Quick Actions */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
