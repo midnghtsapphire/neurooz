@@ -90,37 +90,85 @@ const defaultW2Data: W2FormData = {
   box20LocalityName: "",
 };
 
+// 2024 IRS limits (use previous year for W-2 generation)
+const IRS_LIMITS_2024 = {
+  "401k": 23000,
+  "401k_catchup": 7500, // Age 50+
+  "403b": 23000,
+  "403b_catchup": 7500,
+  "457b": 23000,
+  "457b_catchup": 7500,
+  "simple": 16000,
+  "simple_catchup": 3500,
+  "hsa_individual": 4150,
+  "hsa_family": 8300,
+  "hsa_catchup": 1000, // Age 55+
+  "fsa": 3200,
+  "dcfsa": 5000,
+  "adoption": 16810,
+  "qsehra_individual": 6150,
+  "qsehra_family": 12450,
+  "social_security_wage_base": 168600,
+};
+
 const BOX_12_CODES = [
-  { code: "A", label: "Uncollected SS tax on tips" },
-  { code: "B", label: "Uncollected Medicare tax on tips" },
-  { code: "C", label: "Taxable cost of group-term life insurance over $50,000" },
-  { code: "D", label: "401(k) deferrals" },
-  { code: "E", label: "403(b) deferrals" },
-  { code: "F", label: "408(k)(6) SEP deferrals" },
-  { code: "G", label: "457(b) deferrals" },
-  { code: "H", label: "501(c)(18)(D) deferrals" },
-  { code: "J", label: "Nontaxable sick pay" },
-  { code: "K", label: "20% excise tax on golden parachutes" },
-  { code: "L", label: "Substantiated employee business expense reimbursements" },
-  { code: "M", label: "Uncollected SS tax on group-term life insurance" },
-  { code: "N", label: "Uncollected Medicare tax on group-term life insurance" },
-  { code: "P", label: "Excludable moving expense reimbursements" },
-  { code: "Q", label: "Nontaxable combat pay" },
-  { code: "R", label: "Employer contributions to Archer MSA" },
-  { code: "S", label: "408(p) SIMPLE deferrals" },
-  { code: "T", label: "Adoption benefits" },
-  { code: "V", label: "Income from exercise of nonstatutory stock options" },
-  { code: "W", label: "Employer contributions to HSA" },
-  { code: "Y", label: "Deferrals under 409A nonqualified deferred compensation plan" },
-  { code: "Z", label: "Income under 409A" },
-  { code: "AA", label: "Roth 401(k) contributions" },
-  { code: "BB", label: "Roth 403(b) contributions" },
-  { code: "DD", label: "Cost of employer-sponsored health coverage" },
-  { code: "EE", label: "Roth 457(b) contributions" },
-  { code: "FF", label: "Permitted benefits under qualified small employer HRA" },
-  { code: "GG", label: "Income from qualified equity grants under 83(i)" },
-  { code: "HH", label: "Aggregate deferrals under 83(i)" },
+  { code: "A", label: "Uncollected SS tax on tips", limit: null, limitNote: null },
+  { code: "B", label: "Uncollected Medicare tax on tips", limit: null, limitNote: null },
+  { code: "C", label: "Taxable cost of group-term life insurance over $50,000", limit: null, limitNote: "Taxable portion only" },
+  { code: "D", label: "401(k) deferrals", limit: IRS_LIMITS_2024["401k"], limitNote: "$23,000 (2024); +$7,500 catch-up if 50+" },
+  { code: "E", label: "403(b) deferrals", limit: IRS_LIMITS_2024["403b"], limitNote: "$23,000 (2024); +$7,500 catch-up if 50+" },
+  { code: "F", label: "408(k)(6) SEP deferrals", limit: null, limitNote: "Employer contribution only" },
+  { code: "G", label: "457(b) deferrals", limit: IRS_LIMITS_2024["457b"], limitNote: "$23,000 (2024); +$7,500 catch-up if 50+" },
+  { code: "H", label: "501(c)(18)(D) deferrals", limit: null, limitNote: null },
+  { code: "J", label: "Nontaxable sick pay", limit: null, limitNote: "Informational only" },
+  { code: "K", label: "20% excise tax on golden parachutes", limit: null, limitNote: null },
+  { code: "L", label: "Substantiated employee business expense reimbursements", limit: null, limitNote: null },
+  { code: "M", label: "Uncollected SS tax on group-term life insurance", limit: null, limitNote: null },
+  { code: "N", label: "Uncollected Medicare tax on group-term life insurance", limit: null, limitNote: null },
+  { code: "P", label: "Excludable moving expense reimbursements", limit: null, limitNote: "Military only" },
+  { code: "Q", label: "Nontaxable combat pay", limit: null, limitNote: "Military only" },
+  { code: "R", label: "Employer contributions to Archer MSA", limit: null, limitNote: "Limited availability" },
+  { code: "S", label: "408(p) SIMPLE deferrals", limit: IRS_LIMITS_2024["simple"], limitNote: "$16,000 (2024); +$3,500 catch-up if 50+" },
+  { code: "T", label: "Adoption benefits", limit: IRS_LIMITS_2024["adoption"], limitNote: "$16,810 max exclusion (2024)" },
+  { code: "V", label: "Income from exercise of nonstatutory stock options", limit: null, limitNote: "Taxable income" },
+  { code: "W", label: "Employer contributions to HSA", limit: IRS_LIMITS_2024["hsa_family"], limitNote: "$4,150 self / $8,300 family (2024); +$1,000 if 55+" },
+  { code: "Y", label: "Deferrals under 409A nonqualified deferred compensation plan", limit: null, limitNote: null },
+  { code: "Z", label: "Income under 409A", limit: null, limitNote: "Taxable - included in Box 1" },
+  { code: "AA", label: "Roth 401(k) contributions", limit: IRS_LIMITS_2024["401k"], limitNote: "$23,000 combined with D (2024)" },
+  { code: "BB", label: "Roth 403(b) contributions", limit: IRS_LIMITS_2024["403b"], limitNote: "$23,000 combined with E (2024)" },
+  { code: "DD", label: "Cost of employer-sponsored health coverage", limit: null, limitNote: "Informational only - not taxable" },
+  { code: "EE", label: "Roth 457(b) contributions", limit: IRS_LIMITS_2024["457b"], limitNote: "$23,000 combined with G (2024)" },
+  { code: "FF", label: "Permitted benefits under qualified small employer HRA", limit: IRS_LIMITS_2024["qsehra_family"], limitNote: "$6,150 self / $12,450 family (2024)" },
+  { code: "GG", label: "Income from qualified equity grants under 83(i)", limit: null, limitNote: "Deferred income" },
+  { code: "HH", label: "Aggregate deferrals under 83(i)", limit: null, limitNote: "Tracking only" },
 ];
+
+// Box 14 common codes with limits
+const BOX_14_CODES = [
+  { code: "EDUC ASST", label: "Educational Assistance (Section 127)", limit: 5250, limitNote: "$5,250 max tax-free" },
+  { code: "SLRP", label: "Student Loan Repayment (Section 127)", limit: 5250, limitNote: "Combined with education: $5,250 total" },
+  { code: "FSA", label: "Health FSA Contributions", limit: IRS_LIMITS_2024["fsa"], limitNote: "$3,200 max (2024)" },
+  { code: "DCFSA", label: "Dependent Care FSA", limit: IRS_LIMITS_2024["dcfsa"], limitNote: "$5,000 max (MFJ)" },
+  { code: "HSA-EE", label: "Employee HSA Contributions", limit: IRS_LIMITS_2024["hsa_family"], limitNote: "$4,150 self / $8,300 family" },
+  { code: "PARKING", label: "Qualified Parking", limit: 315, limitNote: "$315/month max (2024)" },
+  { code: "TRANSIT", label: "Transit/Vanpool", limit: 315, limitNote: "$315/month max (2024)" },
+  { code: "UNION", label: "Union Dues", limit: null, limitNote: "No limit - not deductible 2018-2025" },
+  { code: "SUI", label: "State Unemployment Insurance", limit: null, limitNote: "State-specific" },
+  { code: "SDI", label: "State Disability Insurance", limit: null, limitNote: "CA, NJ, NY, HI, RI, PR only" },
+  { code: "FLI", label: "Family Leave Insurance", limit: null, limitNote: "State-specific" },
+  { code: "GTLI", label: "Group-Term Life Insurance (taxable)", limit: null, limitNote: "Coverage over $50,000" },
+  { code: "OTHER", label: "Other", limit: null, limitNote: null },
+];
+
+const getCodeLimit = (code: string, isBox12: boolean): { limit: number | null; note: string | null } => {
+  if (isBox12) {
+    const found = BOX_12_CODES.find(c => c.code === code);
+    return { limit: found?.limit || null, note: found?.limitNote || null };
+  } else {
+    const found = BOX_14_CODES.find(c => c.code === code);
+    return { limit: found?.limit || null, note: found?.limitNote || null };
+  }
+};
 
 export function W2Generator() {
   const [selectedYear, setSelectedYear] = useState(currentYear - 1);
@@ -555,7 +603,10 @@ export function W2Generator() {
           {/* Box 12 Codes */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">Box 12: Coded Benefits</h3>
+              <div>
+                <h3 className="font-semibold">Box 12: Coded Benefits</h3>
+                <p className="text-xs text-muted-foreground">IRS limits shown - warnings appear when exceeded</p>
+              </div>
               <Button variant="outline" size="sm" onClick={addBox12Code}>
                 Add Code
               </Button>
@@ -563,38 +614,70 @@ export function W2Generator() {
             {formData.box12Codes.length === 0 ? (
               <p className="text-sm text-muted-foreground">No Box 12 codes added</p>
             ) : (
-              <div className="space-y-2">
-                {formData.box12Codes.map((entry, index) => (
-                  <div key={index} className="flex gap-2 items-end">
-                    <div className="w-40">
-                      <Label>Code</Label>
-                      <Select value={entry.code} onValueChange={(v) => updateBox12Code(index, "code", v)}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {BOX_12_CODES.map((c) => (
-                            <SelectItem key={c.code} value={c.code}>
-                              {c.code} - {c.label.slice(0, 30)}...
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+              <div className="space-y-3">
+                {formData.box12Codes.map((entry, index) => {
+                  const codeInfo = BOX_12_CODES.find(c => c.code === entry.code);
+                  const isOverLimit = codeInfo?.limit && entry.amount > codeInfo.limit;
+                  
+                  return (
+                    <div key={index} className={`p-3 rounded-lg border ${isOverLimit ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/20' : 'border-border'}`}>
+                      <div className="flex gap-2 items-start">
+                        <div className="w-48">
+                          <Label>Code</Label>
+                          <Select value={entry.code} onValueChange={(v) => updateBox12Code(index, "code", v)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {BOX_12_CODES.map((c) => (
+                                <SelectItem key={c.code} value={c.code}>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono font-bold">{c.code}</span>
+                                    <span className="text-xs truncate max-w-[180px]">{c.label}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex-1">
+                          <Label>Amount</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            value={entry.amount || ""}
+                            onChange={(e) => updateBox12Code(index, "amount", parseFloat(e.target.value) || 0)}
+                            className={isOverLimit ? 'border-amber-500' : ''}
+                          />
+                        </div>
+                        <Button variant="ghost" size="sm" className="mt-6" onClick={() => removeBox12Code(index)}>
+                          ✕
+                        </Button>
+                      </div>
+                      {codeInfo && (
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          <span className="text-xs text-muted-foreground">{codeInfo.label}</span>
+                          {codeInfo.limit && (
+                            <Badge variant={isOverLimit ? "destructive" : "outline"} className="text-xs">
+                              Limit: ${codeInfo.limit.toLocaleString()}
+                            </Badge>
+                          )}
+                          {codeInfo.limitNote && (
+                            <span className="text-xs text-muted-foreground italic">{codeInfo.limitNote}</span>
+                          )}
+                          {isOverLimit && (
+                            <div className="flex items-center gap-1 text-amber-600">
+                              <AlertTriangle className="h-3 w-3" />
+                              <span className="text-xs font-medium">
+                                Over by ${(entry.amount - codeInfo.limit!).toLocaleString()}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <div className="flex-1">
-                      <Label>Amount</Label>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        value={entry.amount || ""}
-                        onChange={(e) => updateBox12Code(index, "amount", parseFloat(e.target.value) || 0)}
-                      />
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => removeBox12Code(index)}>
-                      ✕
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -604,7 +687,10 @@ export function W2Generator() {
           {/* Box 14 Other */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold">Box 14: Other (Education Benefits Auto-Populated)</h3>
+              <div>
+                <h3 className="font-semibold">Box 14: Other (Education Benefits Auto-Populated)</h3>
+                <p className="text-xs text-muted-foreground">Select from common codes or enter custom descriptions</p>
+              </div>
               <Button variant="outline" size="sm" onClick={addBox14Entry}>
                 Add Entry
               </Button>
@@ -612,31 +698,83 @@ export function W2Generator() {
             {formData.box14Other.length === 0 ? (
               <p className="text-sm text-muted-foreground">No Box 14 entries</p>
             ) : (
-              <div className="space-y-2">
-                {formData.box14Other.map((entry, index) => (
-                  <div key={index} className="flex gap-2 items-end">
-                    <div className="flex-1">
-                      <Label>Description</Label>
-                      <Input
-                        placeholder="e.g., EDUC ASST, SUI, SDI"
-                        value={entry.description}
-                        onChange={(e) => updateBox14Entry(index, "description", e.target.value)}
-                      />
+              <div className="space-y-3">
+                {formData.box14Other.map((entry, index) => {
+                  const codeInfo = BOX_14_CODES.find(c => c.code === entry.description.toUpperCase());
+                  const isOverLimit = codeInfo?.limit && entry.amount > codeInfo.limit;
+                  
+                  return (
+                    <div key={index} className={`p-3 rounded-lg border ${isOverLimit ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/20' : 'border-border'}`}>
+                      <div className="flex gap-2 items-start">
+                        <div className="flex-1">
+                          <Label>Description / Code</Label>
+                          <div className="flex gap-2">
+                            <Select 
+                              value={BOX_14_CODES.some(c => c.code === entry.description.toUpperCase()) ? entry.description.toUpperCase() : ""}
+                              onValueChange={(v) => updateBox14Entry(index, "description", v)}
+                            >
+                              <SelectTrigger className="w-48">
+                                <SelectValue placeholder="Common codes..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {BOX_14_CODES.map((c) => (
+                                  <SelectItem key={c.code} value={c.code}>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-mono font-bold text-xs">{c.code}</span>
+                                      {c.limit && (
+                                        <span className="text-xs text-muted-foreground">(max ${c.limit.toLocaleString()})</span>
+                                      )}
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <Input
+                              placeholder="Or custom description"
+                              value={entry.description}
+                              onChange={(e) => updateBox14Entry(index, "description", e.target.value)}
+                              className="flex-1"
+                            />
+                          </div>
+                        </div>
+                        <div className="w-32">
+                          <Label>Amount</Label>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            value={entry.amount || ""}
+                            onChange={(e) => updateBox14Entry(index, "amount", parseFloat(e.target.value) || 0)}
+                            className={isOverLimit ? 'border-amber-500' : ''}
+                          />
+                        </div>
+                        <Button variant="ghost" size="sm" className="mt-6" onClick={() => removeBox14Entry(index)}>
+                          ✕
+                        </Button>
+                      </div>
+                      {codeInfo && (
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          <span className="text-xs text-muted-foreground">{codeInfo.label}</span>
+                          {codeInfo.limit && (
+                            <Badge variant={isOverLimit ? "destructive" : "outline"} className="text-xs">
+                              Limit: ${codeInfo.limit.toLocaleString()}
+                            </Badge>
+                          )}
+                          {codeInfo.limitNote && (
+                            <span className="text-xs text-muted-foreground italic">{codeInfo.limitNote}</span>
+                          )}
+                          {isOverLimit && (
+                            <div className="flex items-center gap-1 text-amber-600">
+                              <AlertTriangle className="h-3 w-3" />
+                              <span className="text-xs font-medium">
+                                Over by ${(entry.amount - codeInfo.limit!).toLocaleString()} - excess is taxable
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <div className="w-32">
-                      <Label>Amount</Label>
-                      <Input
-                        type="number"
-                        step="0.01"
-                        value={entry.amount || ""}
-                        onChange={(e) => updateBox14Entry(index, "amount", parseFloat(e.target.value) || 0)}
-                      />
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => removeBox14Entry(index)}>
-                      ✕
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
