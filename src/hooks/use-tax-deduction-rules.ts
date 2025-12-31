@@ -69,6 +69,11 @@ export const CATEGORY_LABELS: Record<string, string> = {
   disability: "Disability (IRWE)",
   charitable: "Charitable Contributions",
   vine: "Amazon Vine",
+  team_building: "Team Building (100%)",
+  donations: "Donations & Charity",
+  rental_business: "Rental Business",
+  expert_tips: "Expert CPA Tips",
+  back_taxes: "Back Taxes & Amendments",
 };
 
 // Category icons for UI
@@ -83,4 +88,9 @@ export const CATEGORY_ICONS: Record<string, string> = {
   disability: "Accessibility",
   charitable: "Gift",
   vine: "Package",
+  team_building: "Users",
+  donations: "Heart",
+  rental_business: "Building",
+  expert_tips: "Lightbulb",
+  back_taxes: "FileText",
 };
