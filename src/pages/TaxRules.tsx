@@ -1,12 +1,17 @@
+import { useState } from "react";
 import { NavLink } from "@/components/NavLink";
 import { FloatingPetals } from "@/components/FloatingPetals";
 import { TaxDeductionRulesPanel } from "@/components/tax-rules/TaxDeductionRulesPanel";
+import { TaxLawChangesPanel } from "@/components/tax-rules/TaxLawChangesPanel";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookOpen, History } from "lucide-react";
 
 export default function TaxRules() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("deductions");
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,7 +25,7 @@ export default function TaxRules() {
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-xl font-semibold">Tax Deduction Rules</h1>
+            <h1 className="text-xl font-semibold">Tax Rules & Law Changes</h1>
           </div>
           <nav className="flex items-center gap-4">
             <NavLink to="/">Home</NavLink>
@@ -32,7 +37,26 @@ export default function TaxRules() {
 
       {/* Main Content */}
       <main className="container px-4 py-8">
-        <TaxDeductionRulesPanel />
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="deductions" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              Deduction Rules
+            </TabsTrigger>
+            <TabsTrigger value="tcja" className="flex items-center gap-2">
+              <History className="h-4 w-4" />
+              TCJA Changes
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="deductions">
+            <TaxDeductionRulesPanel />
+          </TabsContent>
+
+          <TabsContent value="tcja">
+            <TaxLawChangesPanel />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
