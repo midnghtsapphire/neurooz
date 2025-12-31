@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.customer-portal]
 verify_jwt = false
+
+[functions.process-brain-dump]
+verify_jwt = true
