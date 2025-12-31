@@ -94,7 +94,28 @@ export function useCreateDonation() {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (donation: Omit<Partial<DonationRecord>, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (donation: {
+      product_name: string;
+      charity_name: string;
+      donation_date?: string;
+      source_product_id?: string | null;
+      original_etv?: number;
+      fair_market_value?: number;
+      cost_basis?: number;
+      condition_at_donation?: string;
+      valuation_method?: string;
+      comparable_evidence?: string | null;
+      charity_ein?: string | null;
+      charity_address?: string | null;
+      charity_city?: string | null;
+      charity_state?: string | null;
+      charity_zip?: string | null;
+      is_501c3?: boolean;
+      receipt_number?: string | null;
+      notes?: string | null;
+      included_in_tax_year?: number | null;
+      photo_urls?: string[] | null;
+    }) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("Not authenticated");
 
@@ -110,10 +131,33 @@ export function useCreateDonation() {
       const { data, error } = await supabase
         .from("donation_records")
         .insert([{
-          ...donation,
+          product_name: donation.product_name,
+          charity_name: donation.charity_name,
           user_id: userData.user.id,
-          form_8283_section: form8283Section,
+          donation_date: donation.donation_date || new Date().toISOString().split("T")[0],
+          source_product_id: donation.source_product_id ?? null,
+          original_etv: donation.original_etv ?? 0,
+          fair_market_value: donation.fair_market_value ?? 0,
+          cost_basis: donation.cost_basis ?? 0,
+          condition_at_donation: donation.condition_at_donation ?? "good",
+          valuation_method: donation.valuation_method ?? "comparable_sales",
+          comparable_evidence: donation.comparable_evidence ?? null,
+          charity_ein: donation.charity_ein ?? null,
+          charity_address: donation.charity_address ?? null,
+          charity_city: donation.charity_city ?? null,
+          charity_state: donation.charity_state ?? null,
+          charity_zip: donation.charity_zip ?? null,
+          is_501c3: donation.is_501c3 ?? true,
+          acknowledgment_received: false,
+          acknowledgment_date: null,
+          receipt_number: donation.receipt_number ?? null,
           appraisal_required: fmv > 5000,
+          appraiser_name: null,
+          appraiser_ein: null,
+          form_8283_section: form8283Section,
+          included_in_tax_year: donation.included_in_tax_year ?? null,
+          photo_urls: donation.photo_urls ?? null,
+          notes: donation.notes ?? null,
         }])
         .select()
         .single();
@@ -181,13 +225,40 @@ export function useCreateCharity() {
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (charity: Omit<Partial<SavedCharity>, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+    mutationFn: async (charity: {
+      charity_name: string;
+      ein?: string | null;
+      address?: string | null;
+      city?: string | null;
+      state?: string | null;
+      zip?: string | null;
+      is_501c3?: boolean;
+      contact_name?: string | null;
+      contact_email?: string | null;
+      contact_phone?: string | null;
+      notes?: string | null;
+      total_donations?: number;
+    }) => {
       const { data: userData } = await supabase.auth.getUser();
       if (!userData.user) throw new Error("Not authenticated");
 
       const { data, error } = await supabase
         .from("saved_charities")
-        .insert([{ ...charity, user_id: userData.user.id }])
+        .insert([{
+          charity_name: charity.charity_name,
+          user_id: userData.user.id,
+          ein: charity.ein ?? null,
+          address: charity.address ?? null,
+          city: charity.city ?? null,
+          state: charity.state ?? null,
+          zip: charity.zip ?? null,
+          is_501c3: charity.is_501c3 ?? true,
+          contact_name: charity.contact_name ?? null,
+          contact_email: charity.contact_email ?? null,
+          contact_phone: charity.contact_phone ?? null,
+          notes: charity.notes ?? null,
+          total_donations: charity.total_donations ?? 0,
+        }])
         .select()
         .single();
 
