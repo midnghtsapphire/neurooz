@@ -7,6 +7,7 @@ import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, C
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
+import { FloatingPetals } from "@/components/FloatingPetals";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -45,7 +46,8 @@ const Index = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen vine-section relative overflow-hidden">
+        <FloatingPetals count={15} />
         {/* Hero Section */}
         <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-6 py-4 flex items-center justify-between">

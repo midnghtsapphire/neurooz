@@ -23,6 +23,8 @@ import { useSubscription } from "@/hooks/use-subscription";
 import { getStripePriceId } from "@/lib/stripe-config";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import magnoliaFlowers from "@/assets/magnolia-flowers.png";
+import { FloatingPetals } from "@/components/FloatingPetals";
 
 const tierIcons: Record<string, React.ReactNode> = {
   "free": <Sparkles className="w-6 h-6" />,
@@ -145,7 +147,22 @@ const Pricing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen page-white relative overflow-hidden">
+      <FloatingPetals count={10} />
+      
+      {/* Decorative Magnolias */}
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute top-20 right-0 w-44 opacity-30 pointer-events-none select-none transform translate-x-1/4"
+        aria-hidden="true"
+      />
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute bottom-40 left-0 w-40 opacity-25 pointer-events-none select-none transform -translate-x-1/4 rotate-180"
+        aria-hidden="true"
+      />
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
