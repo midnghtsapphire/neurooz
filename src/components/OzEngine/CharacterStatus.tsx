@@ -1,6 +1,6 @@
 import { useCognitiveLoad } from "@/hooks/use-cognitive-load";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Brain, Shield, Sparkles, Dog } from "lucide-react";
+import { Heart, Brain, Shield, Sparkles, Dog, Crown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface CharacterCardProps {
@@ -61,6 +61,16 @@ export function CharacterStatus() {
   
   const characters = [
     {
+      name: "Dorothy",
+      icon: <Crown className="h-4 w-4" />,
+      state: load.dorothyState === 'paralyzed' ? '🚫 Paralyzed' : 
+             load.dorothyState === 'wavering' ? '⚖️ Wavering' : '👑 Decisive',
+      stateColor: load.dorothyState === 'paralyzed' ? 'text-red-400' : 
+                  load.dorothyState === 'wavering' ? 'text-yellow-400' : 'text-emerald-400',
+      load: load.executiveLoad,
+      description: "Executive control & decision making"
+    },
+    {
       name: "Tin Man",
       icon: <Heart className="h-4 w-4" />,
       state: load.tinManState === 'burnout' ? '🔥 Burnout' : 
@@ -96,7 +106,7 @@ export function CharacterStatus() {
       state: load.totoAlert ? '🚨 Alert!' : '🐕 Watching',
       stateColor: load.totoAlert ? 'text-amber-400' : 'text-emerald-400',
       load: load.totoAlert ? 80 : 20,
-      description: "Impulse watchdog & distraction detector"
+      description: "Impulse watchdog & drift detector"
     }
   ];
 

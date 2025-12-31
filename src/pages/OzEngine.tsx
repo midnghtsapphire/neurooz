@@ -9,6 +9,9 @@ import { TornadoEntry } from "@/components/OzEngine/TornadoEntry";
 import { WizardVoice } from "@/components/OzEngine/WizardVoice";
 import { FirstQuestCard } from "@/components/OzEngine/FirstQuestCard";
 import { QuestCompletion } from "@/components/OzEngine/QuestCompletion";
+import { VoidEvent } from "@/components/OzEngine/VoidEvent";
+import { ControlledBurn } from "@/components/OzEngine/ControlledBurn";
+import { ProjectOrbitDisplay } from "@/components/OzEngine/ProjectOrbitDisplay";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { useCognitiveLoad } from "@/hooks/use-cognitive-load";
 import { useOzOnboarding } from "@/hooks/use-oz-onboarding";
@@ -23,7 +26,8 @@ import {
   Plus,
   Brain,
   Zap,
-  RotateCcw
+  RotateCcw,
+  Flame
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -42,6 +46,10 @@ export default function OzEngine() {
     name?: string;
     callback?: () => void;
   } | null>(null);
+  
+  // Controlled Burn state
+  const [burnMode, setBurnMode] = useState(false);
+  const [burnQuest, setBurnQuest] = useState({ title: "", duration: 25 });
   
   // First quest for new users
   const firstQuest = {
@@ -79,7 +87,39 @@ export default function OzEngine() {
     }
   };
   
+  // Handle void event return
+  const handleVoidReturn = (refocusedGoal: string) => {
+    toast({
+      title: "Gravity restored",
+      description: `Refocused on: "${refocusedGoal}"`,
+    });
+  };
+  
+  // Handle controlled burn
+  const handleStartBurn = (title: string, duration: number = 25) => {
+    setBurnQuest({ title, duration });
+    setBurnMode(true);
+  };
+  
+  const handleBurnComplete = () => {
+    setBurnMode(false);
+    toast({
+      title: "🔥 Burn complete",
+      description: "Mission accomplished. You've earned your cooldown.",
+    });
+  };
+  
   const handleNewProjectAttempt = () => {
+    // Check orbit capacity
+    if (load.openProjects >= 6) {
+      toast({
+        title: "Orbit capacity reached",
+        description: "Complete or archive a project before adding more.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setPendingImpulse({ type: 'project', name: 'New Project' });
     setShowFirewall(true);
   };
@@ -122,6 +162,18 @@ export default function OzEngine() {
         onSkip={onboarding.skipTornado}
       />
       
+      {/* Void Event (Orbital Drift) */}
+      <VoidEvent onReturn={handleVoidReturn} />
+      
+      {/* Controlled Burn Mode */}
+      <ControlledBurn
+        isActive={burnMode}
+        questTitle={burnQuest.title}
+        questDuration={burnQuest.duration}
+        onComplete={handleBurnComplete}
+        onAbort={() => setBurnMode(false)}
+      />
+      
       {/* Quest Completion Celebration */}
       <QuestCompletion
         isVisible={onboarding.showQuestCompletion}
@@ -156,11 +208,23 @@ export default function OzEngine() {
             </Link>
             <div className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-emerald-400" />
-              <h1 className="text-xl font-bold text-emerald-100">The Oz Engine</h1>
+              <div>
+                <h1 className="text-xl font-bold text-emerald-100">The Oz Engine</h1>
+                <p className="text-xs text-emerald-400/60">Stabilize your gravity.</p>
+              </div>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleStartBurn("Focus Session", 25)}
+              className="border-orange-500/50 text-orange-400 hover:bg-orange-950/50"
+            >
+              <Flame className="h-4 w-4 mr-1" />
+              Burn Mode
+            </Button>
             <Button
               variant="ghost"
               size="icon"
@@ -202,10 +266,13 @@ export default function OzEngine() {
                 variant="outline"
                 className="h-auto py-4 flex flex-col gap-2 border-emerald-500/30 hover:bg-emerald-950/50"
                 onClick={handleNewProjectAttempt}
+                disabled={load.status === 'overload'}
               >
                 <Plus className="h-6 w-6 text-emerald-400" />
                 <span>New Quest</span>
-                <span className="text-xs text-muted-foreground">Toto will check first</span>
+                <span className="text-xs text-muted-foreground">
+                  {load.status === 'overload' ? 'Locked - RAM full' : 'Toto will check'}
+                </span>
               </Button>
               
               <Link to="/projects" className="contents">
@@ -266,6 +333,11 @@ export default function OzEngine() {
                           ⚠️ {load.overdueTasks} overdue
                         </span>
                       )}
+                      {load.driftLevel > 50 && (
+                        <span className="text-purple-400">
+                          🚀 Drift: {Math.round(load.driftLevel)}%
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -273,9 +345,10 @@ export default function OzEngine() {
             </Card>
           </div>
           
-          {/* Right Column - RAM & Characters */}
+          {/* Right Column - RAM, Orbits & Characters */}
           <div className="space-y-6">
             <RAMMonitor />
+            <ProjectOrbitDisplay />
             <CharacterStatus />
           </div>
         </div>
