@@ -14,8 +14,11 @@ import { ExportMenu } from "@/components/ExportMenu";
 import { EmploymentRulesDialog } from "@/components/EmploymentRulesDialog";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { EditProjectDialog } from "@/components/EditProjectDialog";
+import { YellowBrickRoad } from "@/components/YellowBrickRoad";
+import { SetbackMatrix } from "@/components/SetbackMatrix";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const defaultFilters: ProjectFilters = {
@@ -180,28 +183,48 @@ export default function Projects() {
             )}
           </div>
 
-          {/* Action Items Section */}
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <ListTodo className="h-5 w-5" />
-              Action Items
-            </h2>
-            <CreateActionItemDialog projectId={selectedProject.id} />
-          </div>
+          {/* Action Items with Yellow Brick Road View */}
+          <Tabs defaultValue="road" className="w-full">
+            <div className="flex items-center justify-between mb-4">
+              <TabsList>
+                <TabsTrigger value="road" className="gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Yellow Brick Road
+                </TabsTrigger>
+                <TabsTrigger value="list" className="gap-2">
+                  <ListTodo className="h-4 w-4" />
+                  List View
+                </TabsTrigger>
+              </TabsList>
+              <div className="flex items-center gap-2">
+                <SetbackMatrix actionItems={projectActionItems} />
+                <CreateActionItemDialog projectId={selectedProject.id} />
+              </div>
+            </div>
 
-          {projectActionItems.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
-              <ListTodo className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No action items yet</p>
-              <p className="text-sm">Add your first action item to get started</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {projectActionItems.map((item) => (
-                <ActionItemRow key={item.id} item={item} />
-              ))}
-            </div>
-          )}
+            <TabsContent value="road">
+              <YellowBrickRoad 
+                actionItems={projectActionItems} 
+                allActionItems={allActionItems}
+              />
+            </TabsContent>
+
+            <TabsContent value="list">
+              {projectActionItems.length === 0 ? (
+                <div className="text-center py-12 text-muted-foreground">
+                  <ListTodo className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p>No action items yet</p>
+                  <p className="text-sm">Add your first action item to get started</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {projectActionItems.map((item) => (
+                    <ActionItemRow key={item.id} item={item} />
+                  ))}
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
 
           {/* Project Garden */}
           <div className="mt-10 pt-6 border-t">
