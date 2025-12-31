@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ActionItem } from "@/hooks/use-projects";
 import { PicketFence } from "./PicketFence";
-import { Flower2, TreePine, Sprout, Droplets, Shovel } from "lucide-react";
+import { Flower2, TreePine, Sprout, Droplets, Shovel, Snowflake, Sun, Leaf, Cherry } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface GardenRewardsProps {
@@ -9,45 +9,134 @@ interface GardenRewardsProps {
   className?: string;
 }
 
-// Plant types with CO2 savings info
-const PLANTS = [
-  { id: "corn", name: "Corn", co2: 20, icon: "🌽", color: "text-yellow-500", requiredPoints: 5 },
-  { id: "flower", name: "Flower", co2: 5, icon: "🌸", color: "text-pink-400", requiredPoints: 3 },
-  { id: "magnolia", name: "Magnolia", co2: 50, icon: "🌺", color: "text-rose-300", requiredPoints: 15 },
-  { id: "palm", name: "Palm Tree", co2: 75, icon: "🌴", color: "text-green-500", requiredPoints: 25 },
-  { id: "oak", name: "Oak Tree", co2: 100, icon: "🌳", color: "text-green-700", requiredPoints: 40 },
-  { id: "sunflower", name: "Sunflower", co2: 15, icon: "🌻", color: "text-amber-400", requiredPoints: 8 },
-];
+// Seasonal themes with unique plants and visuals
+const SEASONS = {
+  spring: {
+    name: "Spring Blossom Garden",
+    description: "Cherry blossoms, tulips, and fresh spring blooms",
+    icon: Cherry,
+    background: "from-pink-100 via-rose-50 to-green-100",
+    skyGradient: "from-sky-200/40 to-pink-100/20",
+    sunColor: "bg-yellow-300",
+    groundColor: "from-amber-700/30 via-green-600/20 to-transparent",
+    borderColor: "border-pink-300/50",
+    textColor: "text-pink-800",
+    subtextColor: "text-pink-600",
+    plants: [
+      { id: "cherry_blossom", name: "Cherry Blossom", co2: 45, icon: "🌸", requiredPoints: 12 },
+      { id: "tulip", name: "Tulip", co2: 8, icon: "🌷", requiredPoints: 4 },
+      { id: "daisy", name: "Daisy", co2: 5, icon: "🌼", requiredPoints: 3 },
+      { id: "butterfly", name: "Butterfly Bush", co2: 25, icon: "🦋", requiredPoints: 10 },
+      { id: "daffodil", name: "Daffodil", co2: 6, icon: "🌻", requiredPoints: 4 },
+      { id: "magnolia", name: "Magnolia", co2: 60, icon: "🌺", requiredPoints: 20 },
+    ],
+    decorations: ["🦋", "🐝", "🐞"],
+    weather: "☁️",
+  },
+  summer: {
+    name: "Tropical Paradise",
+    description: "Palm trees, hibiscus, and summer sunshine",
+    icon: Sun,
+    background: "from-cyan-100 via-sky-50 to-yellow-100",
+    skyGradient: "from-sky-300/30 to-cyan-100/20",
+    sunColor: "bg-orange-400",
+    groundColor: "from-amber-800/40 via-yellow-600/20 to-transparent",
+    borderColor: "border-cyan-300/50",
+    textColor: "text-cyan-800",
+    subtextColor: "text-cyan-600",
+    plants: [
+      { id: "palm", name: "Palm Tree", co2: 80, icon: "🌴", requiredPoints: 25 },
+      { id: "hibiscus", name: "Hibiscus", co2: 15, icon: "🌺", requiredPoints: 6 },
+      { id: "sunflower", name: "Sunflower", co2: 18, icon: "🌻", requiredPoints: 7 },
+      { id: "cactus", name: "Cactus", co2: 12, icon: "🌵", requiredPoints: 5 },
+      { id: "tropical", name: "Tropical Flower", co2: 20, icon: "🏵️", requiredPoints: 8 },
+      { id: "coconut", name: "Coconut Palm", co2: 100, icon: "🥥", requiredPoints: 35 },
+    ],
+    decorations: ["🦜", "🌊", "⛱️"],
+    weather: "☀️",
+  },
+  fall: {
+    name: "Harvest Garden",
+    description: "Pumpkins, corn, and autumn colors",
+    icon: Leaf,
+    background: "from-orange-100 via-amber-50 to-yellow-100",
+    skyGradient: "from-orange-200/30 to-amber-100/20",
+    sunColor: "bg-amber-400",
+    groundColor: "from-amber-900/50 via-orange-700/30 to-transparent",
+    borderColor: "border-orange-300/50",
+    textColor: "text-orange-800",
+    subtextColor: "text-orange-600",
+    plants: [
+      { id: "pumpkin", name: "Pumpkin", co2: 15, icon: "🎃", requiredPoints: 6 },
+      { id: "corn", name: "Corn", co2: 22, icon: "🌽", requiredPoints: 8 },
+      { id: "maple", name: "Maple Tree", co2: 90, icon: "🍁", requiredPoints: 30 },
+      { id: "apple", name: "Apple Tree", co2: 70, icon: "🍎", requiredPoints: 22 },
+      { id: "wheat", name: "Wheat", co2: 10, icon: "🌾", requiredPoints: 4 },
+      { id: "mushroom", name: "Mushroom", co2: 3, icon: "🍄", requiredPoints: 2 },
+    ],
+    decorations: ["🍂", "🦃", "🌰"],
+    weather: "🍃",
+  },
+  winter: {
+    name: "Evergreen Wonderland",
+    description: "Pine trees, holly, and winter magic",
+    icon: Snowflake,
+    background: "from-slate-100 via-blue-50 to-white",
+    skyGradient: "from-blue-200/40 to-slate-100/30",
+    sunColor: "bg-blue-200",
+    groundColor: "from-slate-300/50 via-blue-100/30 to-transparent",
+    borderColor: "border-blue-200/50",
+    textColor: "text-blue-800",
+    subtextColor: "text-blue-600",
+    plants: [
+      { id: "pine", name: "Pine Tree", co2: 85, icon: "🌲", requiredPoints: 28 },
+      { id: "holly", name: "Holly Bush", co2: 20, icon: "🎄", requiredPoints: 8 },
+      { id: "snowdrop", name: "Snowdrop", co2: 5, icon: "❄️", requiredPoints: 3 },
+      { id: "spruce", name: "Blue Spruce", co2: 95, icon: "🎋", requiredPoints: 32 },
+      { id: "mistletoe", name: "Mistletoe", co2: 8, icon: "🌿", requiredPoints: 4 },
+      { id: "poinsettia", name: "Poinsettia", co2: 12, icon: "🌺", requiredPoints: 5 },
+    ],
+    decorations: ["⛄", "❄️", "🦌"],
+    weather: "🌨️",
+  },
+};
+
+type Season = keyof typeof SEASONS;
+
+// Determine current season based on date
+function getCurrentSeason(): Season {
+  const month = new Date().getMonth(); // 0-11
+  if (month >= 2 && month <= 4) return "spring"; // Mar-May
+  if (month >= 5 && month <= 7) return "summer"; // Jun-Aug
+  if (month >= 8 && month <= 10) return "fall";  // Sep-Nov
+  return "winter"; // Dec-Feb
+}
 
 // Tools earned from showstopper tasks
 const TOOLS = [
-  { id: "hoe", name: "Garden Hoe", icon: "🪓", description: "Unlocked by completing high-priority tasks" },
-  { id: "soil", name: "Rich Soil", icon: "🟤", description: "Unlocked by completing 3+ tasks in a row" },
-  { id: "water", name: "Water Can", icon: "💧", description: "Unlocked by completing tasks on time" },
+  { id: "hoe", name: "Garden Hoe", icon: "🪓", description: "Complete 2+ high-priority tasks" },
+  { id: "soil", name: "Rich Soil", icon: "🟤", description: "Complete 5+ total tasks" },
+  { id: "water", name: "Water Can", icon: "💧", description: "Complete 3+ tasks" },
 ];
 
-// Garden theme
-const GARDEN_THEME = {
-  name: "Magnolia Paradise",
-  description: "A Southern garden with magnolias, flowers, and shade trees",
-  background: "from-green-100 via-emerald-50 to-lime-100",
-};
+type Plant = typeof SEASONS.spring.plants[0];
 
-function GardenPlant({ plant, index, isNew = false }: { plant: typeof PLANTS[0]; index: number; isNew?: boolean }) {
+function GardenPlant({ plant, index, season }: { plant: Plant; index: number; season: Season }) {
   const delay = index * 0.1;
+  const theme = SEASONS[season];
   
   return (
     <div 
-      className={cn(
-        "flex flex-col items-center transition-all duration-500",
-        isNew && "animate-bounce"
-      )}
+      className="flex flex-col items-center transition-all duration-500 animate-fade-in"
       style={{ animationDelay: `${delay}s` }}
     >
-      <span className="text-2xl md:text-3xl drop-shadow-md" role="img" aria-label={plant.name}>
+      <span className="text-2xl md:text-3xl drop-shadow-md hover:scale-110 transition-transform cursor-default" role="img" aria-label={plant.name}>
         {plant.icon}
       </span>
-      <div className="text-[10px] text-center mt-1 font-medium text-green-700 bg-white/60 px-1 rounded">
+      <div className={cn(
+        "text-[10px] text-center mt-1 font-medium px-1 rounded bg-white/70",
+        theme.textColor
+      )}>
         {plant.co2}kg CO₂
       </div>
     </div>
@@ -73,7 +162,37 @@ function GardenTool({ tool, earned }: { tool: typeof TOOLS[0]; earned: boolean }
   );
 }
 
+function SeasonIndicator({ season, allSeasons }: { season: Season; allSeasons: Season[] }) {
+  return (
+    <div className="flex justify-center gap-2 mb-3">
+      {allSeasons.map((s) => {
+        const theme = SEASONS[s];
+        const Icon = theme.icon;
+        const isActive = s === season;
+        return (
+          <div
+            key={s}
+            className={cn(
+              "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-all",
+              isActive 
+                ? `${theme.textColor} bg-white shadow-md border ${theme.borderColor}` 
+                : "text-gray-400 bg-gray-100/50"
+            )}
+          >
+            <Icon className="h-3 w-3" />
+            <span className="capitalize">{s}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
+  const currentSeason = getCurrentSeason();
+  const theme = SEASONS[currentSeason];
+  const SeasonIcon = theme.icon;
+
   const stats = useMemo(() => {
     const completed = actionItems.filter(item => item.is_completed);
     const highPriorityCompleted = completed.filter(item => item.priority === "high");
@@ -89,11 +208,11 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
     
     // Calculate total CO2 saved based on earned plants
     let totalCo2 = 0;
-    const earnedPlants: typeof PLANTS[0][] = [];
+    const earnedPlants: Plant[] = [];
     
     let remainingPoints = points;
     // Award plants based on points (best plants first)
-    const sortedPlants = [...PLANTS].sort((a, b) => b.requiredPoints - a.requiredPoints);
+    const sortedPlants = [...theme.plants].sort((a, b) => b.requiredPoints - a.requiredPoints);
     
     for (const plant of sortedPlants) {
       while (remainingPoints >= plant.requiredPoints) {
@@ -110,31 +229,37 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
       water: mediumPriorityCompleted.length >= 3 || completed.length >= 3,
     };
     
+    const minPlantCost = Math.min(...theme.plants.map(p => p.requiredPoints));
+    const pointsToNext = remainingPoints < minPlantCost ? minPlantCost - remainingPoints : 0;
+    
     return {
       completedCount: completed.length,
       points,
       totalCo2,
       earnedPlants: earnedPlants.slice(0, 20), // Max 20 plants shown
       earnedTools,
-      nextPlant: PLANTS.find(p => p.requiredPoints > remainingPoints) || PLANTS[0],
-      pointsToNext: Math.min(...PLANTS.filter(p => p.requiredPoints > remainingPoints).map(p => p.requiredPoints - remainingPoints)) || 0,
+      pointsToNext,
+      remainingPoints,
     };
-  }, [actionItems]);
+  }, [actionItems, theme.plants]);
 
   return (
     <div className={cn("relative", className)}>
+      {/* Season Indicator */}
+      <SeasonIndicator season={currentSeason} allSeasons={["spring", "summer", "fall", "winter"]} />
+
       {/* Garden Header */}
       <div className="text-center mb-4">
-        <h3 className="text-lg font-bold text-green-800 flex items-center justify-center gap-2">
-          <Sprout className="h-5 w-5" />
-          {GARDEN_THEME.name}
+        <h3 className={cn("text-lg font-bold flex items-center justify-center gap-2", theme.textColor)}>
+          <SeasonIcon className="h-5 w-5" />
+          {theme.name}
         </h3>
-        <p className="text-sm text-green-600">{GARDEN_THEME.description}</p>
+        <p className={cn("text-sm", theme.subtextColor)}>{theme.description}</p>
       </div>
 
       {/* Stats Bar */}
       <div className="flex justify-center gap-6 mb-4 text-sm">
-        <div className="flex items-center gap-1 text-green-700">
+        <div className={cn("flex items-center gap-1", theme.textColor)}>
           <TreePine className="h-4 w-4" />
           <span className="font-bold">{stats.earnedPlants.length}</span> plants
         </div>
@@ -161,27 +286,39 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
 
       {/* Garden Bed */}
       <div className={cn(
-        "relative rounded-2xl overflow-hidden border-4 border-amber-700/30",
-        `bg-gradient-to-b ${GARDEN_THEME.background}`
+        "relative rounded-2xl overflow-hidden border-4",
+        `bg-gradient-to-b ${theme.background}`,
+        theme.borderColor
       )}>
         {/* Sky area */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-200/30 to-transparent h-1/2" />
+        <div className={cn("absolute inset-0 h-1/2", `bg-gradient-to-b ${theme.skyGradient}`)} />
         
-        {/* Sun */}
-        <div className="absolute top-4 right-6 w-10 h-10 bg-yellow-300 rounded-full shadow-lg shadow-yellow-200/50 animate-pulse" />
+        {/* Sun/Moon */}
+        <div className={cn(
+          "absolute top-4 right-6 w-10 h-10 rounded-full shadow-lg animate-pulse",
+          theme.sunColor
+        )} />
         
-        {/* Clouds */}
-        <div className="absolute top-6 left-10 text-2xl opacity-60">☁️</div>
-        <div className="absolute top-8 left-1/3 text-xl opacity-40">☁️</div>
+        {/* Weather decoration */}
+        <div className="absolute top-6 left-10 text-2xl opacity-60">{theme.weather}</div>
+        <div className="absolute top-8 left-1/3 text-xl opacity-40">{theme.weather}</div>
+        
+        {/* Seasonal decorations */}
+        <div className="absolute top-12 right-1/4 text-lg opacity-50 animate-bounce" style={{ animationDuration: '3s' }}>
+          {theme.decorations[0]}
+        </div>
+        <div className="absolute top-16 left-1/4 text-lg opacity-40 animate-bounce" style={{ animationDuration: '4s', animationDelay: '1s' }}>
+          {theme.decorations[1]}
+        </div>
         
         {/* Plants Area */}
         <div className="relative pt-16 pb-8 px-6 min-h-[160px]">
           {stats.earnedPlants.length === 0 ? (
-            <div className="text-center py-8 text-green-600/60">
+            <div className={cn("text-center py-8 opacity-60", theme.subtextColor)}>
               <Flower2 className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Complete tasks to grow your garden!</p>
+              <p className="text-sm">Complete tasks to grow your {currentSeason} garden!</p>
               <p className="text-xs mt-1">
-                Next plant in <span className="font-bold">{stats.pointsToNext || PLANTS[0].requiredPoints}</span> points
+                Next plant in <span className="font-bold">{stats.pointsToNext}</span> points
               </p>
             </div>
           ) : (
@@ -191,6 +328,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
                   key={`${plant.id}-${index}`} 
                   plant={plant} 
                   index={index}
+                  season={currentSeason}
                 />
               ))}
             </div>
@@ -198,25 +336,29 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
         </div>
 
         {/* Soil/Ground */}
-        <div className="h-6 bg-gradient-to-t from-amber-800/40 via-amber-700/30 to-transparent" />
+        <div className={cn("h-6", `bg-gradient-to-t ${theme.groundColor}`)} />
         
         {/* Fence at bottom */}
         <div className="relative -mb-4">
-          <PicketFence className="h-20" showFlowers={true} />
+          <PicketFence className="h-20" showFlowers={currentSeason === "spring" || currentSeason === "summer"} />
         </div>
       </div>
 
       {/* Progress to next plant */}
-      {stats.earnedPlants.length > 0 && stats.pointsToNext > 0 && (
+      {stats.pointsToNext > 0 && (
         <div className="mt-3 text-center">
           <div className="text-xs text-muted-foreground">
-            <span className="font-medium">{stats.pointsToNext} more points</span> until next plant
+            <span className="font-medium">{stats.pointsToNext} more points</span> until next {currentSeason} plant
           </div>
           <div className="w-32 h-1.5 bg-gray-200 rounded-full mx-auto mt-1 overflow-hidden">
             <div 
-              className="h-full bg-green-500 rounded-full transition-all duration-500"
+              className={cn("h-full rounded-full transition-all duration-500", 
+                currentSeason === "spring" ? "bg-pink-500" :
+                currentSeason === "summer" ? "bg-cyan-500" :
+                currentSeason === "fall" ? "bg-orange-500" : "bg-blue-400"
+              )}
               style={{ 
-                width: `${Math.min(100, ((stats.points % PLANTS[0].requiredPoints) / PLANTS[0].requiredPoints) * 100)}%` 
+                width: `${Math.min(100, (stats.remainingPoints / Math.min(...theme.plants.map(p => p.requiredPoints))) * 100)}%` 
               }}
             />
           </div>
