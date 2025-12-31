@@ -8,11 +8,14 @@ import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 import { FloatingPetals } from "@/components/FloatingPetals";
-import { PicketFence } from "@/components/PicketFence";
+import { PicketFence, GardenGate } from "@/components/PicketFence";
+import { MagnoliaSplash } from "@/components/MagnoliaSplash";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
+  const [gateOpen, setGateOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +34,14 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Open gate after splash
+  useEffect(() => {
+    if (!showSplash) {
+      const timer = setTimeout(() => setGateOpen(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [showSplash]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success("Signed out successfully");
@@ -47,34 +58,43 @@ const Index = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen vine-section relative overflow-hidden">
-        <FloatingPetals count={15} />
-        {/* Hero Section */}
-        <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-          <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                <Grape className="w-6 h-6 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-display font-bold text-foreground">VineTaxes</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={() => navigate("/projects")}
-                variant="ghost"
-                className="font-medium"
-              >
-                Projects
-              </Button>
-              <Button
-                onClick={() => navigate("/auth")}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft hover:shadow-medium transition-all"
-              >
-                Get Started
-              </Button>
-            </div>
+      <>
+        {showSplash && <MagnoliaSplash onComplete={() => setShowSplash(false)} duration={3500} />}
+        
+        <div className={`min-h-screen vine-section relative overflow-hidden transition-opacity duration-500 ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
+          <FloatingPetals count={20} />
+          
+          {/* Garden Gate Welcome */}
+          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 pointer-events-none">
+            <GardenGate isOpen={gateOpen} className="scale-75 opacity-60" />
           </div>
-        </header>
+          
+          {/* Hero Section */}
+          <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+            <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+                  <Grape className="w-6 h-6 text-primary-foreground" />
+                </div>
+                <span className="text-xl font-display font-bold text-foreground">VineTaxes</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Button
+                  onClick={() => navigate("/projects")}
+                  variant="ghost"
+                  className="font-medium"
+                >
+                  Projects
+                </Button>
+                <Button
+                  onClick={() => navigate("/auth")}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft hover:shadow-medium transition-all"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </div>
+          </header>
 
         <main className="container mx-auto px-6 relative">
           {/* Decorative Magnolia Flowers */}
@@ -146,19 +166,20 @@ const Index = () => {
               />
             </div>
             
-            {/* Decorative Picket Fence */}
-            <PicketFence className="h-20 opacity-70" />
+            {/* Decorative Picket Fence with flowers and gate */}
+            <PicketFence className="h-24 opacity-80" showFlowers={true} showGate={true} />
           </section>
         </main>
 
-        {/* Footer with fence */}
+        {/* Footer with fence and flowers */}
         <footer className="border-t border-border pt-4 mt-20 relative">
-          <PicketFence className="h-16 opacity-50" />
+          <PicketFence className="h-20 opacity-60" showFlowers={true} />
           <div className="container mx-auto px-6 py-6 text-center text-muted-foreground relative z-10 bg-gradient-to-t from-background to-transparent">
             <p>© 2024 VineTaxes. Cultivating tax clarity.</p>
           </div>
         </footer>
-      </div>
+        </div>
+      </>
     );
   }
 

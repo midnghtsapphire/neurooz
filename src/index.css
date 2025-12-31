@@ -56,6 +56,12 @@
     --vine-earth: 30 25% 25%;
     --vine-bark: 25 30% 20%;
     --vine-meadow: 100 35% 85%;
+    
+    /* Garden tokens */
+    --garden-sage: 120 30% 88%;
+    --garden-cream: 45 50% 96%;
+    --garden-pink: 340 60% 85%;
+    --garden-rose: 350 50% 75%;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(142 45% 32%) 0%, hsl(142 60% 45%) 50%, hsl(100 50% 55%) 100%);
@@ -369,5 +375,50 @@
   /* Meadow gradient background */
   .bg-meadow {
     background: var(--gradient-meadow);
+  }
+
+  /* Scale in animation for splash */
+  @keyframes scale-in {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  /* Garden gate transition */
+  @keyframes gate-open {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-70deg); }
+  }
+
+  .animate-gate-open {
+    animation: gate-open 0.8s ease-out forwards;
+  }
+
+  /* Bloom animation for splash */
+  @keyframes bloom {
+    0% {
+      transform: scale(0.5) rotate(-10deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+
+  .animate-bloom {
+    animation: bloom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
 }
