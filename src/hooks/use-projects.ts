@@ -24,6 +24,12 @@ export interface ActionItem {
   priority: "low" | "medium" | "high";
   created_at: string;
   updated_at: string;
+  // Oz-themed fields
+  blocked_by: string | null;
+  is_setback: boolean;
+  setback_reason: string | null;
+  priority_score: number;
+  task_type: "scarecrow" | "tinman" | "lion";
 }
 
 export function useProjects() {

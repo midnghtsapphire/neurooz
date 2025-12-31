@@ -16,39 +16,61 @@ export type Database = {
     Tables: {
       action_items: {
         Row: {
+          blocked_by: string | null
           created_at: string
           description: string | null
           due_date: string | null
           id: string
           is_completed: boolean
+          is_setback: boolean | null
           priority: string | null
+          priority_score: number | null
           project_id: string | null
+          setback_reason: string | null
+          task_type: string | null
           title: string
           updated_at: string
         }
         Insert: {
+          blocked_by?: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
           id?: string
           is_completed?: boolean
+          is_setback?: boolean | null
           priority?: string | null
+          priority_score?: number | null
           project_id?: string | null
+          setback_reason?: string | null
+          task_type?: string | null
           title: string
           updated_at?: string
         }
         Update: {
+          blocked_by?: string | null
           created_at?: string
           description?: string | null
           due_date?: string | null
           id?: string
           is_completed?: boolean
+          is_setback?: boolean | null
           priority?: string | null
+          priority_score?: number | null
           project_id?: string | null
+          setback_reason?: string | null
+          task_type?: string | null
           title?: string
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "action_items_blocked_by_fkey"
+            columns: ["blocked_by"]
+            isOneToOne: false
+            referencedRelation: "action_items"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "action_items_project_id_fkey"
             columns: ["project_id"]
