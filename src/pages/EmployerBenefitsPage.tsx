@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Grape, ArrowLeft, FileText, GraduationCap, BookOpen } from "lucide-react";
+import { Grape, ArrowLeft, FileText, GraduationCap, BookOpen, Printer } from "lucide-react";
 import { Section127PlanTemplate } from "@/components/employer-benefits/Section127PlanTemplate";
 import { EmployerEducationTracker } from "@/components/employer-benefits/EmployerEducationTracker";
 import { W2BoxReference } from "@/components/employer-benefits/W2BoxReference";
+import { W2Generator } from "@/components/employer-benefits/W2Generator";
 
 export default function EmployerBenefitsPage() {
   const navigate = useNavigate();
@@ -62,10 +63,14 @@ export default function EmployerBenefitsPage() {
           </div>
 
           <Tabs defaultValue="tracker" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 max-w-xl">
+            <TabsList className="grid w-full grid-cols-4 max-w-2xl">
               <TabsTrigger value="tracker" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Payment Tracker
+              </TabsTrigger>
+              <TabsTrigger value="w2-generator" className="gap-2">
+                <Printer className="h-4 w-4" />
+                W-2 Generator
               </TabsTrigger>
               <TabsTrigger value="plan" className="gap-2">
                 <FileText className="h-4 w-4" />
@@ -79,6 +84,10 @@ export default function EmployerBenefitsPage() {
 
             <TabsContent value="tracker">
               <EmployerEducationTracker />
+            </TabsContent>
+
+            <TabsContent value="w2-generator">
+              <W2Generator />
             </TabsContent>
 
             <TabsContent value="plan">
