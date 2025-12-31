@@ -287,7 +287,7 @@ const FeatureCard = ({
   title: string;
   description: string;
 }) => (
-  <div className="p-8 rounded-2xl bg-card border border-border shadow-soft hover:shadow-medium transition-all duration-300 group animate-fade-in">
+  <div className="p-8 rounded-2xl bg-card border border-border shadow-soft hover:shadow-medium transition-all duration-300 group animate-fade-in vine-border card-vine-glow">
     <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-5 group-hover:bg-primary group-hover:text-primary-foreground transition-all">
       {icon}
     </div>
@@ -309,7 +309,7 @@ const DashboardCard = ({
   action: string;
   onClick?: () => void;
 }) => (
-  <div className="p-6 rounded-2xl bg-card border border-border shadow-soft hover:shadow-medium transition-all duration-300 group">
+  <div className="p-6 rounded-2xl bg-card border border-border shadow-soft hover:shadow-medium transition-all duration-300 group leaf-corner card-vine-glow">
     <div className="flex items-start justify-between mb-4">
       <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-all">
         {icon}
