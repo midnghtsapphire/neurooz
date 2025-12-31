@@ -74,6 +74,12 @@ export const CATEGORY_LABELS: Record<string, string> = {
   rental_business: "Rental Business",
   expert_tips: "Expert CPA Tips",
   back_taxes: "Back Taxes & Amendments",
+  // 1099 Specific Categories
+  "1099_nec": "1099-NEC Rules & Write-offs",
+  "1099_misc": "1099-MISC Rules & Write-offs",
+  "1099_k": "1099-K Rules & Write-offs",
+  "1099_int_div": "1099-INT/DIV Rules",
+  "1099_percentages": "Key Tax Percentages",
 };
 
 // Category icons for UI
@@ -93,6 +99,12 @@ export const CATEGORY_ICONS: Record<string, string> = {
   rental_business: "Building",
   expert_tips: "Lightbulb",
   back_taxes: "FileText",
+  // 1099 Specific Icons
+  "1099_nec": "FileText",
+  "1099_misc": "Files",
+  "1099_k": "CreditCard",
+  "1099_int_div": "Landmark",
+  "1099_percentages": "Percent",
 };
 
 // Subcategory labels for better organization
