@@ -1159,6 +1159,90 @@ export type Database = {
           },
         ]
       }
+      tax_law_changes: {
+        Row: {
+          affected_taxpayers: string[] | null
+          change_direction: string | null
+          change_percentage: number | null
+          created_at: string
+          current_description: string | null
+          current_value: string | null
+          display_order: number | null
+          effective_date: string
+          expiration_date: string | null
+          extension_history: Json | null
+          id: string
+          irs_reference: string | null
+          is_permanent: boolean | null
+          law_abbreviation: string | null
+          law_name: string
+          notes: string | null
+          post_expiration_description: string | null
+          post_expiration_value: string | null
+          pre_law_description: string | null
+          pre_law_value: string | null
+          proof_documentation: string[] | null
+          provision_category: string
+          provision_name: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          affected_taxpayers?: string[] | null
+          change_direction?: string | null
+          change_percentage?: number | null
+          created_at?: string
+          current_description?: string | null
+          current_value?: string | null
+          display_order?: number | null
+          effective_date: string
+          expiration_date?: string | null
+          extension_history?: Json | null
+          id?: string
+          irs_reference?: string | null
+          is_permanent?: boolean | null
+          law_abbreviation?: string | null
+          law_name: string
+          notes?: string | null
+          post_expiration_description?: string | null
+          post_expiration_value?: string | null
+          pre_law_description?: string | null
+          pre_law_value?: string | null
+          proof_documentation?: string[] | null
+          provision_category: string
+          provision_name: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          affected_taxpayers?: string[] | null
+          change_direction?: string | null
+          change_percentage?: number | null
+          created_at?: string
+          current_description?: string | null
+          current_value?: string | null
+          display_order?: number | null
+          effective_date?: string
+          expiration_date?: string | null
+          extension_history?: Json | null
+          id?: string
+          irs_reference?: string | null
+          is_permanent?: boolean | null
+          law_abbreviation?: string | null
+          law_name?: string
+          notes?: string | null
+          post_expiration_description?: string | null
+          post_expiration_value?: string | null
+          pre_law_description?: string | null
+          pre_law_value?: string | null
+          proof_documentation?: string[] | null
+          provision_category?: string
+          provision_name?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       time_logs: {
         Row: {
           activity_category: string
