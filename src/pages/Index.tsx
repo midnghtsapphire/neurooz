@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap, Receipt, Gift, CreditCard } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap, Receipt, Gift, CreditCard, Building2 } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -346,6 +346,13 @@ const Index = () => {
               icon={<CreditCard className="w-5 h-5" />}
               action="Manage"
               onClick={() => navigate("/subscriptions")}
+            />
+            <DashboardCard
+              title="Structure Calculator"
+              description="Compare SE tax across all 5 business structures + Schedule A"
+              icon={<Building2 className="w-5 h-5" />}
+              action="Calculate"
+              onClick={() => navigate("/structure-calculator")}
             />
           </div>
 
