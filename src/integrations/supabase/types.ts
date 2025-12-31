@@ -162,6 +162,48 @@ export type Database = {
         }
         Relationships: []
       }
+      depreciation_methods: {
+        Row: {
+          business_types: string[] | null
+          created_at: string
+          description: string | null
+          first_year_bonus_eligible: boolean | null
+          id: string
+          is_active: boolean | null
+          method_type: string
+          name: string
+          updated_at: string
+          useful_life_years: number | null
+          year_percentages: Json
+        }
+        Insert: {
+          business_types?: string[] | null
+          created_at?: string
+          description?: string | null
+          first_year_bonus_eligible?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          method_type: string
+          name: string
+          updated_at?: string
+          useful_life_years?: number | null
+          year_percentages?: Json
+        }
+        Update: {
+          business_types?: string[] | null
+          created_at?: string
+          description?: string | null
+          first_year_bonus_eligible?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          method_type?: string
+          name?: string
+          updated_at?: string
+          useful_life_years?: number | null
+          year_percentages?: Json
+        }
+        Relationships: []
+      }
       disability_tax_rules: {
         Row: {
           category: string
@@ -451,6 +493,81 @@ export type Database = {
           yearly_price?: number
         }
         Relationships: []
+      }
+      product_depreciation_tracking: {
+        Row: {
+          accumulated_depreciation: number | null
+          bonus_depreciation_taken: number | null
+          created_at: string
+          current_book_value: number | null
+          current_year: number
+          depreciation_method_id: string | null
+          id: string
+          inventory_id: string | null
+          is_trailing_product: boolean | null
+          notes: string | null
+          original_cost: number
+          product_name: string
+          purchase_date: string
+          section_179_taken: number | null
+          trailing_group_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accumulated_depreciation?: number | null
+          bonus_depreciation_taken?: number | null
+          created_at?: string
+          current_book_value?: number | null
+          current_year: number
+          depreciation_method_id?: string | null
+          id?: string
+          inventory_id?: string | null
+          is_trailing_product?: boolean | null
+          notes?: string | null
+          original_cost?: number
+          product_name: string
+          purchase_date: string
+          section_179_taken?: number | null
+          trailing_group_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accumulated_depreciation?: number | null
+          bonus_depreciation_taken?: number | null
+          created_at?: string
+          current_book_value?: number | null
+          current_year?: number
+          depreciation_method_id?: string | null
+          id?: string
+          inventory_id?: string | null
+          is_trailing_product?: boolean | null
+          notes?: string | null
+          original_cost?: number
+          product_name?: string
+          purchase_date?: string
+          section_179_taken?: number | null
+          trailing_group_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_depreciation_tracking_depreciation_method_id_fkey"
+            columns: ["depreciation_method_id"]
+            isOneToOne: false
+            referencedRelation: "depreciation_methods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_depreciation_tracking_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "rental_inventory"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products_review_insights: {
         Row: {
@@ -1021,6 +1138,36 @@ export type Database = {
         }
         Relationships: []
       }
+      trailing_product_groups: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          group_name: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          group_name: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          group_name?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_co2_stats: {
         Row: {
           completed_tasks_count: number
@@ -1229,6 +1376,56 @@ export type Database = {
           vision_impaired?: boolean | null
         }
         Relationships: []
+      }
+      yearly_depreciation_entries: {
+        Row: {
+          beginning_book_value: number
+          bonus_depreciation_amount: number | null
+          created_at: string
+          depreciation_amount: number
+          depreciation_rate: number | null
+          ending_book_value: number
+          id: string
+          is_first_year: boolean | null
+          section_179_amount: number | null
+          tax_year: number
+          tracking_id: string
+        }
+        Insert: {
+          beginning_book_value?: number
+          bonus_depreciation_amount?: number | null
+          created_at?: string
+          depreciation_amount?: number
+          depreciation_rate?: number | null
+          ending_book_value?: number
+          id?: string
+          is_first_year?: boolean | null
+          section_179_amount?: number | null
+          tax_year: number
+          tracking_id: string
+        }
+        Update: {
+          beginning_book_value?: number
+          bonus_depreciation_amount?: number | null
+          created_at?: string
+          depreciation_amount?: number
+          depreciation_rate?: number | null
+          ending_book_value?: number
+          id?: string
+          is_first_year?: boolean | null
+          section_179_amount?: number | null
+          tax_year?: number
+          tracking_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yearly_depreciation_entries_tracking_id_fkey"
+            columns: ["tracking_id"]
+            isOneToOne: false
+            referencedRelation: "product_depreciation_tracking"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
