@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Grape, ArrowLeft, FileText, GraduationCap } from "lucide-react";
+import { Grape, ArrowLeft, FileText, GraduationCap, BookOpen } from "lucide-react";
 import { Section127PlanTemplate } from "@/components/employer-benefits/Section127PlanTemplate";
 import { EmployerEducationTracker } from "@/components/employer-benefits/EmployerEducationTracker";
+import { W2BoxReference } from "@/components/employer-benefits/W2BoxReference";
 
 export default function EmployerBenefitsPage() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export default function EmployerBenefitsPage() {
           </div>
 
           <Tabs defaultValue="tracker" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2 max-w-md">
+            <TabsList className="grid w-full grid-cols-3 max-w-xl">
               <TabsTrigger value="tracker" className="gap-2">
                 <GraduationCap className="h-4 w-4" />
                 Payment Tracker
@@ -69,6 +70,10 @@ export default function EmployerBenefitsPage() {
               <TabsTrigger value="plan" className="gap-2">
                 <FileText className="h-4 w-4" />
                 Plan Template
+              </TabsTrigger>
+              <TabsTrigger value="w2-reference" className="gap-2">
+                <BookOpen className="h-4 w-4" />
+                W-2 Reference
               </TabsTrigger>
             </TabsList>
 
@@ -78,6 +83,10 @@ export default function EmployerBenefitsPage() {
 
             <TabsContent value="plan">
               <Section127PlanTemplate />
+            </TabsContent>
+
+            <TabsContent value="w2-reference">
+              <W2BoxReference />
             </TabsContent>
           </Tabs>
         </div>
