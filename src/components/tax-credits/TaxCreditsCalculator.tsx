@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { 
   Calculator, DollarSign, Users, Home, Car, GraduationCap, 
-  Heart, Zap, CheckCircle2, XCircle, AlertTriangle, Info
+  Heart, Zap, CheckCircle2, XCircle, AlertTriangle, Info, Building2, Wallet
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
@@ -26,6 +26,7 @@ interface CreditResult {
 
 interface CalculatorInputs {
   filingStatus: string;
+  state: string;
   agi: number;
   earnedIncome: number;
   childrenUnder6: number;
@@ -50,7 +51,90 @@ interface CalculatorInputs {
   isSmallBusinessOwner: boolean;
   hiredTargetedEmployees: boolean;
   researchExpenses: number;
+  // Employer Education Assistance
+  receivesEmployerEducation: boolean;
+  employerEducationAmount: number;
+  // 529 Plan
+  has529Contributions: boolean;
+  contributions529: number;
 }
+
+// State 529 deduction limits (single filer amounts, MFJ often double)
+const STATE_529_LIMITS: Record<string, { limit: number; mfjMultiplier: number; unlimited: boolean }> = {
+  AL: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  AZ: { limit: 2000, mfjMultiplier: 2, unlimited: false },
+  AR: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  CO: { limit: 0, mfjMultiplier: 1, unlimited: true },
+  CT: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  DC: { limit: 4000, mfjMultiplier: 2, unlimited: false },
+  GA: { limit: 4000, mfjMultiplier: 2, unlimited: false },
+  ID: { limit: 6000, mfjMultiplier: 2, unlimited: false },
+  IL: { limit: 10000, mfjMultiplier: 2, unlimited: false },
+  IN: { limit: 5000, mfjMultiplier: 1, unlimited: false },
+  IA: { limit: 3785, mfjMultiplier: 2, unlimited: false },
+  KS: { limit: 3000, mfjMultiplier: 2, unlimited: false },
+  LA: { limit: 2400, mfjMultiplier: 2, unlimited: false },
+  MD: { limit: 2500, mfjMultiplier: 2, unlimited: false },
+  MA: { limit: 1000, mfjMultiplier: 2, unlimited: false },
+  MI: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  MN: { limit: 1500, mfjMultiplier: 2, unlimited: false },
+  MS: { limit: 10000, mfjMultiplier: 2, unlimited: false },
+  MO: { limit: 8000, mfjMultiplier: 2, unlimited: false },
+  MT: { limit: 3000, mfjMultiplier: 2, unlimited: false },
+  NE: { limit: 10000, mfjMultiplier: 2, unlimited: false },
+  NM: { limit: 0, mfjMultiplier: 1, unlimited: true },
+  NY: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  NC: { limit: 0, mfjMultiplier: 1, unlimited: false }, // No deduction
+  ND: { limit: 5000, mfjMultiplier: 2, unlimited: false },
+  OH: { limit: 4000, mfjMultiplier: 1, unlimited: false },
+  OK: { limit: 10000, mfjMultiplier: 2, unlimited: false },
+  OR: { limit: 300, mfjMultiplier: 2, unlimited: false },
+  PA: { limit: 17000, mfjMultiplier: 2, unlimited: false },
+  RI: { limit: 500, mfjMultiplier: 2, unlimited: false },
+  SC: { limit: 0, mfjMultiplier: 1, unlimited: true },
+  UT: { limit: 2290, mfjMultiplier: 2, unlimited: false },
+  VT: { limit: 2500, mfjMultiplier: 2, unlimited: false },
+  VA: { limit: 4000, mfjMultiplier: 2, unlimited: false },
+  WV: { limit: 0, mfjMultiplier: 1, unlimited: true },
+  WI: { limit: 3860, mfjMultiplier: 2, unlimited: false },
+  // States with no income tax or no 529 deduction
+  AK: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  CA: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  DE: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  FL: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  HI: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  KY: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  ME: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  NH: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  NJ: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  NV: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  SD: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  TN: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  TX: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  WA: { limit: 0, mfjMultiplier: 1, unlimited: false },
+  WY: { limit: 0, mfjMultiplier: 1, unlimited: false },
+};
+
+const US_STATES = [
+  { value: "", label: "Select State" },
+  { value: "AL", label: "Alabama" }, { value: "AK", label: "Alaska" }, { value: "AZ", label: "Arizona" },
+  { value: "AR", label: "Arkansas" }, { value: "CA", label: "California" }, { value: "CO", label: "Colorado" },
+  { value: "CT", label: "Connecticut" }, { value: "DE", label: "Delaware" }, { value: "DC", label: "Washington DC" },
+  { value: "FL", label: "Florida" }, { value: "GA", label: "Georgia" }, { value: "HI", label: "Hawaii" },
+  { value: "ID", label: "Idaho" }, { value: "IL", label: "Illinois" }, { value: "IN", label: "Indiana" },
+  { value: "IA", label: "Iowa" }, { value: "KS", label: "Kansas" }, { value: "KY", label: "Kentucky" },
+  { value: "LA", label: "Louisiana" }, { value: "ME", label: "Maine" }, { value: "MD", label: "Maryland" },
+  { value: "MA", label: "Massachusetts" }, { value: "MI", label: "Michigan" }, { value: "MN", label: "Minnesota" },
+  { value: "MS", label: "Mississippi" }, { value: "MO", label: "Missouri" }, { value: "MT", label: "Montana" },
+  { value: "NE", label: "Nebraska" }, { value: "NV", label: "Nevada" }, { value: "NH", label: "New Hampshire" },
+  { value: "NJ", label: "New Jersey" }, { value: "NM", label: "New Mexico" }, { value: "NY", label: "New York" },
+  { value: "NC", label: "North Carolina" }, { value: "ND", label: "North Dakota" }, { value: "OH", label: "Ohio" },
+  { value: "OK", label: "Oklahoma" }, { value: "OR", label: "Oregon" }, { value: "PA", label: "Pennsylvania" },
+  { value: "RI", label: "Rhode Island" }, { value: "SC", label: "South Carolina" }, { value: "SD", label: "South Dakota" },
+  { value: "TN", label: "Tennessee" }, { value: "TX", label: "Texas" }, { value: "UT", label: "Utah" },
+  { value: "VT", label: "Vermont" }, { value: "VA", label: "Virginia" }, { value: "WA", label: "Washington" },
+  { value: "WV", label: "West Virginia" }, { value: "WI", label: "Wisconsin" }, { value: "WY", label: "Wyoming" },
+];
 
 const FILING_STATUS_OPTIONS = [
   { value: "single", label: "Single" },
@@ -62,6 +146,7 @@ const FILING_STATUS_OPTIONS = [
 export function TaxCreditsCalculator() {
   const [inputs, setInputs] = useState<CalculatorInputs>({
     filingStatus: "single",
+    state: "",
     agi: 0,
     earnedIncome: 0,
     childrenUnder6: 0,
@@ -86,6 +171,10 @@ export function TaxCreditsCalculator() {
     isSmallBusinessOwner: false,
     hiredTargetedEmployees: false,
     researchExpenses: 0,
+    receivesEmployerEducation: false,
+    employerEducationAmount: 0,
+    has529Contributions: false,
+    contributions529: 0,
   });
 
   const [showResults, setShowResults] = useState(false);
@@ -277,6 +366,51 @@ export function TaxCreditsCalculator() {
       icon: <Home className="h-4 w-4" />,
     });
 
+    // Employer Educational Assistance Exclusion (Section 127)
+    const maxEmployerEducation = 5250;
+    const employerEdEligible = inputs.receivesEmployerEducation && inputs.employerEducationAmount > 0;
+    const employerEdAmount = employerEdEligible ? Math.min(inputs.employerEducationAmount, maxEmployerEducation) : 0;
+    results.push({
+      name: "Employer Educational Assistance Exclusion",
+      maxAmount: maxEmployerEducation,
+      estimatedAmount: employerEdAmount,
+      eligible: employerEdEligible,
+      phaseOutApplied: false,
+      reason: !inputs.receivesEmployerEducation 
+        ? "No employer education assistance received" 
+        : inputs.employerEducationAmount === 0 
+        ? "Enter amount received" 
+        : undefined,
+      category: "Education",
+      icon: <Building2 className="h-4 w-4" />,
+    });
+
+    // 529 State Deduction
+    const stateData = inputs.state ? STATE_529_LIMITS[inputs.state] : null;
+    const has529Deduction = stateData && (stateData.limit > 0 || stateData.unlimited);
+    const state529Limit = stateData?.unlimited 
+      ? inputs.contributions529 
+      : (stateData?.limit || 0) * (isMFJ ? (stateData?.mfjMultiplier || 1) : 1);
+    const state529Amount = inputs.has529Contributions && has529Deduction 
+      ? Math.min(inputs.contributions529, state529Limit) 
+      : 0;
+    results.push({
+      name: "529 Plan State Tax Deduction",
+      maxAmount: stateData?.unlimited ? inputs.contributions529 : state529Limit,
+      estimatedAmount: state529Amount,
+      eligible: inputs.has529Contributions && inputs.contributions529 > 0 && has529Deduction,
+      phaseOutApplied: false,
+      reason: !inputs.has529Contributions 
+        ? "No 529 contributions" 
+        : !inputs.state 
+        ? "Select your state" 
+        : !has529Deduction 
+        ? "Your state doesn't offer a 529 deduction"
+        : undefined,
+      category: "Education",
+      icon: <Wallet className="h-4 w-4" />,
+    });
+
     // Work Opportunity Tax Credit (Business)
     if (inputs.isSmallBusinessOwner) {
       results.push({
@@ -332,7 +466,7 @@ export function TaxCreditsCalculator() {
               <DollarSign className="h-4 w-4" />
               Income & Filing Status
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <Label>Filing Status</Label>
                 <Select value={inputs.filingStatus} onValueChange={(v) => updateInput("filingStatus", v)}>
@@ -341,6 +475,21 @@ export function TaxCreditsCalculator() {
                   </SelectTrigger>
                   <SelectContent>
                     {FILING_STATUS_OPTIONS.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>State (for 529 deduction)</Label>
+                <Select value={inputs.state} onValueChange={(v) => updateInput("state", v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select State" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {US_STATES.map((opt) => (
                       <SelectItem key={opt.value} value={opt.value}>
                         {opt.label}
                       </SelectItem>
@@ -436,12 +585,23 @@ export function TaxCreditsCalculator() {
                 />
               </div>
               <div>
-                <Label>Tuition Paid</Label>
+                <Label>Tuition Paid (for credits)</Label>
                 <Input
                   type="number"
                   placeholder="0"
                   value={inputs.tuitionPaid || ""}
                   onChange={(e) => updateInput("tuitionPaid", parseFloat(e.target.value) || 0)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label>Retirement Contributions</Label>
+                <Input
+                  type="number"
+                  placeholder="0"
+                  value={inputs.retirementContributions || ""}
+                  onChange={(e) => updateInput("retirementContributions", parseFloat(e.target.value) || 0)}
                 />
               </div>
               <div>
@@ -453,6 +613,67 @@ export function TaxCreditsCalculator() {
                   onChange={(e) => updateInput("retirementContributions", parseFloat(e.target.value) || 0)}
                 />
               </div>
+            </div>
+
+            {/* Employer Education & 529 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <Card className="p-4 space-y-3 border-primary/20 bg-primary/5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <Label>Employer Pays for Education</Label>
+                  </div>
+                  <Switch
+                    checked={inputs.receivesEmployerEducation}
+                    onCheckedChange={(v) => updateInput("receivesEmployerEducation", v)}
+                  />
+                </div>
+                {inputs.receivesEmployerEducation && (
+                  <div>
+                    <Label className="text-xs">Amount Provided by Employer</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={inputs.employerEducationAmount || ""}
+                      onChange={(e) => updateInput("employerEducationAmount", parseFloat(e.target.value) || 0)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">Up to $5,250 is tax-free (Section 127)</p>
+                  </div>
+                )}
+              </Card>
+
+              <Card className="p-4 space-y-3 border-secondary/20 bg-secondary/5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Wallet className="h-4 w-4 text-secondary" />
+                    <Label>529 Plan Contributions</Label>
+                  </div>
+                  <Switch
+                    checked={inputs.has529Contributions}
+                    onCheckedChange={(v) => updateInput("has529Contributions", v)}
+                  />
+                </div>
+                {inputs.has529Contributions && (
+                  <div>
+                    <Label className="text-xs">Total 529 Contributions This Year</Label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={inputs.contributions529 || ""}
+                      onChange={(e) => updateInput("contributions529", parseFloat(e.target.value) || 0)}
+                    />
+                    {inputs.state && STATE_529_LIMITS[inputs.state] && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {STATE_529_LIMITS[inputs.state].unlimited 
+                          ? "Your state offers unlimited deduction" 
+                          : STATE_529_LIMITS[inputs.state].limit > 0 
+                          ? `Your state limit: $${(STATE_529_LIMITS[inputs.state].limit * (inputs.filingStatus === "mfj" ? STATE_529_LIMITS[inputs.state].mfjMultiplier : 1)).toLocaleString()}` 
+                          : "Your state doesn't offer a 529 deduction"}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </Card>
             </div>
           </div>
 
