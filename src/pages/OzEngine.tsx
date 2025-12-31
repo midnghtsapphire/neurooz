@@ -1,34 +1,83 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { RAMMonitor } from "@/components/OzEngine/RAMMonitor";
 import { CharacterStatus } from "@/components/OzEngine/CharacterStatus";
 import { EmeraldCityDashboard } from "@/components/OzEngine/EmeraldCityDashboard";
 import { OverloadIntervention } from "@/components/OzEngine/OverloadIntervention";
 import { TotoFirewall } from "@/components/OzEngine/TotoFirewall";
+import { TornadoEntry } from "@/components/OzEngine/TornadoEntry";
+import { WizardVoice } from "@/components/OzEngine/WizardVoice";
+import { FirstQuestCard } from "@/components/OzEngine/FirstQuestCard";
+import { QuestCompletion } from "@/components/OzEngine/QuestCompletion";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { useCognitiveLoad } from "@/hooks/use-cognitive-load";
+import { useOzOnboarding } from "@/hooks/use-oz-onboarding";
+import { useCreateBrainDump, useProcessBrainDump } from "@/hooks/use-brain-dumps";
+import { useProjects } from "@/hooks/use-projects";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Sparkles, 
   ArrowLeft, 
-  Tornado, 
   FolderOpen,
   Plus,
   Brain,
-  Zap
+  Zap,
+  RotateCcw
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function OzEngine() {
   const load = useCognitiveLoad();
   const { toast } = useToast();
+  const { data: projects = [] } = useProjects();
+  const createBrainDump = useCreateBrainDump();
+  const processBrainDump = useProcessBrainDump();
+  
+  const onboarding = useOzOnboarding();
+  
   const [showFirewall, setShowFirewall] = useState(false);
   const [pendingImpulse, setPendingImpulse] = useState<{
     type: 'project' | 'task' | 'idea' | 'other';
     name?: string;
     callback?: () => void;
   } | null>(null);
+  
+  // First quest for new users
+  const firstQuest = {
+    title: "Close One Open Loop",
+    description: "Pick the smallest, simplest task you've been avoiding. Complete it now. Feel the relief.",
+    estimatedMinutes: 10,
+    energyCost: 'low' as const,
+    reward: "RAM freed. City lights surge. The Wizard nods in approval.",
+  };
+  
+  // Handle tornado brain dump completion
+  const handleTornadoComplete = async (content: string) => {
+    onboarding.completeTornado(content);
+    
+    try {
+      const result = await createBrainDump.mutateAsync({
+        raw_content: content,
+        title: "Entry Storm",
+      });
+      
+      if (result) {
+        await processBrainDump.mutateAsync({
+          brainDumpId: result.id,
+          rawContent: content,
+          existingProjects: projects.map(p => p.name),
+        });
+      }
+      
+      toast({
+        title: "Storm sorted",
+        description: "The Wizard has organized your thoughts. Welcome to Oz.",
+      });
+    } catch (error) {
+      console.error('Failed to process brain dump:', error);
+    }
+  };
   
   const handleNewProjectAttempt = () => {
     setPendingImpulse({ type: 'project', name: 'New Project' });
@@ -41,7 +90,6 @@ export default function OzEngine() {
       title: "Quest approved",
       description: "Toto has cleared this impulse. Proceed with intention.",
     });
-    // Could navigate to create project here
   };
   
   const handleImpulseDelay = () => {
@@ -67,6 +115,20 @@ export default function OzEngine() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-950 via-background to-background">
+      {/* Tornado Entry (First-time users) */}
+      <TornadoEntry
+        isOpen={onboarding.showTornadoEntry}
+        onComplete={handleTornadoComplete}
+        onSkip={onboarding.skipTornado}
+      />
+      
+      {/* Quest Completion Celebration */}
+      <QuestCompletion
+        isVisible={onboarding.showQuestCompletion}
+        questTitle={firstQuest.title}
+        onComplete={onboarding.dismissQuestCompletion}
+      />
+      
       {/* Overload Intervention (full-screen takeover) */}
       <OverloadIntervention />
       
@@ -99,6 +161,15 @@ export default function OzEngine() {
           </div>
           
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onboarding.resetOnboarding}
+              title="Reset Onboarding (Dev)"
+              className="text-emerald-400/50 hover:text-emerald-400"
+            >
+              <RotateCcw className="h-4 w-4" />
+            </Button>
             <BrainDumpDialog />
           </div>
         </div>
@@ -109,6 +180,9 @@ export default function OzEngine() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Column - City & Status */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Wizard Greeting */}
+            <WizardVoice size="lg" />
+            
             {/* Emerald City Visualization */}
             <Card className="border-emerald-500/30 overflow-hidden">
               <CardHeader className="pb-2">
@@ -147,6 +221,17 @@ export default function OzEngine() {
               
               <BrainDumpDialog />
             </div>
+            
+            {/* First Quest Card (for new users) */}
+            {onboarding.needsFirstQuest && (
+              <FirstQuestCard
+                quest={firstQuest}
+                onAccept={onboarding.acceptFirstQuest}
+                onComplete={onboarding.completeFirstQuest}
+                isAccepted={onboarding.state.hasAcceptedFirstQuest}
+                isComplete={onboarding.state.hasCompletedFirstQuest}
+              />
+            )}
             
             {/* Status Message */}
             <Card className={`border-2 ${
