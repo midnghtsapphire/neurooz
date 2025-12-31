@@ -204,6 +204,90 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_inventory: {
+        Row: {
+          asset_name: string
+          asset_type: string
+          business_use_percentage: number | null
+          category: string | null
+          created_at: string
+          current_value: number | null
+          depreciation_method: string | null
+          id: string
+          installed_on: string[] | null
+          is_business_asset: boolean | null
+          license_expiry: string | null
+          license_key: string | null
+          license_type: string | null
+          notes: string | null
+          platform: string | null
+          proof_of_purchase: string[] | null
+          purchase_date: string | null
+          purchase_price: number | null
+          seats_count: number | null
+          status: string | null
+          updated_at: string
+          useful_life_years: number | null
+          user_id: string
+          vendor: string | null
+          version: string | null
+        }
+        Insert: {
+          asset_name: string
+          asset_type?: string
+          business_use_percentage?: number | null
+          category?: string | null
+          created_at?: string
+          current_value?: number | null
+          depreciation_method?: string | null
+          id?: string
+          installed_on?: string[] | null
+          is_business_asset?: boolean | null
+          license_expiry?: string | null
+          license_key?: string | null
+          license_type?: string | null
+          notes?: string | null
+          platform?: string | null
+          proof_of_purchase?: string[] | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          seats_count?: number | null
+          status?: string | null
+          updated_at?: string
+          useful_life_years?: number | null
+          user_id: string
+          vendor?: string | null
+          version?: string | null
+        }
+        Update: {
+          asset_name?: string
+          asset_type?: string
+          business_use_percentage?: number | null
+          category?: string | null
+          created_at?: string
+          current_value?: number | null
+          depreciation_method?: string | null
+          id?: string
+          installed_on?: string[] | null
+          is_business_asset?: boolean | null
+          license_expiry?: string | null
+          license_key?: string | null
+          license_type?: string | null
+          notes?: string | null
+          platform?: string | null
+          proof_of_purchase?: string[] | null
+          purchase_date?: string | null
+          purchase_price?: number | null
+          seats_count?: number | null
+          status?: string | null
+          updated_at?: string
+          useful_life_years?: number | null
+          user_id?: string
+          vendor?: string | null
+          version?: string | null
+        }
+        Relationships: []
+      }
       disability_tax_rules: {
         Row: {
           category: string
@@ -1200,6 +1284,84 @@ export type Database = {
           status?: string | null
           stripe_event_id?: string
           subscription_id?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          amount: number
+          assigned_to: string[] | null
+          auto_renew: boolean | null
+          billing_cycle: string | null
+          business_use_percentage: number | null
+          cancellation_date: string | null
+          category: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          is_business_expense: boolean | null
+          license_key: string | null
+          notes: string | null
+          provider: string | null
+          receipt_urls: string[] | null
+          renewal_date: string | null
+          seats_purchased: number | null
+          start_date: string | null
+          status: string | null
+          subscription_name: string
+          subscription_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          assigned_to?: string[] | null
+          auto_renew?: boolean | null
+          billing_cycle?: string | null
+          business_use_percentage?: number | null
+          cancellation_date?: string | null
+          category?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          is_business_expense?: boolean | null
+          license_key?: string | null
+          notes?: string | null
+          provider?: string | null
+          receipt_urls?: string[] | null
+          renewal_date?: string | null
+          seats_purchased?: number | null
+          start_date?: string | null
+          status?: string | null
+          subscription_name: string
+          subscription_type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          assigned_to?: string[] | null
+          auto_renew?: boolean | null
+          billing_cycle?: string | null
+          business_use_percentage?: number | null
+          cancellation_date?: string | null
+          category?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          is_business_expense?: boolean | null
+          license_key?: string | null
+          notes?: string | null
+          provider?: string | null
+          receipt_urls?: string[] | null
+          renewal_date?: string | null
+          seats_purchased?: number | null
+          start_date?: string | null
+          status?: string | null
+          subscription_name?: string
+          subscription_type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
