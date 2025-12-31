@@ -6,6 +6,7 @@ import { User } from "@supabase/supabase-js";
 import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
+import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -72,9 +73,23 @@ const Index = () => {
           </div>
         </header>
 
-        <main className="container mx-auto px-6">
+        <main className="container mx-auto px-6 relative">
+          {/* Decorative Magnolia Flowers */}
+          <img 
+            src={magnoliaFlowers} 
+            alt="" 
+            className="absolute top-0 right-0 w-48 lg:w-64 opacity-40 pointer-events-none select-none transform translate-x-1/4 -translate-y-8"
+            aria-hidden="true"
+          />
+          <img 
+            src={magnoliaFlowers} 
+            alt="" 
+            className="absolute top-1/3 left-0 w-40 lg:w-56 opacity-30 pointer-events-none select-none transform -translate-x-1/3 rotate-12"
+            aria-hidden="true"
+          />
+
           {/* Hero */}
-          <section className="py-20 lg:py-32 text-center">
+          <section className="py-20 lg:py-32 text-center relative z-10">
             <div className="max-w-3xl mx-auto animate-fade-in">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary font-medium text-sm mb-6">
                 <Sparkles className="w-4 h-4" />
