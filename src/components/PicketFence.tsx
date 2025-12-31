@@ -1,16 +1,25 @@
-import { Flower2, Cherry } from "lucide-react";
+import { Flower2, Cherry, Sparkles } from "lucide-react";
 
-// Small flower decorations
-const FlowerDecoration = ({ style, variant = 1 }: { style?: React.CSSProperties; variant?: number }) => {
-  const colors = ["text-pink-300", "text-rose-300", "text-pink-200", "text-white"];
+// Small flower decorations with more variety
+const FlowerDecoration = ({ style, variant = 1, size = "sm" }: { style?: React.CSSProperties; variant?: number; size?: "xs" | "sm" | "md" }) => {
+  const colors = ["text-pink-300", "text-rose-300", "text-pink-200", "text-white", "text-fuchsia-200"];
   const color = colors[variant % colors.length];
+  const sizeClasses = {
+    xs: "w-2 h-2",
+    sm: "w-3 h-3",
+    md: "w-4 h-4"
+  };
+  
+  const flowerType = variant % 3;
   
   return (
     <div className={`absolute ${color} drop-shadow-sm`} style={style}>
-      {variant % 2 === 0 ? (
-        <Flower2 className="w-3 h-3 animate-pulse" style={{ animationDuration: `${2 + variant}s` }} />
+      {flowerType === 0 ? (
+        <Flower2 className={`${sizeClasses[size]} animate-pulse`} style={{ animationDuration: `${2 + variant}s` }} />
+      ) : flowerType === 1 ? (
+        <Cherry className={`${sizeClasses[size]}`} />
       ) : (
-        <Cherry className="w-2.5 h-2.5" />
+        <Sparkles className={`${sizeClasses[size]} animate-pulse`} style={{ animationDuration: `${3 + variant}s` }} />
       )}
     </div>
   );
@@ -75,7 +84,7 @@ export const PicketFence = ({ className = "", showFlowers = true, showGate = fal
               return <GardenGate key="gate" className="mx-2" />;
             }
             
-            const hasFlower = showFlowers && (i % 4 === 0 || i % 7 === 0);
+            const hasFlower = showFlowers && (i % 3 === 0 || i % 5 === 0 || i % 7 === 0);
             const flowerOffset = (i * 17) % 20 - 10;
             
             return (
@@ -84,13 +93,39 @@ export const PicketFence = ({ className = "", showFlowers = true, showGate = fal
                 className="relative"
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
-                {/* Flower decorations on some pickets */}
+                {/* Multiple flower decorations scattered around pickets */}
                 {hasFlower && (
+                  <>
+                    <FlowerDecoration 
+                      variant={i} 
+                      size="sm"
+                      style={{ 
+                        top: `${4 + (i % 4) * 3}px`, 
+                        left: `${flowerOffset - 4}px` 
+                      }} 
+                    />
+                    {i % 4 === 0 && (
+                      <FlowerDecoration 
+                        variant={i + 2} 
+                        size="xs"
+                        style={{ 
+                          top: `${12 + (i % 3) * 4}px`, 
+                          right: `${-2 + (i % 2) * 3}px` 
+                        }} 
+                      />
+                    )}
+                  </>
+                )}
+                
+                {/* Extra scattered flowers between some pickets */}
+                {showFlowers && i % 6 === 1 && (
                   <FlowerDecoration 
-                    variant={i} 
+                    variant={i + 5} 
+                    size="md"
                     style={{ 
-                      top: `${8 + (i % 3) * 4}px`, 
-                      left: `${flowerOffset}px` 
+                      top: `-8px`, 
+                      left: `50%`,
+                      transform: 'translateX(-50%)'
                     }} 
                   />
                 )}
