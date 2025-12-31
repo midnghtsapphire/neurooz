@@ -4,11 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Package, Users, Receipt, ArrowLeftRight } from "lucide-react";
+import { ArrowLeft, Package, Users, Receipt, ArrowLeftRight, Calculator } from "lucide-react";
 import { RentalInventoryTab } from "@/components/rental/RentalInventoryTab";
 import { RentalTransactionsTab } from "@/components/rental/RentalTransactionsTab";
 import { RentalCustomersTab } from "@/components/rental/RentalCustomersTab";
 import { InterCompanyTransfersTab } from "@/components/rental/InterCompanyTransfersTab";
+import { DepreciationCalculatorTab } from "@/components/rental/DepreciationCalculatorTab";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const RentalManagement = () => {
@@ -84,10 +85,14 @@ const RentalManagement = () => {
 
       <main className="container mx-auto px-6 py-8">
         <Tabs defaultValue="inventory" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
             <TabsTrigger value="inventory" className="gap-2">
               <Package className="w-4 h-4" />
               <span className="hidden sm:inline">Inventory</span>
+            </TabsTrigger>
+            <TabsTrigger value="depreciation" className="gap-2">
+              <Calculator className="w-4 h-4" />
+              <span className="hidden sm:inline">Depreciation</span>
             </TabsTrigger>
             <TabsTrigger value="transactions" className="gap-2">
               <Receipt className="w-4 h-4" />
@@ -105,6 +110,10 @@ const RentalManagement = () => {
 
           <TabsContent value="inventory">
             <RentalInventoryTab userId={user.id} />
+          </TabsContent>
+
+          <TabsContent value="depreciation">
+            <DepreciationCalculatorTab userId={user.id} />
           </TabsContent>
 
           <TabsContent value="transactions">
