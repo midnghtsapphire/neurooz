@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -318,6 +318,13 @@ const Index = () => {
               icon={<DollarSign className="w-5 h-5" />}
               action="Manage"
               onClick={() => navigate("/pricing")}
+            />
+            <DashboardCard
+              title="Employer Education Benefits"
+              description="Section 127 plan template & payment tracker"
+              icon={<GraduationCap className="w-5 h-5" />}
+              action="Manage Benefits"
+              onClick={() => navigate("/employer-benefits")}
             />
           </div>
 
