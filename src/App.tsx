@@ -13,6 +13,7 @@ import SavedForms from "./pages/SavedForms";
 import VineTracker from "./pages/VineTracker";
 import RentalManagement from "./pages/RentalManagement";
 import TaxRules from "./pages/TaxRules";
+import DonationTrackerPage from "./pages/DonationTrackerPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/vine-tracker" element={<VineTracker />} />
           <Route path="/rental-management" element={<RentalManagement />} />
           <Route path="/tax-rules" element={<TaxRules />} />
+          <Route path="/donations" element={<DonationTrackerPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
