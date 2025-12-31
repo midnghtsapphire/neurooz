@@ -8,6 +8,7 @@ import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 import { FloatingPetals } from "@/components/FloatingPetals";
+import { PicketFence } from "@/components/PicketFence";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -126,8 +127,8 @@ const Index = () => {
           </section>
 
           {/* Features Grid */}
-          <section className="py-20 border-t border-border">
-            <div className="grid md:grid-cols-3 gap-8">
+          <section className="py-20 border-t border-border relative">
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
               <FeatureCard
                 icon={<FolderKanban className="w-6 h-6" />}
                 title="Project Tracking"
@@ -144,12 +145,16 @@ const Index = () => {
                 description="Never miss a deadline with due date tracking and priority-based organization."
               />
             </div>
+            
+            {/* Decorative Picket Fence */}
+            <PicketFence className="h-20 opacity-70" />
           </section>
         </main>
 
-        {/* Footer */}
-        <footer className="border-t border-border py-8 mt-20">
-          <div className="container mx-auto px-6 text-center text-muted-foreground">
+        {/* Footer with fence */}
+        <footer className="border-t border-border pt-4 mt-20 relative">
+          <PicketFence className="h-16 opacity-50" />
+          <div className="container mx-auto px-6 py-6 text-center text-muted-foreground relative z-10 bg-gradient-to-t from-background to-transparent">
             <p>© 2024 VineTaxes. Cultivating tax clarity.</p>
           </div>
         </footer>
