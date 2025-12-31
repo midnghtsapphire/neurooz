@@ -125,38 +125,53 @@ export type Database = {
       }
       businesses: {
         Row: {
+          church_denomination: string | null
           created_at: string
           ein: string | null
+          entity_type: string | null
           formation_date: string | null
           id: string
+          is_501c3: boolean | null
           is_active: boolean | null
           name: string
+          nonprofit_category: string | null
           state: string | null
           structure: Database["public"]["Enums"]["business_structure"]
+          tax_classification: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          church_denomination?: string | null
           created_at?: string
           ein?: string | null
+          entity_type?: string | null
           formation_date?: string | null
           id?: string
+          is_501c3?: boolean | null
           is_active?: boolean | null
           name: string
+          nonprofit_category?: string | null
           state?: string | null
           structure: Database["public"]["Enums"]["business_structure"]
+          tax_classification?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          church_denomination?: string | null
           created_at?: string
           ein?: string | null
+          entity_type?: string | null
           formation_date?: string | null
           id?: string
+          is_501c3?: boolean | null
           is_active?: boolean | null
           name?: string
+          nonprofit_category?: string | null
           state?: string | null
           structure?: Database["public"]["Enums"]["business_structure"]
+          tax_classification?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -475,6 +490,414 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      form_1099_investment_income: {
+        Row: {
+          bond_premium: number | null
+          business_id: string | null
+          capital_gain_distributions: number | null
+          collectibles_gain: number | null
+          created_at: string
+          early_withdrawal_penalty: number | null
+          exempt_interest_dividends: number | null
+          federal_withheld: number | null
+          foreign_tax_paid: number | null
+          form_type: string
+          id: string
+          interest_income: number | null
+          interest_on_savings_bonds: number | null
+          investment_expenses: number | null
+          market_discount: number | null
+          nondividend_distributions: number | null
+          ordinary_dividends: number | null
+          payer_name: string
+          payer_tin: string | null
+          private_activity_bond_interest: number | null
+          qualified_dividends: number | null
+          section_1202_gain: number | null
+          section_1250_gain: number | null
+          section_199a_dividends: number | null
+          state_id: string | null
+          state_withheld: number | null
+          tax_exempt_interest: number | null
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bond_premium?: number | null
+          business_id?: string | null
+          capital_gain_distributions?: number | null
+          collectibles_gain?: number | null
+          created_at?: string
+          early_withdrawal_penalty?: number | null
+          exempt_interest_dividends?: number | null
+          federal_withheld?: number | null
+          foreign_tax_paid?: number | null
+          form_type?: string
+          id?: string
+          interest_income?: number | null
+          interest_on_savings_bonds?: number | null
+          investment_expenses?: number | null
+          market_discount?: number | null
+          nondividend_distributions?: number | null
+          ordinary_dividends?: number | null
+          payer_name: string
+          payer_tin?: string | null
+          private_activity_bond_interest?: number | null
+          qualified_dividends?: number | null
+          section_1202_gain?: number | null
+          section_1250_gain?: number | null
+          section_199a_dividends?: number | null
+          state_id?: string | null
+          state_withheld?: number | null
+          tax_exempt_interest?: number | null
+          tax_year?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bond_premium?: number | null
+          business_id?: string | null
+          capital_gain_distributions?: number | null
+          collectibles_gain?: number | null
+          created_at?: string
+          early_withdrawal_penalty?: number | null
+          exempt_interest_dividends?: number | null
+          federal_withheld?: number | null
+          foreign_tax_paid?: number | null
+          form_type?: string
+          id?: string
+          interest_income?: number | null
+          interest_on_savings_bonds?: number | null
+          investment_expenses?: number | null
+          market_discount?: number | null
+          nondividend_distributions?: number | null
+          ordinary_dividends?: number | null
+          payer_name?: string
+          payer_tin?: string | null
+          private_activity_bond_interest?: number | null
+          qualified_dividends?: number | null
+          section_1202_gain?: number | null
+          section_1250_gain?: number | null
+          section_199a_dividends?: number | null
+          state_id?: string | null
+          state_withheld?: number | null
+          tax_exempt_interest?: number | null
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_1099_investment_income_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_1099_k_received: {
+        Row: {
+          april_amount: number | null
+          august_amount: number | null
+          business_id: string | null
+          card_not_present: number | null
+          created_at: string
+          december_amount: number | null
+          february_amount: number | null
+          federal_withheld: number | null
+          gross_amount: number | null
+          id: string
+          january_amount: number | null
+          july_amount: number | null
+          june_amount: number | null
+          march_amount: number | null
+          may_amount: number | null
+          november_amount: number | null
+          october_amount: number | null
+          payer_name: string
+          payer_tin: string | null
+          payment_card_transactions: number | null
+          september_amount: number | null
+          state_id: string | null
+          state_income: number | null
+          state_withheld: number | null
+          tax_year: number
+          third_party_network_transactions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          april_amount?: number | null
+          august_amount?: number | null
+          business_id?: string | null
+          card_not_present?: number | null
+          created_at?: string
+          december_amount?: number | null
+          february_amount?: number | null
+          federal_withheld?: number | null
+          gross_amount?: number | null
+          id?: string
+          january_amount?: number | null
+          july_amount?: number | null
+          june_amount?: number | null
+          march_amount?: number | null
+          may_amount?: number | null
+          november_amount?: number | null
+          october_amount?: number | null
+          payer_name: string
+          payer_tin?: string | null
+          payment_card_transactions?: number | null
+          september_amount?: number | null
+          state_id?: string | null
+          state_income?: number | null
+          state_withheld?: number | null
+          tax_year?: number
+          third_party_network_transactions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          april_amount?: number | null
+          august_amount?: number | null
+          business_id?: string | null
+          card_not_present?: number | null
+          created_at?: string
+          december_amount?: number | null
+          february_amount?: number | null
+          federal_withheld?: number | null
+          gross_amount?: number | null
+          id?: string
+          january_amount?: number | null
+          july_amount?: number | null
+          june_amount?: number | null
+          march_amount?: number | null
+          may_amount?: number | null
+          november_amount?: number | null
+          october_amount?: number | null
+          payer_name?: string
+          payer_tin?: string | null
+          payment_card_transactions?: number | null
+          september_amount?: number | null
+          state_id?: string | null
+          state_income?: number | null
+          state_withheld?: number | null
+          tax_year?: number
+          third_party_network_transactions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_1099_k_received_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_1099_misc_payments: {
+        Row: {
+          amount: number
+          box_number: number
+          business_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          payment_date: string
+          payment_method: string | null
+          recipient_id: string | null
+          recipient_name: string
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          box_number?: number
+          business_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          payment_date?: string
+          payment_method?: string | null
+          recipient_id?: string | null
+          recipient_name: string
+          tax_year?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          box_number?: number
+          business_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          payment_date?: string
+          payment_method?: string | null
+          recipient_id?: string | null
+          recipient_name?: string
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_1099_misc_payments_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_1099_misc_payments_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "form_1099_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_1099_nec_payments: {
+        Row: {
+          amount: number
+          box_number: number | null
+          business_id: string | null
+          check_number: string | null
+          created_at: string
+          description: string | null
+          form_generated: boolean | null
+          id: string
+          is_1099_required: boolean | null
+          payment_date: string
+          payment_method: string | null
+          recipient_id: string | null
+          recipient_name: string
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          box_number?: number | null
+          business_id?: string | null
+          check_number?: string | null
+          created_at?: string
+          description?: string | null
+          form_generated?: boolean | null
+          id?: string
+          is_1099_required?: boolean | null
+          payment_date?: string
+          payment_method?: string | null
+          recipient_id?: string | null
+          recipient_name: string
+          tax_year?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          box_number?: number | null
+          business_id?: string | null
+          check_number?: string | null
+          created_at?: string
+          description?: string | null
+          form_generated?: boolean | null
+          id?: string
+          is_1099_required?: boolean | null
+          payment_date?: string
+          payment_method?: string | null
+          recipient_id?: string | null
+          recipient_name?: string
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_1099_nec_payments_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "form_1099_nec_payments_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "form_1099_recipients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      form_1099_recipients: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          business_id: string | null
+          city: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean | null
+          recipient_name: string
+          recipient_type: string | null
+          state: string | null
+          tin: string | null
+          tin_type: string | null
+          updated_at: string
+          user_id: string
+          zip: string | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          business_id?: string | null
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          recipient_name: string
+          recipient_type?: string | null
+          state?: string | null
+          tin?: string | null
+          tin_type?: string | null
+          updated_at?: string
+          user_id: string
+          zip?: string | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          business_id?: string | null
+          city?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          recipient_name?: string
+          recipient_type?: string | null
+          state?: string | null
+          tin?: string | null
+          tin_type?: string | null
+          updated_at?: string
+          user_id?: string
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "form_1099_recipients_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       income_sources: {
         Row: {
