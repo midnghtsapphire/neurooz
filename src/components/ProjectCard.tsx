@@ -13,6 +13,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, actionItemCount, onSelect, onDelete }: ProjectCardProps) {
   return (
     <Card
+      variant="vine"
       className="cursor-pointer transition-all hover:shadow-lg hover:scale-[1.02] border-l-4"
       style={{ borderLeftColor: project.color }}
       onClick={onSelect}

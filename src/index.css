@@ -188,4 +188,113 @@
     0%, 100% { opacity: 0.5; transform: translateX(-100%); }
     50% { opacity: 1; transform: translateX(100%); }
   }
+
+  /* Vine border decorations */
+  .vine-border {
+    position: relative;
+  }
+
+  .vine-border::before,
+  .vine-border::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .vine-border::before {
+    top: -2px;
+    left: -2px;
+    border-top: 2px solid hsl(142 45% 32%);
+    border-left: 2px solid hsl(142 45% 32%);
+    border-top-left-radius: 12px;
+    background: radial-gradient(ellipse 20px 20px at 8px 8px, hsl(142 50% 45% / 0.15), transparent);
+  }
+
+  .vine-border::after {
+    bottom: -2px;
+    right: -2px;
+    border-bottom: 2px solid hsl(142 45% 32%);
+    border-right: 2px solid hsl(142 45% 32%);
+    border-bottom-right-radius: 12px;
+    background: radial-gradient(ellipse 20px 20px at calc(100% - 8px) calc(100% - 8px), hsl(142 50% 45% / 0.15), transparent);
+  }
+
+  .vine-border:hover::before,
+  .vine-border:hover::after {
+    opacity: 0.7;
+  }
+
+  /* Leaf corner accents */
+  .leaf-corner {
+    position: relative;
+    overflow: visible;
+  }
+
+  .leaf-corner::before {
+    content: '🌿';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 16px;
+    opacity: 0.5;
+    transform: rotate(45deg);
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .leaf-corner:hover::before {
+    opacity: 0.8;
+    transform: rotate(45deg) scale(1.1);
+  }
+
+  /* Organic section divider */
+  .vine-divider {
+    position: relative;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(142 45% 32% / 0.3) 20%,
+      hsl(142 50% 45% / 0.5) 50%,
+      hsl(142 45% 32% / 0.3) 80%,
+      transparent 100%
+    );
+  }
+
+  .vine-divider::before {
+    content: '❀';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: hsl(var(--background));
+    padding: 0 8px;
+    color: hsl(142 50% 45%);
+    font-size: 14px;
+  }
+
+  /* Subtle card glow on hover */
+  .card-vine-glow {
+    transition: all 0.3s ease;
+  }
+
+  .card-vine-glow:hover {
+    box-shadow: 
+      0 4px 20px -4px hsl(142 45% 32% / 0.15),
+      0 0 0 1px hsl(142 50% 45% / 0.1);
+  }
+
+  /* Organic floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
 }
