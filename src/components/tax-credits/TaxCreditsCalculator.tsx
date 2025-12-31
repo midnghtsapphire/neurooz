@@ -621,7 +621,7 @@ export function TaxCreditsCalculator() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-primary" />
-                    <Label>Employer Pays for Education</Label>
+                    <Label>Employer Pays for Education or Student Loans</Label>
                   </div>
                   <Switch
                     checked={inputs.receivesEmployerEducation}
@@ -629,7 +629,7 @@ export function TaxCreditsCalculator() {
                   />
                 </div>
                 {inputs.receivesEmployerEducation && (
-                  <div>
+                  <div className="space-y-2">
                     <Label className="text-xs">Amount Provided by Employer</Label>
                     <Input
                       type="number"
@@ -637,7 +637,17 @@ export function TaxCreditsCalculator() {
                       value={inputs.employerEducationAmount || ""}
                       onChange={(e) => updateInput("employerEducationAmount", parseFloat(e.target.value) || 0)}
                     />
-                    <p className="text-xs text-muted-foreground mt-1">Up to $5,250 is tax-free (Section 127)</p>
+                    <p className="text-xs text-muted-foreground">
+                      Up to $5,250 is tax-free (Section 127). Includes:
+                    </p>
+                    <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5">
+                      <li>Tuition & fees paid by employer</li>
+                      <li><strong>Student loan repayments</strong> by employer</li>
+                      <li>Books & supplies</li>
+                    </ul>
+                    <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                      📄 Proof: Get documentation from employer showing educational assistance provided
+                    </p>
                   </div>
                 )}
               </Card>
