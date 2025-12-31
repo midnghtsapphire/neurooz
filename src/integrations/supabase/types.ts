@@ -566,28 +566,85 @@ export type Database = {
         }
         Relationships: []
       }
-      projects: {
+      project_items: {
         Row: {
-          color: string | null
+          action_item_id: string | null
           created_at: string
           description: string | null
           id: string
+          is_action_item: boolean
+          project_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_item_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_action_item?: boolean
+          project_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_item_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_action_item?: boolean
+          project_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_items_action_item_id_fkey"
+            columns: ["action_item_id"]
+            isOneToOne: false
+            referencedRelation: "action_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          assigned_to: string | null
+          color: string | null
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_completed: boolean
           name: string
           updated_at: string
         }
         Insert: {
+          assigned_to?: string | null
           color?: string | null
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          is_completed?: boolean
           name: string
           updated_at?: string
         }
         Update: {
+          assigned_to?: string | null
           color?: string | null
+          completed_at?: string | null
           created_at?: string
           description?: string | null
           id?: string
+          is_completed?: boolean
           name?: string
           updated_at?: string
         }

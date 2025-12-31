@@ -21,6 +21,7 @@ export function CreateProjectDialog() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [assignedTo, setAssignedTo] = useState("");
   const [color, setColor] = useState(colorOptions[0]);
   const createProject = useCreateProject();
 
@@ -29,12 +30,18 @@ export function CreateProjectDialog() {
     if (!name.trim()) return;
 
     createProject.mutate(
-      { name: name.trim(), description: description.trim() || undefined, color },
+      { 
+        name: name.trim(), 
+        description: description.trim() || undefined, 
+        color,
+        assigned_to: assignedTo.trim() || undefined,
+      },
       {
         onSuccess: () => {
           setOpen(false);
           setName("");
           setDescription("");
+          setAssignedTo("");
           setColor(colorOptions[0]);
         },
       }
@@ -72,6 +79,15 @@ export function CreateProjectDialog() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What's this project about?"
               rows={3}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="assigned">Assigned To (optional)</Label>
+            <Input
+              id="assigned"
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
+              placeholder="Team member name"
             />
           </div>
           <div className="space-y-2">
