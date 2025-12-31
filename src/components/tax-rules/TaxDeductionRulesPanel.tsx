@@ -3,7 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Loader2, Search, Calculator, Car, Home, Utensils, Heart, PiggyBank, TrendingUp, Accessibility, Gift, Package, BookOpen } from "lucide-react";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Loader2, Search, Calculator, Car, Home, Utensils, Heart, PiggyBank, TrendingUp, Accessibility, Gift, Package, BookOpen, Users, Building, Lightbulb, FileText } from "lucide-react";
 import { useTaxDeductionRulesByCategory, CATEGORY_LABELS } from "@/hooks/use-tax-deduction-rules";
 import { TaxDeductionRulesCard } from "./TaxDeductionRulesCard";
 
@@ -18,6 +19,11 @@ const CATEGORY_ICON_MAP: Record<string, React.ReactNode> = {
   disability: <Accessibility className="h-4 w-4" />,
   charitable: <Gift className="h-4 w-4" />,
   vine: <Package className="h-4 w-4" />,
+  team_building: <Users className="h-4 w-4" />,
+  donations: <Heart className="h-4 w-4" />,
+  rental_business: <Building className="h-4 w-4" />,
+  expert_tips: <Lightbulb className="h-4 w-4" />,
+  back_taxes: <FileText className="h-4 w-4" />,
 };
 
 export function TaxDeductionRulesPanel() {
