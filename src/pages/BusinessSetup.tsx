@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 import { supabase } from "@/integrations/supabase/client";
 import { BusinessStructureStep } from "@/components/business-setup/BusinessStructureStep";
 import { RoleSelectionStep } from "@/components/business-setup/RoleSelectionStep";
@@ -172,7 +173,20 @@ export default function BusinessSetup() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen vine-section relative overflow-hidden">
+      {/* Decorative Magnolias */}
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute top-32 right-0 w-44 opacity-20 pointer-events-none select-none transform translate-x-1/3"
+        aria-hidden="true"
+      />
+      <img 
+        src={magnoliaFlowers} 
+        alt="" 
+        className="absolute bottom-32 left-0 w-36 opacity-15 pointer-events-none select-none transform -translate-x-1/4 rotate-180"
+        aria-hidden="true"
+      />
       {/* Header */}
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">

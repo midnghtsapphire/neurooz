@@ -12,15 +12,15 @@
     --primary: 142 45% 32%;
     --primary-foreground: 0 0% 100%;
     
-    /* Soft cream/parchment background */
-    --background: 45 30% 97%;
+    /* Soft sage green background */
+    --background: 120 25% 94%;
     --foreground: 150 20% 15%;
 
-    /* Warm white cards with subtle green tint */
-    --card: 60 20% 99%;
+    /* Warm white cards with green tint */
+    --card: 100 20% 98%;
     --card-foreground: 150 20% 15%;
 
-    --popover: 60 20% 99%;
+    --popover: 100 20% 98%;
     --popover-foreground: 150 20% 15%;
 
     /* Warm grape purple accent */
@@ -28,7 +28,7 @@
     --secondary-foreground: 0 0% 100%;
 
     /* Muted sage */
-    --muted: 100 15% 92%;
+    --muted: 120 18% 88%;
     --muted-foreground: 150 15% 40%;
 
     /* Golden harvest accent */
@@ -38,8 +38,8 @@
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 100 20% 85%;
-    --input: 100 20% 85%;
+    --border: 120 20% 82%;
+    --input: 120 20% 82%;
     --ring: 142 45% 32%;
 
     --radius: 0.75rem;
@@ -48,19 +48,21 @@
     --vine-forest: 142 45% 32%;
     --vine-leaf: 142 50% 45%;
     --vine-spring: 142 60% 65%;
-    --vine-sage: 100 25% 75%;
+    --vine-sage: 120 25% 75%;
     --vine-grape: 280 35% 45%;
     --vine-wine: 345 50% 40%;
     --vine-harvest: 38 70% 55%;
-    --vine-cream: 45 30% 97%;
+    --vine-cream: 60 40% 97%;
     --vine-earth: 30 25% 25%;
     --vine-bark: 25 30% 20%;
+    --vine-meadow: 100 35% 85%;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(142 45% 32%) 0%, hsl(142 60% 45%) 50%, hsl(100 50% 55%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(60 20% 99%) 0%, hsl(100 15% 96%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(100 20% 98%) 0%, hsl(120 18% 94%) 100%);
     --gradient-vine: linear-gradient(135deg, hsl(142 45% 32%) 0%, hsl(280 35% 45%) 100%);
     --gradient-sunset: linear-gradient(135deg, hsl(38 70% 55%) 0%, hsl(345 50% 40%) 100%);
+    --gradient-meadow: linear-gradient(180deg, hsl(120 25% 94%) 0%, hsl(120 30% 88%) 100%);
     
     /* Shadows */
     --shadow-soft: 0 4px 20px -4px hsl(142 45% 32% / 0.12);
@@ -69,13 +71,13 @@
     --shadow-grape: 0 0 30px hsl(280 35% 45% / 0.2);
 
     /* Sidebar */
-    --sidebar-background: 60 20% 99%;
+    --sidebar-background: 100 20% 98%;
     --sidebar-foreground: 150 20% 15%;
     --sidebar-primary: 142 45% 32%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 100 15% 92%;
+    --sidebar-accent: 120 18% 88%;
     --sidebar-accent-foreground: 150 20% 15%;
-    --sidebar-border: 100 20% 85%;
+    --sidebar-border: 120 20% 82%;
     --sidebar-ring: 142 45% 32%;
   }
 
@@ -83,20 +85,20 @@
     --primary: 142 50% 50%;
     --primary-foreground: 150 20% 10%;
 
-    --background: 150 20% 8%;
+    --background: 150 25% 8%;
     --foreground: 60 20% 95%;
 
-    --card: 150 18% 12%;
+    --card: 150 22% 12%;
     --card-foreground: 60 20% 95%;
 
-    --popover: 150 18% 12%;
+    --popover: 150 22% 12%;
     --popover-foreground: 60 20% 95%;
 
     --secondary: 280 40% 55%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 150 15% 18%;
-    --muted-foreground: 100 15% 65%;
+    --muted: 150 18% 18%;
+    --muted-foreground: 120 15% 65%;
 
     --accent: 38 65% 50%;
     --accent-foreground: 150 20% 10%;
@@ -104,17 +106,17 @@
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 15% 22%;
-    --input: 150 15% 22%;
+    --border: 150 18% 22%;
+    --input: 150 18% 22%;
     --ring: 142 50% 50%;
 
-    --sidebar-background: 150 18% 10%;
+    --sidebar-background: 150 22% 10%;
     --sidebar-foreground: 60 20% 95%;
     --sidebar-primary: 142 50% 50%;
     --sidebar-primary-foreground: 150 20% 10%;
-    --sidebar-accent: 150 15% 18%;
+    --sidebar-accent: 150 18% 18%;
     --sidebar-accent-foreground: 60 20% 95%;
-    --sidebar-border: 150 15% 22%;
+    --sidebar-border: 150 18% 22%;
     --sidebar-ring: 142 50% 50%;
   }
 }
@@ -296,5 +298,76 @@
 
   .animate-float {
     animation: float 4s ease-in-out infinite;
+  }
+
+  /* Falling petal animation */
+  @keyframes petal-fall {
+    0% {
+      transform: translateY(-20px) rotate(0deg) translateX(0px);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.6;
+    }
+    90% {
+      opacity: 0.4;
+    }
+    100% {
+      transform: translateY(100vh) rotate(360deg) translateX(100px);
+      opacity: 0;
+    }
+  }
+
+  .animate-petal-fall {
+    animation: petal-fall 10s linear infinite;
+  }
+
+  /* White fence decorative border */
+  .fence-border {
+    position: relative;
+  }
+
+  .fence-border::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: 
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 8px,
+        hsl(0 0% 100% / 0.9) 8px,
+        hsl(0 0% 100% / 0.9) 10px,
+        transparent 10px,
+        transparent 20px
+      );
+    mask: linear-gradient(to bottom, transparent 0%, black 60%);
+    -webkit-mask: linear-gradient(to bottom, transparent 0%, black 60%);
+    opacity: 0.7;
+  }
+
+  /* Rich vine section background */
+  .vine-section {
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 100%, hsl(142 45% 32% / 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 0%, hsl(142 60% 45% / 0.06) 0%, transparent 50%),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(120 30% 90%) 100%);
+  }
+
+  /* White page variant */
+  .page-white {
+    background: 
+      radial-gradient(ellipse 100% 60% at 50% 0%, hsl(0 0% 100%) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 40% at 20% 100%, hsl(142 50% 45% / 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, hsl(280 35% 45% / 0.04) 0%, transparent 50%),
+      hsl(0 0% 99%);
+  }
+
+  /* Meadow gradient background */
+  .bg-meadow {
+    background: var(--gradient-meadow);
   }
 }
