@@ -58,6 +58,56 @@ export type Database = {
           },
         ]
       }
+      brain_dumps: {
+        Row: {
+          ai_action_items: Json | null
+          ai_categories: Json | null
+          ai_summary: string | null
+          created_at: string
+          document_urls: string[] | null
+          id: string
+          project_id: string | null
+          raw_content: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_action_items?: Json | null
+          ai_categories?: Json | null
+          ai_summary?: string | null
+          created_at?: string
+          document_urls?: string[] | null
+          id?: string
+          project_id?: string | null
+          raw_content: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_action_items?: Json | null
+          ai_categories?: Json | null
+          ai_summary?: string | null
+          created_at?: string
+          document_urls?: string[] | null
+          id?: string
+          project_id?: string | null
+          raw_content?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brain_dumps_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       business_members: {
         Row: {
           address_line1: string | null

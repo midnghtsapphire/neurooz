@@ -12,6 +12,7 @@ import { ProjectFilterBar, ProjectFilters } from "@/components/ProjectFilterBar"
 import { EnvironmentSelector, Environment, EnvironmentBadge } from "@/components/EnvironmentSelector";
 import { ExportMenu } from "@/components/ExportMenu";
 import { EmploymentRulesDialog } from "@/components/EmploymentRulesDialog";
+import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -237,6 +238,7 @@ export default function Projects() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <EnvironmentSelector value={environment} onChange={setEnvironment} />
+              <BrainDumpDialog />
               <EmploymentRulesDialog />
               <ExportMenu 
                 data={{ 
