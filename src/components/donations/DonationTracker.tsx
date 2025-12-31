@@ -3,12 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Heart, FileText, Plus, AlertTriangle, CheckCircle2, Building } from "lucide-react";
+import { Loader2, Heart, FileText, Plus, AlertTriangle, CheckCircle2, Building, Shield } from "lucide-react";
 import { useDonations, useSavedCharities, getForm8283Requirements, formatCurrency } from "@/hooks/use-donations";
 import { DonationsList } from "./DonationsList";
 import { AddDonationDialog } from "./AddDonationDialog";
 import { Form8283Helper } from "./Form8283Helper";
 import { CharitiesManager } from "./CharitiesManager";
+import { DeductionLimitsAlert } from "@/components/tax-rules/DeductionLimitsAlert";
 
 export function DonationTracker() {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -111,6 +112,9 @@ export function DonationTracker() {
         </CardContent>
       </Card>
 
+      {/* Deduction Limits Alerts */}
+      <DeductionLimitsAlert taxYear={selectedYear} userAGI={100000} />
+
       {/* Main Content Tabs */}
       <Tabs defaultValue="donations">
         <TabsList>
@@ -125,6 +129,10 @@ export function DonationTracker() {
           <TabsTrigger value="charities" className="flex items-center gap-1">
             <Building className="h-4 w-4" />
             Charities
+          </TabsTrigger>
+          <TabsTrigger value="limits" className="flex items-center gap-1">
+            <Shield className="h-4 w-4" />
+            Limits
           </TabsTrigger>
         </TabsList>
 
@@ -146,6 +154,10 @@ export function DonationTracker() {
 
         <TabsContent value="charities" className="mt-4">
           <CharitiesManager charities={charities || []} />
+        </TabsContent>
+
+        <TabsContent value="limits" className="mt-4">
+          <DeductionLimitsAlert taxYear={selectedYear} userAGI={100000} />
         </TabsContent>
       </Tabs>
 
