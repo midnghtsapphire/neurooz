@@ -88,10 +88,15 @@ export default function OzEngine() {
   };
   
   // Handle void event return
-  const handleVoidReturn = (refocusedGoal: string) => {
+  const handleVoidReturn = (destination: 'planet' | 'library' | 'battle' | 'sanctuary', refocusedGoal?: string) => {
+    if (destination === 'battle') {
+      handleStartBurn(refocusedGoal || 'Focus Quest');
+    }
     toast({
       title: "Gravity restored",
-      description: `Refocused on: "${refocusedGoal}"`,
+      description: destination === 'planet' && refocusedGoal 
+        ? `Refocused on: "${refocusedGoal}"` 
+        : `Navigating to ${destination}`,
     });
   };
   
@@ -132,24 +137,34 @@ export default function OzEngine() {
     });
   };
   
-  const handleImpulseDelay = () => {
+  const handleImpulseDelay = (minutes: number) => {
     setShowFirewall(false);
     toast({
       title: "Impulse delayed",
-      description: "This will be revisited in 10 minutes. Focus on current quests.",
+      description: `This will be revisited in ${minutes} minutes. Focus on current quests.`,
     });
   };
   
-  const handleImpulseRoute = (destination: 'tinman' | 'scarecrow' | 'lion') => {
+  const handleImpulseRoute = (destination: 'tinman' | 'scarecrow' | 'lion' | 'dorothy') => {
     setShowFirewall(false);
     const names = {
       tinman: 'Tin Man (Emotional Processing)',
       scarecrow: 'Scarecrow (Logic & Planning)',
-      lion: 'Lion (Courage Building)'
+      lion: 'Lion (Courage Building)',
+      dorothy: 'Dorothy (Executive Decision)'
     };
     toast({
       title: `Routed to ${names[destination]}`,
       description: "This impulse has been tagged for proper processing.",
+    });
+  };
+  
+  const handleImpulseBlock = () => {
+    setShowFirewall(false);
+    toast({
+      title: "Impulse blocked",
+      description: "Toto has protected you from a destructive impulse.",
+      variant: "destructive",
     });
   };
 
@@ -194,6 +209,7 @@ export default function OzEngine() {
           onProceed={handleImpulseProceed}
           onDelay={handleImpulseDelay}
           onRoute={handleImpulseRoute}
+          onBlock={handleImpulseBlock}
         />
       )}
       

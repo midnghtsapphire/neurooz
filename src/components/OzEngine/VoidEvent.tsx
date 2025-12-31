@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useCognitiveLoad } from "@/hooks/use-cognitive-load";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Compass, Sparkles, ArrowRight } from "lucide-react";
+import { Compass, Sparkles, ArrowRight, Flame, BookOpen, Moon, Globe } from "lucide-react";
+
+type ReturnDestination = 'planet' | 'library' | 'battle' | 'sanctuary';
 
 interface VoidEventProps {
-  onReturn: (refocusedGoal: string) => void;
+  onReturn: (destination: ReturnDestination, refocusedGoal?: string) => void;
 }
 
 const VOID_SCENARIOS = [
@@ -38,11 +40,39 @@ const VOID_SCENARIOS = [
   },
 ];
 
+const RETURN_OPTIONS: { id: ReturnDestination; label: string; description: string; icon: typeof Globe }[] = [
+  {
+    id: 'planet',
+    label: 'Return to Planet',
+    description: 'Resume your main mission',
+    icon: Globe,
+  },
+  {
+    id: 'library',
+    label: 'Park in Cosmic Library',
+    description: 'Archive this for later',
+    icon: BookOpen,
+  },
+  {
+    id: 'battle',
+    label: 'Enter Battle Focus',
+    description: 'Activate Controlled Burn',
+    icon: Flame,
+  },
+  {
+    id: 'sanctuary',
+    label: 'Rest in Sanctuary',
+    description: 'Take a mindful break',
+    icon: Moon,
+  },
+];
+
 export function VoidEvent({ onReturn }: VoidEventProps) {
   const load = useCognitiveLoad();
-  const [phase, setPhase] = useState<'fade' | 'void' | 'question' | 'answer'>('fade');
+  const [phase, setPhase] = useState<'fade' | 'void' | 'question' | 'choose'>('fade');
   const [scenario] = useState(() => VOID_SCENARIOS[Math.floor(Math.random() * VOID_SCENARIOS.length)]);
   const [answer, setAnswer] = useState("");
+  const [selectedDestination, setSelectedDestination] = useState<ReturnDestination | null>(null);
   
   // Only show if drift level is critical
   if (!load.isInVoid) return null;
@@ -57,8 +87,8 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
   }, []);
   
   const handleReturn = () => {
-    if (answer.trim()) {
-      onReturn(answer.trim());
+    if (selectedDestination) {
+      onReturn(selectedDestination, answer.trim() || undefined);
     }
   };
 
@@ -81,7 +111,7 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
         )}
         
         {/* Void Phase */}
-        {(phase === 'void' || phase === 'question' || phase === 'answer') && (
+        {(phase === 'void' || phase === 'question' || phase === 'choose') && (
           <motion.div
             className={`absolute inset-0 ${scenario.bg} flex flex-col items-center justify-center p-8`}
             initial={{ opacity: 0 }}
@@ -125,7 +155,7 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
             
             {/* Content */}
             <motion.div
-              className="relative z-10 max-w-xl text-center space-y-8"
+              className="relative z-10 max-w-xl text-center space-y-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -136,12 +166,22 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity }}
               >
-                <Compass className={`h-16 w-16 ${scenario.darkText ? 'text-stone-600' : 'text-white/40'}`} />
+                <Compass className={`h-12 w-12 ${scenario.darkText ? 'text-stone-600' : 'text-white/40'}`} />
               </motion.div>
+              
+              {/* Main message */}
+              <motion.p
+                className={`text-xl font-light ${scenario.darkText ? 'text-stone-800' : 'text-white/80'}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                You are outside planetary orbit.
+              </motion.p>
               
               {/* Scenario description */}
               <motion.p
-                className={`text-lg ${scenario.darkText ? 'text-stone-600' : 'text-white/60'}`}
+                className={`text-sm ${scenario.darkText ? 'text-stone-600' : 'text-white/50'}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1 }}
@@ -150,45 +190,87 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
               </motion.p>
               
               {/* The Question */}
-              {(phase === 'question' || phase === 'answer') && (
+              {(phase === 'question' || phase === 'choose') && (
                 <motion.div
-                  className="space-y-6"
+                  className="space-y-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  <p className={`text-2xl font-light ${scenario.darkText ? 'text-stone-800' : 'text-white'}`}>
-                    "What were you <span className="font-semibold text-emerald-400">actually</span> trying to do<br />
-                    before you left the planet?"
+                  <p className={`text-lg ${scenario.darkText ? 'text-stone-700' : 'text-white/90'}`}>
+                    What were you building before you left the planet?
                   </p>
                   
                   <Textarea
                     value={answer}
                     onChange={(e) => {
                       setAnswer(e.target.value);
-                      if (phase !== 'answer') setPhase('answer');
+                      if (phase !== 'choose') setPhase('choose');
                     }}
                     placeholder="My real goal was..."
-                    className={`min-h-[100px] max-w-md mx-auto resize-none ${
+                    className={`min-h-[80px] max-w-md mx-auto resize-none ${
                       scenario.darkText 
                         ? 'bg-white/80 border-stone-400 text-stone-800 placeholder:text-stone-500'
                         : 'bg-white/10 border-white/20 text-white placeholder:text-white/40'
                     }`}
                   />
                   
-                  {phase === 'answer' && answer.trim() && (
+                  {/* Return Options */}
+                  {phase === 'choose' && (
                     <motion.div
+                      className="space-y-4 pt-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <Button
-                        onClick={handleReturn}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                      >
-                        <Sparkles className="h-4 w-4 mr-2" />
-                        Return to Oz
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
+                      <p className={`text-sm ${scenario.darkText ? 'text-stone-600' : 'text-white/50'}`}>
+                        Choose your path:
+                      </p>
+                      
+                      <div className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
+                        {RETURN_OPTIONS.map((option) => {
+                          const Icon = option.icon;
+                          const isSelected = selectedDestination === option.id;
+                          return (
+                            <button
+                              key={option.id}
+                              onClick={() => setSelectedDestination(option.id)}
+                              className={`
+                                p-3 rounded-lg border text-left transition-all
+                                ${scenario.darkText 
+                                  ? isSelected 
+                                    ? 'bg-emerald-100 border-emerald-400 text-stone-800'
+                                    : 'bg-white/60 border-stone-300 text-stone-700 hover:bg-white/80'
+                                  : isSelected
+                                    ? 'bg-emerald-500/20 border-emerald-400/50 text-white'
+                                    : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10'
+                                }
+                              `}
+                            >
+                              <Icon className="h-4 w-4 mb-1" />
+                              <p className="text-sm font-medium">{option.label}</p>
+                              <p className={`text-xs ${scenario.darkText ? 'text-stone-500' : 'text-white/50'}`}>
+                                {option.description}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                      
+                      {selectedDestination && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          <Button
+                            onClick={handleReturn}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                          >
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            Restore Gravity
+                            <ArrowRight className="h-4 w-4 ml-2" />
+                          </Button>
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
                 </motion.div>
