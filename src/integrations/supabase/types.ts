@@ -428,6 +428,54 @@ export type Database = {
           },
         ]
       }
+      employer_education_benefits: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          documentation_notes: string | null
+          employee_email: string | null
+          employee_name: string
+          id: string
+          is_student_loan_payment: boolean | null
+          payment_date: string
+          payment_type: string
+          tax_year: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          documentation_notes?: string | null
+          employee_email?: string | null
+          employee_name: string
+          id?: string
+          is_student_loan_payment?: boolean | null
+          payment_date?: string
+          payment_type?: string
+          tax_year?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          documentation_notes?: string | null
+          employee_email?: string | null
+          employee_name?: string
+          id?: string
+          is_student_loan_payment?: boolean | null
+          payment_date?: string
+          payment_type?: string
+          tax_year?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       income_sources: {
         Row: {
           created_at: string
