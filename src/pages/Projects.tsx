@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useProjects, useActionItems, useDeleteProject, Project } from "@/hooks/use-projects";
+import { useProjectItems } from "@/hooks/use-project-items";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ActionItemRow } from "@/components/ActionItemRow";
+import { ProjectItemRow } from "@/components/ProjectItemRow";
 import { CreateProjectDialog } from "@/components/CreateProjectDialog";
 import { CreateActionItemDialog } from "@/components/CreateActionItemDialog";
+import { BulkUploadDialog } from "@/components/BulkUploadDialog";
 import { GardenRewards } from "@/components/GardenRewards";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 export default function Projects() {
@@ -14,6 +17,7 @@ export default function Projects() {
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: allActionItems = [] } = useActionItems();
   const { data: projectActionItems = [] } = useActionItems(selectedProject?.id);
+  const { data: projectItems = [] } = useProjectItems(selectedProject?.id);
   const deleteProject = useDeleteProject();
 
   const getActionItemCount = (projectId: string) => {
@@ -50,7 +54,37 @@ export default function Projects() {
         </header>
 
         <main className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between mb-6">
+          {/* Project Items Section (Bulk Uploaded) */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Package className="h-5 w-5" />
+                Project Items
+              </h2>
+              <BulkUploadDialog projectId={selectedProject.id} />
+            </div>
+
+            {projectItems.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground bg-muted/30 rounded-lg border border-dashed">
+                <Package className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No items yet</p>
+                <p className="text-xs">Use "Bulk Add" to add multiple items at once</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {projectItems.map((item) => (
+                  <ProjectItemRow 
+                    key={item.id} 
+                    item={item} 
+                    projectId={selectedProject.id}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Action Items Section */}
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold flex items-center gap-2">
               <ListTodo className="h-5 w-5" />
               Action Items

@@ -7,6 +7,9 @@ export interface Project {
   name: string;
   description: string | null;
   color: string;
+  assigned_to: string | null;
+  is_completed: boolean;
+  completed_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -63,7 +66,12 @@ export function useCreateProject() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (project: { name: string; description?: string; color?: string }) => {
+    mutationFn: async (project: { 
+      name: string; 
+      description?: string; 
+      color?: string;
+      assigned_to?: string;
+    }) => {
       const { data, error } = await supabase
         .from("projects")
         .insert(project)
