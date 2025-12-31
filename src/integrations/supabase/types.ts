@@ -611,6 +611,50 @@ export type Database = {
         }
         Relationships: []
       }
+      focus_patterns: {
+        Row: {
+          created_at: string
+          id: string
+          impact_on_score: number | null
+          lesson: string | null
+          pattern_description: string
+          pattern_type: string
+          project_id: string | null
+          times_occurred: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          impact_on_score?: number | null
+          lesson?: string | null
+          pattern_description: string
+          pattern_type: string
+          project_id?: string | null
+          times_occurred?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          impact_on_score?: number | null
+          lesson?: string | null
+          pattern_description?: string
+          pattern_type?: string
+          project_id?: string | null
+          times_occurred?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "focus_patterns_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       form_1099_investment_income: {
         Row: {
           bond_premium: number | null
@@ -1465,6 +1509,47 @@ export type Database = {
         }
         Relationships: []
       }
+      project_checkins: {
+        Row: {
+          checkin_date: string
+          created_at: string
+          distractions_to_avoid: string[] | null
+          focus_intention: string | null
+          id: string
+          priorities_reviewed: boolean | null
+          project_id: string
+          stakeholders_contacted: string[] | null
+        }
+        Insert: {
+          checkin_date?: string
+          created_at?: string
+          distractions_to_avoid?: string[] | null
+          focus_intention?: string | null
+          id?: string
+          priorities_reviewed?: boolean | null
+          project_id: string
+          stakeholders_contacted?: string[] | null
+        }
+        Update: {
+          checkin_date?: string
+          created_at?: string
+          distractions_to_avoid?: string[] | null
+          focus_intention?: string | null
+          id?: string
+          priorities_reviewed?: boolean | null
+          project_id?: string
+          stakeholders_contacted?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_checkins_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_history: {
         Row: {
           changed_at: string
@@ -1557,10 +1642,14 @@ export type Database = {
           color: string | null
           completed_at: string | null
           created_at: string
+          daily_checkin_required: boolean | null
           description: string | null
+          focus_score: number | null
           id: string
           is_completed: boolean
+          lessons_learned: string | null
           name: string
+          scope_creep_count: number | null
           updated_at: string
         }
         Insert: {
@@ -1568,10 +1657,14 @@ export type Database = {
           color?: string | null
           completed_at?: string | null
           created_at?: string
+          daily_checkin_required?: boolean | null
           description?: string | null
+          focus_score?: number | null
           id?: string
           is_completed?: boolean
+          lessons_learned?: string | null
           name: string
+          scope_creep_count?: number | null
           updated_at?: string
         }
         Update: {
@@ -1579,10 +1672,14 @@ export type Database = {
           color?: string | null
           completed_at?: string | null
           created_at?: string
+          daily_checkin_required?: boolean | null
           description?: string | null
+          focus_score?: number | null
           id?: string
           is_completed?: boolean
+          lessons_learned?: string | null
           name?: string
+          scope_creep_count?: number | null
           updated_at?: string
         }
         Relationships: []
