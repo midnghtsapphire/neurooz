@@ -1,8 +1,15 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ActionItem } from "@/hooks/use-projects";
 import { PicketFence } from "./PicketFence";
 import { Flower2, TreePine, Sprout, Droplets, Shovel, Snowflake, Sun, Leaf, Cherry } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface GardenRewardsProps {
   actionItems: ActionItem[];
@@ -162,35 +169,76 @@ function GardenTool({ tool, earned }: { tool: typeof TOOLS[0]; earned: boolean }
   );
 }
 
-function SeasonIndicator({ season, allSeasons }: { season: Season; allSeasons: Season[] }) {
+function SeasonSelector({ 
+  currentSeason, 
+  selectedSeason, 
+  onSeasonChange 
+}: { 
+  currentSeason: Season; 
+  selectedSeason: Season; 
+  onSeasonChange: (season: Season) => void;
+}) {
+  const allSeasons: Season[] = ["spring", "summer", "fall", "winter"];
+  
   return (
-    <div className="flex justify-center gap-2 mb-3">
-      {allSeasons.map((s) => {
-        const theme = SEASONS[s];
-        const Icon = theme.icon;
-        const isActive = s === season;
-        return (
-          <div
-            key={s}
-            className={cn(
-              "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-all",
-              isActive 
-                ? `${theme.textColor} bg-white shadow-md border ${theme.borderColor}` 
-                : "text-gray-400 bg-gray-100/50"
-            )}
-          >
-            <Icon className="h-3 w-3" />
-            <span className="capitalize">{s}</span>
-          </div>
-        );
-      })}
+    <div className="flex items-center justify-center gap-3 mb-3">
+      {/* Visual indicators */}
+      <div className="flex gap-1">
+        {allSeasons.map((s) => {
+          const theme = SEASONS[s];
+          const Icon = theme.icon;
+          const isActive = s === selectedSeason;
+          const isCurrent = s === currentSeason;
+          return (
+            <button
+              key={s}
+              onClick={() => onSeasonChange(s)}
+              className={cn(
+                "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-all",
+                isActive 
+                  ? `${theme.textColor} bg-white shadow-md border ${theme.borderColor}` 
+                  : "text-gray-400 bg-gray-100/50 hover:bg-gray-200/50",
+                isCurrent && !isActive && "ring-1 ring-offset-1 ring-gray-300"
+              )}
+              title={isCurrent ? `${s} (current)` : s}
+            >
+              <Icon className="h-3 w-3" />
+              <span className="capitalize hidden sm:inline">{s}</span>
+            </button>
+          );
+        })}
+      </div>
+      
+      {/* Dropdown for mobile */}
+      <Select value={selectedSeason} onValueChange={(value) => onSeasonChange(value as Season)}>
+        <SelectTrigger className="w-[140px] h-8 text-xs sm:hidden">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {allSeasons.map((s) => {
+            const theme = SEASONS[s];
+            const Icon = theme.icon;
+            const isCurrent = s === currentSeason;
+            return (
+              <SelectItem key={s} value={s}>
+                <div className="flex items-center gap-2">
+                  <Icon className="h-3 w-3" />
+                  <span className="capitalize">{s}</span>
+                  {isCurrent && <span className="text-muted-foreground">(now)</span>}
+                </div>
+              </SelectItem>
+            );
+          })}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
 
 export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
   const currentSeason = getCurrentSeason();
-  const theme = SEASONS[currentSeason];
+  const [selectedSeason, setSelectedSeason] = useState<Season>(currentSeason);
+  const theme = SEASONS[selectedSeason];
   const SeasonIcon = theme.icon;
 
   const stats = useMemo(() => {
@@ -245,8 +293,12 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
 
   return (
     <div className={cn("relative", className)}>
-      {/* Season Indicator */}
-      <SeasonIndicator season={currentSeason} allSeasons={["spring", "summer", "fall", "winter"]} />
+      {/* Season Selector */}
+      <SeasonSelector 
+        currentSeason={currentSeason} 
+        selectedSeason={selectedSeason} 
+        onSeasonChange={setSelectedSeason} 
+      />
 
       {/* Garden Header */}
       <div className="text-center mb-4">
@@ -316,7 +368,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
           {stats.earnedPlants.length === 0 ? (
             <div className={cn("text-center py-8 opacity-60", theme.subtextColor)}>
               <Flower2 className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">Complete tasks to grow your {currentSeason} garden!</p>
+              <p className="text-sm">Complete tasks to grow your {selectedSeason} garden!</p>
               <p className="text-xs mt-1">
                 Next plant in <span className="font-bold">{stats.pointsToNext}</span> points
               </p>
@@ -328,7 +380,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
                   key={`${plant.id}-${index}`} 
                   plant={plant} 
                   index={index}
-                  season={currentSeason}
+                  season={selectedSeason}
                 />
               ))}
             </div>
@@ -340,7 +392,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
         
         {/* Fence at bottom */}
         <div className="relative -mb-4">
-          <PicketFence className="h-20" showFlowers={currentSeason === "spring" || currentSeason === "summer"} />
+          <PicketFence className="h-20" showFlowers={selectedSeason === "spring" || selectedSeason === "summer"} />
         </div>
       </div>
 
@@ -348,14 +400,14 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
       {stats.pointsToNext > 0 && (
         <div className="mt-3 text-center">
           <div className="text-xs text-muted-foreground">
-            <span className="font-medium">{stats.pointsToNext} more points</span> until next {currentSeason} plant
+            <span className="font-medium">{stats.pointsToNext} more points</span> until next {selectedSeason} plant
           </div>
           <div className="w-32 h-1.5 bg-gray-200 rounded-full mx-auto mt-1 overflow-hidden">
             <div 
               className={cn("h-full rounded-full transition-all duration-500", 
-                currentSeason === "spring" ? "bg-pink-500" :
-                currentSeason === "summer" ? "bg-cyan-500" :
-                currentSeason === "fall" ? "bg-orange-500" : "bg-blue-400"
+                selectedSeason === "spring" ? "bg-pink-500" :
+                selectedSeason === "summer" ? "bg-cyan-500" :
+                selectedSeason === "fall" ? "bg-orange-500" : "bg-blue-400"
               )}
               style={{ 
                 width: `${Math.min(100, (stats.remainingPoints / Math.min(...theme.plants.map(p => p.requiredPoints))) * 100)}%` 
