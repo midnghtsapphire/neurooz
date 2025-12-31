@@ -1,5 +1,42 @@
 import { Flower2, Cherry, Sparkles } from "lucide-react";
 
+// Buzzing bee component
+const BuzzingBee = ({ style, delay = 0 }: { style?: React.CSSProperties; delay?: number }) => {
+  return (
+    <div 
+      className="absolute text-amber-400 animate-bounce"
+      style={{ 
+        ...style,
+        animationDuration: '1.5s',
+        animationDelay: `${delay}s`,
+      }}
+    >
+      <svg 
+        className="w-3 h-3 drop-shadow-sm" 
+        viewBox="0 0 24 24" 
+        fill="currentColor"
+        style={{
+          animation: `buzz ${0.3 + delay * 0.1}s ease-in-out infinite alternate`,
+        }}
+      >
+        {/* Bee body */}
+        <ellipse cx="12" cy="14" rx="5" ry="6" fill="#f59e0b" />
+        {/* Stripes */}
+        <rect x="7" y="12" width="10" height="2" fill="#1f2937" rx="1" />
+        <rect x="7" y="16" width="10" height="2" fill="#1f2937" rx="1" />
+        {/* Head */}
+        <circle cx="12" cy="7" r="3" fill="#1f2937" />
+        {/* Wings */}
+        <ellipse cx="7" cy="11" rx="3" ry="4" fill="white" opacity="0.7" />
+        <ellipse cx="17" cy="11" rx="3" ry="4" fill="white" opacity="0.7" />
+        {/* Antennae */}
+        <path d="M10 5 L8 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+        <path d="M14 5 L16 2" stroke="#1f2937" strokeWidth="1" fill="none" />
+      </svg>
+    </div>
+  );
+};
+
 // Small flower decorations with more variety
 const FlowerDecoration = ({ style, variant = 1, size = "sm" }: { style?: React.CSSProperties; variant?: number; size?: "xs" | "sm" | "md" }) => {
   const colors = ["text-pink-300", "text-rose-300", "text-pink-200", "text-white", "text-fuchsia-200"];
@@ -152,6 +189,26 @@ export const PicketFence = ({ className = "", showFlowers = true, showGate = fal
                     <div className="absolute top-1 -left-1 w-2 h-1.5 bg-green-400 rounded-full rotate-45" />
                     <div className="absolute top-4 left-1 w-2 h-1.5 bg-green-400 rounded-full -rotate-45" />
                   </div>
+                )}
+                
+                {/* Bees buzzing near flowers */}
+                {showFlowers && i % 7 === 0 && (
+                  <BuzzingBee 
+                    delay={i * 0.2}
+                    style={{ 
+                      top: `-4px`, 
+                      left: `${8 + (i % 3) * 4}px`,
+                    }} 
+                  />
+                )}
+                {showFlowers && i % 11 === 0 && (
+                  <BuzzingBee 
+                    delay={i * 0.15 + 0.5}
+                    style={{ 
+                      top: `${6 + (i % 4) * 2}px`, 
+                      right: `-6px`,
+                    }} 
+                  />
                 )}
               </div>
             );
