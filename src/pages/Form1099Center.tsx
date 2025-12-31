@@ -13,6 +13,9 @@ import {
 import { useBusinessesExtended } from "@/hooks/use-businesses-extended";
 import { Form1099NECTracker } from "@/components/tax-forms/Form1099NECTracker";
 import { Form1099BoxReference } from "@/components/tax-forms/Form1099BoxReference";
+import { Form1099MISCTracker } from "@/components/tax-forms/Form1099MISCTracker";
+import { Form1099KTracker } from "@/components/tax-forms/Form1099KTracker";
+import { Form1099INTDIVTracker } from "@/components/tax-forms/Form1099INTDIVTracker";
 
 export default function Form1099Center() {
   const navigate = useNavigate();
@@ -186,31 +189,14 @@ export default function Form1099Center() {
                 </TabsContent>
 
                 <TabsContent value="misc-k">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>1099-MISC & 1099-K Tracking</CardTitle>
-                      <CardDescription>
-                        Track miscellaneous income (rents, royalties) and payment processor income
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Form1099BoxReference formType="1099-MISC" />
-                    </CardContent>
-                  </Card>
+                  <div className="space-y-8">
+                    <Form1099MISCTracker businessId={selectedBusinessId} />
+                    <Form1099KTracker businessId={selectedBusinessId} />
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="int-div">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>1099-INT & 1099-DIV Tracking</CardTitle>
-                      <CardDescription>
-                        Track interest and dividend income received
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Form1099BoxReference formType="1099-INT" />
-                    </CardContent>
-                  </Card>
+                  <Form1099INTDIVTracker businessId={selectedBusinessId} />
                 </TabsContent>
 
                 <TabsContent value="reference">

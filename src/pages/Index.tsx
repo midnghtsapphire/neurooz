@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { User } from "@supabase/supabase-js";
-import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap } from "lucide-react";
+import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap, Receipt, Gift, CreditCard } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
@@ -325,6 +325,27 @@ const Index = () => {
               icon={<GraduationCap className="w-5 h-5" />}
               action="Manage Benefits"
               onClick={() => navigate("/employer-benefits")}
+            />
+            <DashboardCard
+              title="1099 Center"
+              description="Multi-entity 1099 tracking for NEC, MISC, K, INT/DIV"
+              icon={<Receipt className="w-5 h-5" />}
+              action="Open Center"
+              onClick={() => navigate("/1099-center")}
+            />
+            <DashboardCard
+              title="Donation Tracker"
+              description="Track charitable donations and 8283 forms"
+              icon={<Gift className="w-5 h-5" />}
+              action="Track Donations"
+              onClick={() => navigate("/donations")}
+            />
+            <DashboardCard
+              title="Subscriptions"
+              description="Track business subscriptions and digital assets"
+              icon={<CreditCard className="w-5 h-5" />}
+              action="Manage"
+              onClick={() => navigate("/subscriptions")}
             />
           </div>
 
