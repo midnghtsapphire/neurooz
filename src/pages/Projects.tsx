@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useProjects, useActionItems, useDeleteProject, Project } from "@/hooks/use-projects";
 import { useProjectItems } from "@/hooks/use-project-items";
+import { useTodayCheckin } from "@/hooks/use-focus-system";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ActionItemRow } from "@/components/ActionItemRow";
 import { ProjectItemRow } from "@/components/ProjectItemRow";
@@ -16,9 +17,12 @@ import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { EditProjectDialog } from "@/components/EditProjectDialog";
 import { YellowBrickRoad } from "@/components/YellowBrickRoad";
 import { SetbackMatrix } from "@/components/SetbackMatrix";
+import { DailyOzRitual } from "@/components/DailyOzRitual";
+import { ScoreProjectDialog } from "@/components/ProjectCompletionScorer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles } from "lucide-react";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const defaultFilters: ProjectFilters = {
@@ -32,6 +36,8 @@ const defaultFilters: ProjectFilters = {
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showOzRitual, setShowOzRitual] = useState(false);
+  const [ritualCompleted, setRitualCompleted] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [environment, setEnvironment] = useState<Environment>("sandbox");
   const [filters, setFilters] = useState<ProjectFilters>(defaultFilters);
@@ -40,7 +46,11 @@ export default function Projects() {
   const { data: allActionItems = [] } = useActionItems();
   const { data: projectActionItems = [] } = useActionItems(selectedProject?.id);
   const { data: projectItems = [] } = useProjectItems(selectedProject?.id);
+  const { data: todayCheckin } = useTodayCheckin(selectedProject?.id || "");
   const deleteProject = useDeleteProject();
+
+  // Check if ritual is needed
+  const needsRitual = selectedProject && !todayCheckin && !ritualCompleted;
 
   // Get unique assignees from projects
   const assignees = useMemo(() => {
@@ -134,20 +144,57 @@ export default function Projects() {
 
   // Project detail view
   if (selectedProject) {
+    // Show Oz Ritual if needed
+    if (needsRitual) {
+      return (
+        <>
+          <DailyOzRitual
+            project={selectedProject}
+            open={true}
+            onComplete={() => setRitualCompleted(true)}
+            onCancel={() => {
+              setSelectedProject(null);
+              setRitualCompleted(false);
+            }}
+          />
+        </>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-background">
         <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
           <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => setSelectedProject(null)}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: selectedProject.color }}
-                />
-                <h1 className="text-xl font-bold">{selectedProject.name}</h1>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Button variant="ghost" size="icon" onClick={() => {
+                  setSelectedProject(null);
+                  setRitualCompleted(false);
+                }}>
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: selectedProject.color }}
+                  />
+                  <h1 className="text-xl font-bold">{selectedProject.name}</h1>
+                  {(selectedProject as any).focus_score && (
+                    <Badge variant="outline" className="gap-1">
+                      <Trophy className="h-3 w-3" />
+                      {(selectedProject as any).focus_score}/100
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {todayCheckin && (
+                  <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 gap-1">
+                    <Sparkles className="h-3 w-3" />
+                    Ritual Complete
+                  </Badge>
+                )}
+                <ScoreProjectDialog project={selectedProject} actionItems={projectActionItems} />
               </div>
             </div>
           </div>
