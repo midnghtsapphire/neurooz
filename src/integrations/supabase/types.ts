@@ -964,6 +964,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_co2_stats: {
+        Row: {
+          completed_tasks_count: number
+          created_at: string
+          current_season: string | null
+          display_name: string | null
+          id: string
+          total_co2_saved: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_tasks_count?: number
+          created_at?: string
+          current_season?: string | null
+          display_name?: string | null
+          id?: string
+          total_co2_saved?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_tasks_count?: number
+          created_at?: string
+          current_season?: string | null
+          display_name?: string | null
+          id?: string
+          total_co2_saved?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_disability_profiles: {
         Row: {
           created_at: string
