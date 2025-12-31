@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { ActionItem } from "@/hooks/use-projects";
 import { PicketFence } from "./PicketFence";
-import { Flower2, TreePine, Sprout, Droplets, Shovel, Snowflake, Sun, Leaf, Cherry } from "lucide-react";
+import { Flower2, TreePine, Droplets, Shovel, Snowflake, Sun, Leaf, Cherry, Award, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Select,
   SelectContent,
@@ -126,6 +127,32 @@ const TOOLS = [
   { id: "water", name: "Water Can", icon: "💧", description: "Complete 3+ tasks" },
 ];
 
+// Seasonal achievements
+const ACHIEVEMENTS = {
+  spring: [
+    { id: "spring_sprout", name: "Spring Sprout", icon: "🌱", description: "Complete 3 tasks in spring", requirement: 3, tier: "bronze" },
+    { id: "spring_bloomer", name: "Spring Bloomer", icon: "🌸", description: "Complete 7 tasks in spring", requirement: 7, tier: "silver" },
+    { id: "spring_master", name: "Blossom Master", icon: "🌺", description: "Complete 15 tasks in spring", requirement: 15, tier: "gold" },
+  ],
+  summer: [
+    { id: "summer_starter", name: "Summer Starter", icon: "☀️", description: "Complete 3 tasks in summer", requirement: 3, tier: "bronze" },
+    { id: "summer_surfer", name: "Wave Rider", icon: "🏄", description: "Complete 7 tasks in summer", requirement: 7, tier: "silver" },
+    { id: "summer_champion", name: "Beach Champion", icon: "🏆", description: "Complete 15 tasks in summer", requirement: 15, tier: "gold" },
+  ],
+  fall: [
+    { id: "fall_harvester", name: "Fall Harvester", icon: "🍂", description: "Complete 3 tasks in fall", requirement: 3, tier: "bronze" },
+    { id: "fall_gatherer", name: "Harvest Gatherer", icon: "🎃", description: "Complete 7 tasks in fall", requirement: 7, tier: "silver" },
+    { id: "fall_legend", name: "Autumn Legend", icon: "🍁", description: "Complete 15 tasks in fall", requirement: 15, tier: "gold" },
+  ],
+  winter: [
+    { id: "winter_walker", name: "Winter Walker", icon: "❄️", description: "Complete 3 tasks in winter", requirement: 3, tier: "bronze" },
+    { id: "winter_warrior", name: "Frost Warrior", icon: "⛄", description: "Complete 7 tasks in winter", requirement: 7, tier: "silver" },
+    { id: "winter_champion", name: "Winter Champion", icon: "👑", description: "Complete 15 tasks in winter", requirement: 15, tier: "gold" },
+  ],
+};
+
+type Achievement = typeof ACHIEVEMENTS.spring[0];
+
 type Plant = typeof SEASONS.spring.plants[0];
 
 function GardenPlant({ plant, index, season }: { plant: Plant; index: number; season: Season }) {
@@ -166,6 +193,76 @@ function GardenTool({ tool, earned }: { tool: typeof TOOLS[0]; earned: boolean }
         <div className="text-[10px]">{earned ? "Earned!" : tool.description}</div>
       </div>
     </div>
+  );
+}
+
+function AchievementBadge({ achievement, earned, progress, season }: { 
+  achievement: Achievement; 
+  earned: boolean; 
+  progress: number;
+  season: Season;
+}) {
+  const theme = SEASONS[season];
+  const tierColors = {
+    bronze: "from-amber-600 to-amber-400 border-amber-500",
+    silver: "from-slate-400 to-slate-200 border-slate-400",
+    gold: "from-yellow-500 to-amber-300 border-yellow-500",
+  };
+  
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div 
+            className={cn(
+              "relative flex flex-col items-center p-2 rounded-xl border-2 transition-all cursor-default min-w-[70px]",
+              earned 
+                ? `bg-gradient-to-b ${tierColors[achievement.tier as keyof typeof tierColors]} shadow-lg` 
+                : "bg-gray-100/80 border-gray-300 opacity-60"
+            )}
+          >
+            <span className={cn(
+              "text-2xl transition-all",
+              earned ? "drop-shadow-md" : "grayscale"
+            )}>
+              {achievement.icon}
+            </span>
+            <div className={cn(
+              "text-[9px] font-bold text-center mt-1 leading-tight",
+              earned ? "text-white drop-shadow" : "text-gray-500"
+            )}>
+              {achievement.name}
+            </div>
+            {!earned && (
+              <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-[80%] h-1 bg-gray-300 rounded-full overflow-hidden">
+                <div 
+                  className={cn("h-full rounded-full transition-all",
+                    season === "spring" ? "bg-pink-500" :
+                    season === "summer" ? "bg-cyan-500" :
+                    season === "fall" ? "bg-orange-500" : "bg-blue-400"
+                  )}
+                  style={{ width: `${Math.min(100, (progress / achievement.requirement) * 100)}%` }}
+                />
+              </div>
+            )}
+            {earned && (
+              <div className="absolute -top-1 -right-1 text-xs">
+                {achievement.tier === "gold" ? "👑" : achievement.tier === "silver" ? "🥈" : "🥉"}
+              </div>
+            )}
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side="top" className="max-w-[200px]">
+          <div className="text-center">
+            <div className="font-bold">{achievement.name}</div>
+            <div className="text-xs text-muted-foreground">{achievement.description}</div>
+            <div className="text-xs mt-1 font-medium">
+              {earned ? "✅ Achieved!" : `Progress: ${progress}/${achievement.requirement}`}
+            </div>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
@@ -280,6 +377,13 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
     const minPlantCost = Math.min(...theme.plants.map(p => p.requiredPoints));
     const pointsToNext = remainingPoints < minPlantCost ? minPlantCost - remainingPoints : 0;
     
+    // Check achievements for the selected season
+    const seasonAchievements = ACHIEVEMENTS[selectedSeason];
+    const earnedAchievements = seasonAchievements.map(achievement => ({
+      ...achievement,
+      earned: completed.length >= achievement.requirement,
+    }));
+    
     return {
       completedCount: completed.length,
       points,
@@ -288,8 +392,9 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
       earnedTools,
       pointsToNext,
       remainingPoints,
+      earnedAchievements,
     };
-  }, [actionItems, theme.plants]);
+  }, [actionItems, theme.plants, selectedSeason]);
 
   return (
     <div className={cn("relative", className)}>
@@ -322,6 +427,27 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
         <div className="flex items-center gap-1 text-amber-600">
           <Shovel className="h-4 w-4" />
           <span className="font-bold">{stats.points}</span> garden points
+        </div>
+      </div>
+
+      {/* Achievements Section */}
+      <div className="mb-4">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Trophy className={cn("h-4 w-4", theme.textColor)} />
+          <span className={cn("text-sm font-semibold", theme.textColor)}>
+            {selectedSeason.charAt(0).toUpperCase() + selectedSeason.slice(1)} Achievements
+          </span>
+        </div>
+        <div className="flex justify-center gap-2 flex-wrap">
+          {stats.earnedAchievements.map(achievement => (
+            <AchievementBadge 
+              key={achievement.id}
+              achievement={achievement}
+              earned={achievement.earned}
+              progress={stats.completedCount}
+              season={selectedSeason}
+            />
+          ))}
         </div>
       </div>
 
