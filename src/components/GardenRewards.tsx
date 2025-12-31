@@ -1,9 +1,11 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { ActionItem } from "@/hooks/use-projects";
 import { PicketFence } from "./PicketFence";
 import { Flower2, TreePine, Droplets, Shovel, Snowflake, Sun, Leaf, Cherry, Award, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CO2Leaderboard } from "./CO2Leaderboard";
+import { useUpdateCO2Stats } from "@/hooks/use-co2-leaderboard";
 import {
   Select,
   SelectContent,
@@ -337,6 +339,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
   const [selectedSeason, setSelectedSeason] = useState<Season>(currentSeason);
   const theme = SEASONS[selectedSeason];
   const SeasonIcon = theme.icon;
+  const updateCO2Stats = useUpdateCO2Stats();
 
   const stats = useMemo(() => {
     const completed = actionItems.filter(item => item.is_completed);
@@ -395,6 +398,17 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
       earnedAchievements,
     };
   }, [actionItems, theme.plants, selectedSeason]);
+
+  // Sync CO2 stats to database for leaderboard
+  useEffect(() => {
+    if (stats.completedCount > 0) {
+      updateCO2Stats.mutate({
+        totalCO2Saved: stats.totalCo2,
+        completedTasksCount: stats.completedCount,
+        currentSeason: selectedSeason,
+      });
+    }
+  }, [stats.totalCo2, stats.completedCount, selectedSeason]);
 
   return (
     <div className={cn("relative", className)}>
@@ -542,6 +556,11 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
           </div>
         </div>
       )}
+
+      {/* CO2 Leaderboard */}
+      <div className="mt-6">
+        <CO2Leaderboard />
+      </div>
     </div>
   );
 }
