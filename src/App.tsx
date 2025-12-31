@@ -15,6 +15,7 @@ import RentalManagement from "./pages/RentalManagement";
 import TaxRules from "./pages/TaxRules";
 import DonationTrackerPage from "./pages/DonationTrackerPage";
 import SubscriptionsPage from "./pages/SubscriptionsPage";
+import TaxCreditsCalculatorPage from "./pages/TaxCreditsCalculatorPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/tax-rules" element={<TaxRules />} />
           <Route path="/donations" element={<DonationTrackerPage />} />
           <Route path="/subscriptions" element={<SubscriptionsPage />} />
+          <Route path="/tax-credits-calculator" element={<TaxCreditsCalculatorPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
