@@ -6,6 +6,7 @@ import ProjectsQuickCard from "./ProjectsQuickCard";
 import WellnessPlanCard from "./WellnessPlanCard";
 import MaintenanceRoutineCard from "./MaintenanceRoutineCard";
 import AssetTrackingCard from "./AssetTrackingCard";
+import VineProductCard from "./VineProductCard";
 import { useBusinesses } from "@/hooks/use-businesses";
 
 export function DashboardCards() {
@@ -31,6 +32,7 @@ export function DashboardCards() {
         businessName={activeBusiness?.name}
       />
       <ProjectsQuickCard />
+      <VineProductCard />
       <MaintenanceRoutineCard />
       <AssetTrackingCard />
       <WellnessPlanCard onCreatePlan={handleCreateWellnessPlan} />
