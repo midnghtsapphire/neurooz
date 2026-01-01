@@ -74,6 +74,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
   rental_business: "Rental Business",
   expert_tips: "Expert CPA Tips",
   back_taxes: "Back Taxes & Amendments",
+  student_loan: "Student Loan Interest",
   // 1099 Specific Categories
   "1099_nec": "1099-NEC Rules & Write-offs",
   "1099_misc": "1099-MISC Rules & Write-offs",
@@ -99,6 +100,7 @@ export const CATEGORY_ICONS: Record<string, string> = {
   rental_business: "Building",
   expert_tips: "Lightbulb",
   back_taxes: "FileText",
+  student_loan: "GraduationCap",
   // 1099 Specific Icons
   "1099_nec": "FileText",
   "1099_misc": "Files",
