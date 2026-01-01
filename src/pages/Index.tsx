@@ -6,15 +6,12 @@ import { User } from "@supabase/supabase-js";
 import { Grape, LogOut, Settings, LayoutDashboard, Plus, Sparkles, DollarSign, CheckCircle, FolderKanban, Calendar, ClipboardList, FileText, TrendingUp, Package, Calculator, GraduationCap, Receipt, Gift, CreditCard, Building2 } from "lucide-react";
 import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
-import magnoliaFlowers from "@/assets/magnolia-flowers.png";
-import { FloatingPetals } from "@/components/FloatingPetals";
+import emeraldRoadHero from "@/assets/emerald-road-hero.jpg";
 import { PicketFence, GardenGate } from "@/components/PicketFence";
-import { MagnoliaSplash } from "@/components/MagnoliaSplash";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showSplash, setShowSplash] = useState(true);
   const [gateOpen, setGateOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -34,13 +31,13 @@ const Index = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Open gate after splash
+  // Open gate after load
   useEffect(() => {
-    if (!showSplash) {
+    if (!loading) {
       const timer = setTimeout(() => setGateOpen(true), 500);
       return () => clearTimeout(timer);
     }
-  }, [showSplash]);
+  }, [loading]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -58,147 +55,89 @@ const Index = () => {
 
   if (!user) {
     return (
-      <>
-        {showSplash && <MagnoliaSplash onComplete={() => setShowSplash(false)} duration={3500} />}
+      <div className="min-h-screen bg-night-emerald relative overflow-hidden">
+        {/* Hero Image Background */}
+        <div className="absolute inset-0">
+          <img 
+            src={emeraldRoadHero}
+            alt="Emerald Road OS Command Center"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-night-emerald via-night-emerald/60 to-transparent" />
+        </div>
         
-        <div className={`min-h-screen vine-section relative overflow-hidden transition-opacity duration-500 ${showSplash ? 'opacity-0' : 'opacity-100'}`}>
-          <FloatingPetals count={20} />
-          
-          {/* Garden Gate Welcome */}
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 pointer-events-none">
-            <GardenGate isOpen={gateOpen} className="scale-75 opacity-60" />
+        {/* Header */}
+        <header className="relative z-50 border-b border-emerald-gold/20 bg-night-emerald/80 backdrop-blur-sm">
+          <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-gold flex items-center justify-center">
+                <Grape className="w-6 h-6 text-night-emerald" />
+              </div>
+              <span className="text-xl font-display font-bold text-clean-white">Emerald Road OS</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Button
+                onClick={() => navigate("/the-crossing")}
+                variant="ghost"
+                className="font-medium text-moon-silver hover:text-emerald-gold"
+              >
+                The Crossing
+              </Button>
+              <Button
+                onClick={() => navigate("/auth")}
+                className="bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold shadow-soft hover:shadow-medium transition-all"
+              >
+                Enter
+              </Button>
+            </div>
           </div>
-          
-          {/* Hero Section */}
-          <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-            <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-                  <Grape className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-display font-bold text-foreground">VineTaxes</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button
-                  onClick={() => navigate("/projects")}
-                  variant="ghost"
-                  className="font-medium"
-                >
-                  Projects
-                </Button>
-                <Button
-                  onClick={() => navigate("/auth")}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-soft hover:shadow-medium transition-all"
-                >
-                  Get Started
-                </Button>
-              </div>
-            </div>
-          </header>
+        </header>
 
-        <main className="container mx-auto px-6 relative">
-          {/* Decorative Magnolia Flowers */}
-          <img 
-            src={magnoliaFlowers} 
-            alt="" 
-            className="absolute top-0 right-0 w-48 lg:w-64 opacity-40 pointer-events-none select-none transform translate-x-1/4 -translate-y-8"
-            aria-hidden="true"
-          />
-          <img 
-            src={magnoliaFlowers} 
-            alt="" 
-            className="absolute top-1/3 left-0 w-40 lg:w-56 opacity-30 pointer-events-none select-none transform -translate-x-1/3 rotate-12"
-            aria-hidden="true"
-          />
-
-          {/* Hero */}
-          <section className="py-20 lg:py-32 text-center relative z-10">
-            <div className="max-w-3xl mx-auto animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary font-medium text-sm mb-6">
-                <Sparkles className="w-4 h-4" />
-                Tax tracking that grows with you
-              </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground leading-tight mb-6 text-balance">
-                Organize your taxes,{" "}
-                <span className="text-primary">harvest peace of mind</span>
-              </h1>
-              <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-                From W2s to 1099s, freelance gigs to passive income — 
-                VineTaxes helps you cultivate order from tax season chaos.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  onClick={() => navigate("/projects")}
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-medium hover:shadow-glow transition-all h-14 px-8 text-lg"
-                >
-                  View Projects
-                </Button>
-                <Button
-                  onClick={() => navigate("/auth")}
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-border hover:border-primary hover:text-primary font-semibold h-14 px-8 text-lg transition-all"
-                >
-                  Sign In
-                </Button>
-              </div>
+        {/* Hero Content */}
+        <main className="relative z-10 container mx-auto px-6 flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
+          <section className="text-center animate-fade-in -mt-20">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-clean-white leading-tight mb-4 tracking-tight">
+              EMERALD ROAD OS
+            </h1>
+            <p className="text-xl md:text-2xl text-moon-silver mb-10 max-w-2xl mx-auto font-light">
+              This is where real people rebuild real lives.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                onClick={() => navigate("/the-crossing")}
+                size="lg"
+                className="bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-bold shadow-medium hover:shadow-glow transition-all h-14 px-10 text-lg uppercase tracking-wider"
+              >
+                Enter The Crossing
+              </Button>
+              <Button
+                onClick={() => navigate("/auth")}
+                variant="outline"
+                size="lg"
+                className="border-2 border-moon-silver/40 text-moon-silver hover:border-emerald-gold hover:text-emerald-gold font-semibold h-14 px-10 text-lg transition-all bg-transparent"
+              >
+                Sign In
+              </Button>
             </div>
-          </section>
-
-          {/* Features Grid */}
-          <section className="py-20 border-t border-border relative">
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
-              <FeatureCard
-                icon={<FolderKanban className="w-6 h-6" />}
-                title="Project Tracking"
-                description="Organize your work into projects with custom colors and keep everything in one place."
-              />
-              <FeatureCard
-                icon={<CheckCircle className="w-6 h-6" />}
-                title="Action Items"
-                description="Create tasks with priorities and due dates. Check them off as you complete them."
-              />
-              <FeatureCard
-                icon={<Calendar className="w-6 h-6" />}
-                title="Stay on Schedule"
-                description="Never miss a deadline with due date tracking and priority-based organization."
-              />
-            </div>
-            
-            {/* Decorative Picket Fence with flowers and gate */}
-            <PicketFence className="h-24 opacity-80" showFlowers={true} showGate={true} />
           </section>
         </main>
 
-        {/* Footer with fence and flowers */}
-        <footer className="border-t border-border pt-4 mt-20 relative">
-          <PicketFence className="h-20 opacity-60" showFlowers={true} />
-          <div className="container mx-auto px-6 py-6 text-center text-muted-foreground relative z-10 bg-gradient-to-t from-background to-transparent">
-            <p>© 2024 VineTaxes. Cultivating tax clarity.</p>
+        {/* Footer */}
+        <footer className="absolute bottom-0 left-0 right-0 z-10 border-t border-emerald-gold/20 bg-night-emerald/80 backdrop-blur-sm">
+          <div className="container mx-auto px-6 py-4 text-center text-moon-silver/60">
+            <p>© 2026 Emerald Road OS. This is where real people rebuild real lives.</p>
           </div>
         </footer>
-        </div>
-      </>
+      </div>
     );
   }
 
   // Authenticated Dashboard
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Decorative Magnolia Flowers */}
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute top-20 right-0 w-40 lg:w-56 opacity-25 pointer-events-none select-none transform translate-x-1/4"
-        aria-hidden="true"
-      />
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute bottom-20 left-0 w-36 lg:w-48 opacity-20 pointer-events-none select-none transform -translate-x-1/4 rotate-180"
-        aria-hidden="true"
-      />
+    <div className="min-h-screen bg-night-emerald relative overflow-hidden">
+      {/* Subtle background glow */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-gold/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-dark-emerald/30 rounded-full blur-3xl pointer-events-none" />
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
