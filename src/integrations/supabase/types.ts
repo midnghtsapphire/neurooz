@@ -1269,6 +1269,45 @@ export type Database = {
         }
         Relationships: []
       }
+      operating_agreement_templates: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          placeholders: Json | null
+          state: string | null
+          template_content: string
+          template_name: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          placeholders?: Json | null
+          state?: string | null
+          template_content: string
+          template_name: string
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          placeholders?: Json | null
+          state?: string | null
+          template_content?: string
+          template_name?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pricing_tiers: {
         Row: {
           created_at: string
@@ -1962,6 +2001,78 @@ export type Database = {
         }
         Relationships: []
       }
+      ssdi_tracking: {
+        Row: {
+          alert_notes: string | null
+          created_at: string
+          earned_income: number
+          hours_worked: number | null
+          id: string
+          is_epe_month: boolean | null
+          is_substantial_services: boolean | null
+          is_twp_month: boolean | null
+          k1_distributions: number
+          material_participation_test: string | null
+          month: number
+          passive_income: number
+          rental_income: number
+          sga_limit: number | null
+          sga_risk_level: string | null
+          ssdi_benefit_amount: number | null
+          twp_months_used: number | null
+          updated_at: string
+          user_id: string
+          vine_etv: number
+          year: number
+        }
+        Insert: {
+          alert_notes?: string | null
+          created_at?: string
+          earned_income?: number
+          hours_worked?: number | null
+          id?: string
+          is_epe_month?: boolean | null
+          is_substantial_services?: boolean | null
+          is_twp_month?: boolean | null
+          k1_distributions?: number
+          material_participation_test?: string | null
+          month: number
+          passive_income?: number
+          rental_income?: number
+          sga_limit?: number | null
+          sga_risk_level?: string | null
+          ssdi_benefit_amount?: number | null
+          twp_months_used?: number | null
+          updated_at?: string
+          user_id: string
+          vine_etv?: number
+          year: number
+        }
+        Update: {
+          alert_notes?: string | null
+          created_at?: string
+          earned_income?: number
+          hours_worked?: number | null
+          id?: string
+          is_epe_month?: boolean | null
+          is_substantial_services?: boolean | null
+          is_twp_month?: boolean | null
+          k1_distributions?: number
+          material_participation_test?: string | null
+          month?: number
+          passive_income?: number
+          rental_income?: number
+          sga_limit?: number | null
+          sga_risk_level?: string | null
+          ssdi_benefit_amount?: number | null
+          twp_months_used?: number | null
+          updated_at?: string
+          user_id?: string
+          vine_etv?: number
+          year?: number
+        }
+        Relationships: []
+      }
       subscription_events: {
         Row: {
           amount: number | null
@@ -2504,6 +2615,87 @@ export type Database = {
           },
         ]
       }
+      user_operating_agreements: {
+        Row: {
+          agreement_name: string
+          business_id: string | null
+          created_at: string
+          custom_provisions: Json | null
+          generated_at: string | null
+          generated_content: string | null
+          id: string
+          includes_ssdi_protection: boolean | null
+          managing_member_name: string | null
+          managing_member_ownership: number | null
+          no_material_participation_clause: boolean | null
+          passive_member_name: string | null
+          passive_member_ownership: number | null
+          passive_role_explicitly_defined: boolean | null
+          signed_at: string | null
+          status: string | null
+          template_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agreement_name: string
+          business_id?: string | null
+          created_at?: string
+          custom_provisions?: Json | null
+          generated_at?: string | null
+          generated_content?: string | null
+          id?: string
+          includes_ssdi_protection?: boolean | null
+          managing_member_name?: string | null
+          managing_member_ownership?: number | null
+          no_material_participation_clause?: boolean | null
+          passive_member_name?: string | null
+          passive_member_ownership?: number | null
+          passive_role_explicitly_defined?: boolean | null
+          signed_at?: string | null
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agreement_name?: string
+          business_id?: string | null
+          created_at?: string
+          custom_provisions?: Json | null
+          generated_at?: string | null
+          generated_content?: string | null
+          id?: string
+          includes_ssdi_protection?: boolean | null
+          managing_member_name?: string | null
+          managing_member_ownership?: number | null
+          no_material_participation_clause?: boolean | null
+          passive_member_name?: string | null
+          passive_member_ownership?: number | null
+          passive_role_explicitly_defined?: boolean | null
+          signed_at?: string | null
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_operating_agreements_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_operating_agreements_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "operating_agreement_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -2575,6 +2767,92 @@ export type Database = {
           vision_impaired?: boolean | null
         }
         Relationships: []
+      }
+      vine_inventory_transfers: {
+        Row: {
+          bonus_depreciation_amount: number | null
+          capital_contribution_basis: number | null
+          created_at: string
+          depreciation_method: string | null
+          fmv_at_transfer: number | null
+          from_entity: string
+          id: string
+          is_section_179_eligible: boolean | null
+          notes: string | null
+          original_etv: number
+          placed_in_service_date: string | null
+          product_name: string
+          section_179_amount: number | null
+          six_month_eligible_date: string | null
+          source_product_id: string | null
+          status: string | null
+          to_entity: string
+          transfer_date: string | null
+          transfer_type: string | null
+          updated_at: string
+          useful_life_years: number | null
+          user_id: string
+          vine_order_date: string
+        }
+        Insert: {
+          bonus_depreciation_amount?: number | null
+          capital_contribution_basis?: number | null
+          created_at?: string
+          depreciation_method?: string | null
+          fmv_at_transfer?: number | null
+          from_entity?: string
+          id?: string
+          is_section_179_eligible?: boolean | null
+          notes?: string | null
+          original_etv?: number
+          placed_in_service_date?: string | null
+          product_name: string
+          section_179_amount?: number | null
+          six_month_eligible_date?: string | null
+          source_product_id?: string | null
+          status?: string | null
+          to_entity: string
+          transfer_date?: string | null
+          transfer_type?: string | null
+          updated_at?: string
+          useful_life_years?: number | null
+          user_id: string
+          vine_order_date: string
+        }
+        Update: {
+          bonus_depreciation_amount?: number | null
+          capital_contribution_basis?: number | null
+          created_at?: string
+          depreciation_method?: string | null
+          fmv_at_transfer?: number | null
+          from_entity?: string
+          id?: string
+          is_section_179_eligible?: boolean | null
+          notes?: string | null
+          original_etv?: number
+          placed_in_service_date?: string | null
+          product_name?: string
+          section_179_amount?: number | null
+          six_month_eligible_date?: string | null
+          source_product_id?: string | null
+          status?: string | null
+          to_entity?: string
+          transfer_date?: string | null
+          transfer_type?: string | null
+          updated_at?: string
+          useful_life_years?: number | null
+          user_id?: string
+          vine_order_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vine_inventory_transfers_source_product_id_fkey"
+            columns: ["source_product_id"]
+            isOneToOne: false
+            referencedRelation: "products_review_insights"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       yearly_depreciation_entries: {
         Row: {
