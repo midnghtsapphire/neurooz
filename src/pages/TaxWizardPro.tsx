@@ -9,7 +9,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AccessibilityTrigger, useAccessibility } from "@/hooks/use-accessibility";
+import { AccessibilityTrigger } from "@/components/accessibility/AccessibilityPanel";
+import { useAccessibility } from "@/hooks/use-accessibility";
 import { 
   UserProfile, TaxFormDef, FormFieldDef, 
   getFormsForProfile, getTotalEstimatedTime, ALL_TAX_FORMS, TAX_CONSTANTS_2026 

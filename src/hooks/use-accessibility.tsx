@@ -155,4 +155,14 @@ export const STEP_TIME_ESTIMATES: Record<string, { minutes: number; label: strin
   "ownership": { minutes: 3, label: "~3 min" },
   "address": { minutes: 1, label: "~1 min" },
   "review": { minutes: 2, label: "~2 min" },
+  // Tax Wizard steps
+  "tax-profile": { minutes: 2, label: "~2 min" },
+  "tax-forms": { minutes: 1, label: "~1 min" },
+  "form-1040": { minutes: 45, label: "~45 min" },
+  "ssa-1099": { minutes: 5, label: "~5 min" },
+  "form-1065": { minutes: 60, label: "~60 min" },
+  "schedule-k1": { minutes: 20, label: "~20 min" },
+  "form-4562": { minutes: 25, label: "~25 min" },
+  "schedule-e": { minutes: 15, label: "~15 min" },
+  "schedule-se": { minutes: 10, label: "~10 min" },
 };

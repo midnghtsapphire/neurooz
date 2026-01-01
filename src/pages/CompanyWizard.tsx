@@ -11,7 +11,7 @@ import { AddressStep } from "@/components/company-wizard/AddressStep";
 import { ReviewStep } from "@/components/company-wizard/ReviewStep";
 import { AccessibilityTrigger } from "@/components/accessibility/AccessibilityPanel";
 import { useAccessibility, STEP_TIME_ESTIMATES } from "@/hooks/use-accessibility";
-import { ArrowLeft, ArrowRight, Building2, Check, Save, X, Clock, PartyPopper } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Check, Save, X, Clock, PartyPopper, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -276,6 +276,23 @@ const CompanyWizard = () => {
             {step === 4 && <OwnershipStep members={formData.members} entityType={formData.entityType} onMembersChange={(v) => setFormData({ ...formData, members: v })} />}
             {step === 5 && <AddressStep address={formData.address} onAddressChange={(v) => setFormData({ ...formData, address: v })} />}
             {step === 6 && <ReviewStep formData={formData} electSCorp={formData.electSCorp} onElectSCorpChange={(v) => setFormData({ ...formData, electSCorp: v })} onGenerate={handleGenerate} isGenerating={isGenerating} />}
+            
+            {/* Tax Wizard Link after company setup */}
+            {step === 6 && (
+              <div className="mt-6 pt-6 border-t border-emerald-gold/20">
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 border-emerald-gold/40 text-emerald-gold hover:bg-emerald-gold/10"
+                  onClick={() => navigate("/tax-wizard")}
+                >
+                  <FileText className="w-4 h-4" />
+                  Continue to Tax Form Wizard (SSDI-Safe)
+                </Button>
+                <p className="text-xs text-moon-silver/60 text-center mt-2">
+                  Guided field-by-field tax form filling with SSDI safeguards
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
