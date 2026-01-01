@@ -8,8 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Calendar,
+  Calendar as CalendarIcon,
   Clock,
   Plus,
   Trash2,
@@ -28,24 +29,21 @@ import {
   AlertTriangle,
   Star,
   Zap,
-  ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Pill,
+  Heart,
+  Activity,
+  Moon,
+  Sun,
+  Coffee
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
+import { format } from "date-fns";
 import { toast } from "sonner";
+import MaintenanceCalendar from "./MaintenanceCalendar";
+import type { RecurringTask } from "./MaintenanceCalendar";
 
-interface RecurringTask {
-  id: string;
-  title: string;
-  category: "chores" | "health" | "fitness" | "shopping" | "work" | "personal" | "job";
-  frequency: "daily" | "weekly" | "monthly";
-  daysOfWeek?: number[]; // 0-6, Sunday-Saturday
-  time?: string;
-  icon: string;
-  priority?: "high" | "medium" | "low";
-  energyLevel?: "high" | "medium" | "low"; // best time of day
-}
+export type { RecurringTask };
 
 const DAYS_OF_WEEK = [
   { short: "S", full: "Sun", value: 0 },
@@ -58,20 +56,52 @@ const DAYS_OF_WEEK = [
 ];
 
 const CATEGORY_ICONS: Record<string, { icon: any; color: string; emoji: string }> = {
+  wellness: { icon: Heart, color: "text-pink-500", emoji: "🧘" },
+  fitness: { icon: Dumbbell, color: "text-emerald-500", emoji: "💪" },
+  medication: { icon: Pill, color: "text-red-500", emoji: "💊" },
   chores: { icon: Home, color: "text-amber-500", emoji: "🏠" },
   health: { icon: Stethoscope, color: "text-rose-500", emoji: "🏥" },
-  fitness: { icon: Dumbbell, color: "text-emerald-500", emoji: "💪" },
   shopping: { icon: ShoppingCart, color: "text-blue-500", emoji: "🛒" },
-  work: { icon: Calendar, color: "text-purple-500", emoji: "💼" },
+  work: { icon: CalendarIcon, color: "text-purple-500", emoji: "💼" },
   personal: { icon: Sparkles, color: "text-primary", emoji: "✨" },
   job: { icon: Briefcase, color: "text-indigo-500", emoji: "👔" },
 };
 
-const PRESET_TASKS: RecurringTask[] = [
+// Wellness presets
+const WELLNESS_PRESET_TASKS: RecurringTask[] = [
+  { id: "morning-meditation", title: "Morning meditation", category: "wellness", frequency: "daily", time: "07:00", icon: "🧘", priority: "high", energyLevel: "high" },
+  { id: "journal", title: "Gratitude journaling", category: "wellness", frequency: "daily", time: "21:00", icon: "📓", priority: "medium", energyLevel: "low" },
+  { id: "hydration", title: "Drink 8 glasses of water", category: "wellness", frequency: "daily", icon: "💧", priority: "high" },
+  { id: "screen-break", title: "Take screen breaks", category: "wellness", frequency: "daily", icon: "👀", priority: "medium" },
+  { id: "self-care", title: "Self-care time", category: "wellness", frequency: "weekly", daysOfWeek: [0], icon: "🛁", priority: "medium", energyLevel: "low" },
+  { id: "nature-walk", title: "Walk in nature", category: "wellness", frequency: "weekly", daysOfWeek: [6], icon: "🌿", priority: "low" },
+];
+
+// Fitness presets
+const FITNESS_PRESET_TASKS: RecurringTask[] = [
+  { id: "workout-mwf", title: "Strength training", category: "fitness", frequency: "weekly", daysOfWeek: [1, 3, 5], time: "18:00", icon: "🏋️", priority: "high", energyLevel: "high" },
+  { id: "morning-stretch", title: "Morning stretches", category: "fitness", frequency: "daily", time: "06:30", icon: "🤸", priority: "medium", energyLevel: "high" },
+  { id: "cardio", title: "Cardio session", category: "fitness", frequency: "weekly", daysOfWeek: [2, 4], time: "07:00", icon: "🏃", priority: "high", energyLevel: "high" },
+  { id: "yoga", title: "Yoga practice", category: "fitness", frequency: "weekly", daysOfWeek: [0, 3], time: "19:00", icon: "🧘‍♀️", priority: "medium", energyLevel: "low" },
+  { id: "steps", title: "10,000 steps", category: "fitness", frequency: "daily", icon: "👟", priority: "medium" },
+];
+
+// Medication presets
+const MEDICATION_PRESET_TASKS: RecurringTask[] = [
+  { id: "morning-meds", title: "Morning medications", category: "medication", frequency: "daily", time: "08:00", icon: "💊", priority: "high", energyLevel: "high" },
+  { id: "evening-meds", title: "Evening medications", category: "medication", frequency: "daily", time: "20:00", icon: "💊", priority: "high", energyLevel: "low" },
+  { id: "vitamins", title: "Take vitamins", category: "medication", frequency: "daily", time: "08:30", icon: "🍊", priority: "medium" },
+  { id: "supplements", title: "Supplements with food", category: "medication", frequency: "daily", time: "12:00", icon: "🥗", priority: "medium" },
+  { id: "weekly-med", title: "Weekly medication", category: "medication", frequency: "weekly", daysOfWeek: [0], time: "09:00", icon: "📅", priority: "high" },
+];
+
+// General daily presets
+const DAILY_PRESET_TASKS: RecurringTask[] = [
   { id: "trash", title: "Take out trash", category: "chores", frequency: "weekly", daysOfWeek: [1], icon: "🗑️", priority: "medium" },
-  { id: "workout-mwf", title: "Workout", category: "fitness", frequency: "weekly", daysOfWeek: [1, 3, 5], time: "18:00", icon: "💪", priority: "high", energyLevel: "high" },
-  { id: "meds", title: "Take medications", category: "health", frequency: "daily", icon: "💊", priority: "high" },
   { id: "groceries", title: "Grocery shopping", category: "shopping", frequency: "weekly", daysOfWeek: [6], icon: "🛒", priority: "medium" },
+  { id: "laundry", title: "Do laundry", category: "chores", frequency: "weekly", daysOfWeek: [6], icon: "🧺", priority: "medium" },
+  { id: "meal-prep", title: "Meal prep", category: "personal", frequency: "weekly", daysOfWeek: [0], icon: "🍱", priority: "medium" },
+  { id: "tidy-up", title: "Quick tidy up", category: "chores", frequency: "daily", time: "21:00", icon: "🧹", priority: "low", energyLevel: "low" },
 ];
 
 const JOB_PRESET_TASKS: RecurringTask[] = [
@@ -81,8 +111,6 @@ const JOB_PRESET_TASKS: RecurringTask[] = [
   { id: "expense-report", title: "Submit expense reports", category: "job", frequency: "monthly", icon: "🧾", priority: "medium" },
   { id: "1on1", title: "1-on-1 with manager", category: "job", frequency: "weekly", daysOfWeek: [2], icon: "👥", priority: "high" },
   { id: "review-tasks", title: "Review & plan tasks", category: "job", frequency: "daily", time: "08:30", icon: "📋", priority: "high", energyLevel: "high" },
-  { id: "documentation", title: "Update documentation", category: "job", frequency: "weekly", daysOfWeek: [4], icon: "📝", priority: "medium" },
-  { id: "training", title: "Professional development", category: "job", frequency: "weekly", daysOfWeek: [3], icon: "📚", priority: "low", energyLevel: "low" },
 ];
 
 const PRIORITY_CONFIG = {
@@ -97,6 +125,44 @@ const ENERGY_CONFIG = {
   low: { label: "Evening (low energy)", time: "evening" },
 };
 
+// Preset task item component
+function PresetTaskItem({ 
+  preset, 
+  isSelected, 
+  onToggle, 
+  accentColor 
+}: { 
+  preset: RecurringTask; 
+  isSelected: boolean; 
+  onToggle: () => void; 
+  accentColor: string;
+}) {
+  const borderClass = isSelected ? `border-${accentColor}-500 bg-${accentColor}-500/10` : "border-border hover:border-primary/50";
+  
+  return (
+    <div 
+      className={cn(
+        "p-2 rounded-lg border flex items-center justify-between cursor-pointer transition-all text-sm",
+        isSelected ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
+      )}
+      onClick={onToggle}
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-lg">{preset.icon}</span>
+        <div>
+          <div className="font-medium">{preset.title}</div>
+          <div className="text-xs text-muted-foreground">
+            {preset.frequency === "daily" ? "Daily" : 
+              preset.daysOfWeek?.map(d => DAYS_OF_WEEK[d].short).join(", ")}
+            {preset.time && ` • ${preset.time}`}
+          </div>
+        </div>
+      </div>
+      {isSelected && <Check className="w-4 h-4 text-primary" />}
+    </div>
+  );
+}
+
 interface MaintenanceRoutineCardProps {
   onOpenWizard?: () => void;
 }
@@ -104,15 +170,18 @@ interface MaintenanceRoutineCardProps {
 export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardProps) {
   const [showWizard, setShowWizard] = useState(false);
   const [showPrioritizer, setShowPrioritizer] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
-  const [tasks, setTasks] = useState<RecurringTask[]>(PRESET_TASKS);
+  const [tasks, setTasks] = useState<RecurringTask[]>([]);
   const [newTask, setNewTask] = useState<Partial<RecurringTask>>({
     category: "personal",
     frequency: "weekly",
     daysOfWeek: [],
     priority: "medium",
   });
-  const [todayCompleted, setTodayCompleted] = useState<string[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<Record<string, string[]>>({});
+  const todayKey = format(new Date(), "yyyy-MM-dd");
+  const todayCompleted = completedTasks[todayKey] || [];
 
   const today = new Date().getDay();
   const currentHour = new Date().getHours();
@@ -156,10 +225,15 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
     return false;
   }) || prioritizedTasks.find(task => !todayCompleted.includes(task.id));
 
-  const toggleComplete = (taskId: string) => {
-    setTodayCompleted(prev => 
-      prev.includes(taskId) ? prev.filter(id => id !== taskId) : [...prev, taskId]
-    );
+  const toggleComplete = (taskId: string, date?: Date) => {
+    const dateKey = date ? format(date, "yyyy-MM-dd") : todayKey;
+    setCompletedTasks(prev => {
+      const currentTasks = prev[dateKey] || [];
+      const updated = currentTasks.includes(taskId)
+        ? currentTasks.filter(id => id !== taskId)
+        : [...currentTasks, taskId];
+      return { ...prev, [dateKey]: updated };
+    });
   };
 
   const addTask = () => {
@@ -203,9 +277,51 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
     toast.success(`Added ${newJobTasks.length} job maintenance tasks!`);
   };
 
+  const addPresetsByCategory = (presets: RecurringTask[]) => {
+    const existingIds = tasks.map(t => t.id);
+    const newTasks = presets.filter(t => !existingIds.includes(t.id));
+    setTasks(prev => [...prev, ...newTasks]);
+    toast.success(`Added ${newTasks.length} tasks!`);
+  };
+
+  const togglePreset = (preset: RecurringTask) => {
+    if (tasks.find(t => t.id === preset.id)) {
+      removeTask(preset.id);
+    } else {
+      setTasks(prev => [...prev, preset]);
+    }
+  };
+
   const completedCount = todaysTasks.filter(t => todayCompleted.includes(t.id)).length;
   const highPriorityRemaining = prioritizedTasks.filter(t => t.priority === "high" && !todayCompleted.includes(t.id)).length;
   const completionPercent = todaysTasks.length > 0 ? (completedCount / todaysTasks.length) * 100 : 0;
+
+  // Calendar view
+  if (showCalendar) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+      >
+        <Card className="border-2 border-amber-500/20 shadow-glow">
+          <CardContent className="p-4">
+            <MaintenanceCalendar
+              tasks={tasks}
+              completedTasks={completedTasks}
+              onToggleComplete={toggleComplete}
+              onClose={() => setShowCalendar(false)}
+              onEditTask={(task) => {
+                setShowCalendar(false);
+                setShowWizard(true);
+                setWizardStep(5);
+              }}
+            />
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
+  }
 
   if (showWizard) {
     return (
@@ -249,44 +365,109 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-4"
                 >
-                  <h3 className="font-semibold">Step 1: Quick Add Common Tasks</h3>
-                  <p className="text-sm text-muted-foreground">Select tasks that apply to your routine:</p>
+                  <h3 className="font-semibold">Step 1: Daily Essentials</h3>
+                  <p className="text-sm text-muted-foreground">Select categories to add presets:</p>
                   
-                  <div className="space-y-2">
-                    {PRESET_TASKS.map(preset => (
-                      <div 
-                        key={preset.id}
-                        className={cn(
-                          "p-3 rounded-lg border flex items-center justify-between cursor-pointer transition-all",
-                          tasks.find(t => t.id === preset.id)
-                            ? "border-amber-500 bg-amber-500/10"
-                            : "border-border hover:border-amber-500/50"
-                        )}
-                        onClick={() => {
-                          if (tasks.find(t => t.id === preset.id)) {
-                            removeTask(preset.id);
-                          } else {
-                            setTasks(prev => [...prev, preset]);
-                          }
-                        }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">{preset.icon}</span>
-                          <div>
-                            <div className="text-sm font-medium">{preset.title}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {preset.frequency === "daily" ? "Every day" : 
-                                preset.daysOfWeek?.map(d => DAYS_OF_WEEK[d].full).join(", ")}
-                              {preset.time && ` at ${preset.time}`}
-                            </div>
-                          </div>
+                  <Tabs defaultValue="wellness" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4 h-auto">
+                      <TabsTrigger value="wellness" className="text-xs flex flex-col gap-1 py-2">
+                        <Heart className="w-4 h-4 text-pink-500" />
+                        Wellness
+                      </TabsTrigger>
+                      <TabsTrigger value="fitness" className="text-xs flex flex-col gap-1 py-2">
+                        <Dumbbell className="w-4 h-4 text-emerald-500" />
+                        Fitness
+                      </TabsTrigger>
+                      <TabsTrigger value="medication" className="text-xs flex flex-col gap-1 py-2">
+                        <Pill className="w-4 h-4 text-red-500" />
+                        Medication
+                      </TabsTrigger>
+                      <TabsTrigger value="daily" className="text-xs flex flex-col gap-1 py-2">
+                        <Home className="w-4 h-4 text-amber-500" />
+                        Daily
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="wellness" className="mt-3">
+                      <ScrollArea className="h-40">
+                        <div className="space-y-2">
+                          {WELLNESS_PRESET_TASKS.map(preset => (
+                            <PresetTaskItem
+                              key={preset.id}
+                              preset={preset}
+                              isSelected={!!tasks.find(t => t.id === preset.id)}
+                              onToggle={() => togglePreset(preset)}
+                              accentColor="pink"
+                            />
+                          ))}
                         </div>
-                        {tasks.find(t => t.id === preset.id) && (
-                          <Check className="w-5 h-5 text-amber-500" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                      </ScrollArea>
+                      <Button variant="outline" size="sm" onClick={() => addPresetsByCategory(WELLNESS_PRESET_TASKS)} className="w-full mt-2 gap-2">
+                        <Heart className="w-4 h-4" />
+                        Add All Wellness
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="fitness" className="mt-3">
+                      <ScrollArea className="h-40">
+                        <div className="space-y-2">
+                          {FITNESS_PRESET_TASKS.map(preset => (
+                            <PresetTaskItem
+                              key={preset.id}
+                              preset={preset}
+                              isSelected={!!tasks.find(t => t.id === preset.id)}
+                              onToggle={() => togglePreset(preset)}
+                              accentColor="emerald"
+                            />
+                          ))}
+                        </div>
+                      </ScrollArea>
+                      <Button variant="outline" size="sm" onClick={() => addPresetsByCategory(FITNESS_PRESET_TASKS)} className="w-full mt-2 gap-2">
+                        <Dumbbell className="w-4 h-4" />
+                        Add All Fitness
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="medication" className="mt-3">
+                      <ScrollArea className="h-40">
+                        <div className="space-y-2">
+                          {MEDICATION_PRESET_TASKS.map(preset => (
+                            <PresetTaskItem
+                              key={preset.id}
+                              preset={preset}
+                              isSelected={!!tasks.find(t => t.id === preset.id)}
+                              onToggle={() => togglePreset(preset)}
+                              accentColor="red"
+                            />
+                          ))}
+                        </div>
+                      </ScrollArea>
+                      <Button variant="outline" size="sm" onClick={() => addPresetsByCategory(MEDICATION_PRESET_TASKS)} className="w-full mt-2 gap-2">
+                        <Pill className="w-4 h-4" />
+                        Add All Medication
+                      </Button>
+                    </TabsContent>
+                    
+                    <TabsContent value="daily" className="mt-3">
+                      <ScrollArea className="h-40">
+                        <div className="space-y-2">
+                          {DAILY_PRESET_TASKS.map(preset => (
+                            <PresetTaskItem
+                              key={preset.id}
+                              preset={preset}
+                              isSelected={!!tasks.find(t => t.id === preset.id)}
+                              onToggle={() => togglePreset(preset)}
+                              accentColor="amber"
+                            />
+                          ))}
+                        </div>
+                      </ScrollArea>
+                      <Button variant="outline" size="sm" onClick={() => addPresetsByCategory(DAILY_PRESET_TASKS)} className="w-full mt-2 gap-2">
+                        <Home className="w-4 h-4" />
+                        Add All Daily
+                      </Button>
+                    </TabsContent>
+                  </Tabs>
                 </motion.div>
               )}
 
@@ -596,6 +777,9 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
               </div>
             </div>
             <div className="flex gap-2">
+              <Button size="sm" variant="ghost" className="gap-1" onClick={() => setShowCalendar(true)}>
+                <CalendarIcon className="w-4 h-4" />
+              </Button>
               <Button size="sm" variant="outline" className="gap-1" onClick={() => setShowPrioritizer(!showPrioritizer)}>
                 <Target className="w-4 h-4" />
                 Prioritize
