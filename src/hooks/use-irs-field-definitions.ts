@@ -19,7 +19,25 @@ export interface IRSFieldDefinition {
   is_state_field: boolean;
 }
 
-export type FormType = '1099-NEC' | '1099-MISC' | '1099-K' | '1099-INT' | '1099-DIV';
+export type FormType = 
+  | '1099-NEC' 
+  | '1099-MISC' 
+  | '1099-K' 
+  | '1099-INT' 
+  | '1099-DIV'
+  | '1040'
+  | '1040-X'
+  | 'Schedule C'
+  | 'W-2'
+  | 'W-4'
+  | 'W-9';
+
+// Form categories for organization
+export const FORM_CATEGORIES = {
+  individual: ['1040', '1040-X', 'Schedule C'],
+  employment: ['W-2', 'W-4', 'W-9'],
+  information: ['1099-NEC', '1099-MISC', '1099-K', '1099-INT', '1099-DIV'],
+} as const;
 
 // Fetch all field definitions for a specific form type
 export function useIRSFieldDefinitions(formType?: FormType) {
