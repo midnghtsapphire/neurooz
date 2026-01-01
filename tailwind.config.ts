@@ -97,6 +97,13 @@ export default {
           "rainbow-indigo": "hsl(var(--oz-rainbow-indigo))",
           "rainbow-violet": "hsl(var(--oz-rainbow-violet))",
         },
+        // Emerald Road OS - Direct utilities
+        "deep-night-emerald": "hsl(var(--deep-night-emerald))",
+        "dark-emerald": "hsl(var(--dark-emerald))",
+        "gold": "hsl(var(--gold))",
+        "moon-silver": "hsl(var(--moon-silver))",
+        "clean-white": "hsl(var(--clean-white))",
+        "warning-amber": "hsl(var(--warning-amber))",
       },
       borderRadius: {
         lg: "var(--radius)",

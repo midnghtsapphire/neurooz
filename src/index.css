@@ -9,6 +9,13 @@
 
 @layer base {
   :root {
+    /* Emerald Road OS - Direct color utilities */
+    --deep-night-emerald: 150 42% 8%;
+    --dark-emerald: 153 54% 15%;
+    --gold: 50 85% 46%;
+    --moon-silver: 160 15% 82%;
+    --clean-white: 140 20% 97%;
+    --warning-amber: 40 100% 52%;
     /* Deep night emerald background #0B1F16 */
     --background: 150 45% 8%;
     --foreground: 160 20% 95%;
