@@ -4,6 +4,8 @@ import BrainMeleeReviewCard from "./BrainMeleeReviewCard";
 import BusinessWizardCard from "./BusinessWizardCard";
 import ProjectsQuickCard from "./ProjectsQuickCard";
 import WellnessPlanCard from "./WellnessPlanCard";
+import MaintenanceRoutineCard from "./MaintenanceRoutineCard";
+import AssetTrackingCard from "./AssetTrackingCard";
 import { useBusinesses } from "@/hooks/use-businesses";
 
 export function DashboardCards() {
@@ -22,13 +24,15 @@ export function DashboardCards() {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       <BrainMeleeReviewCard onStartMelee={handleStartMelee} />
       <BusinessWizardCard 
         hasExistingBusiness={!!activeBusiness}
         businessName={activeBusiness?.name}
       />
       <ProjectsQuickCard />
+      <MaintenanceRoutineCard />
+      <AssetTrackingCard />
       <WellnessPlanCard onCreatePlan={handleCreateWellnessPlan} />
     </div>
   );
