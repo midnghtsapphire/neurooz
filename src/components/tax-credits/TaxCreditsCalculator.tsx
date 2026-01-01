@@ -116,7 +116,6 @@ const STATE_529_LIMITS: Record<string, { limit: number; mfjMultiplier: number; u
 };
 
 const US_STATES = [
-  { value: "", label: "Select State" },
   { value: "AL", label: "Alabama" }, { value: "AK", label: "Alaska" }, { value: "AZ", label: "Arizona" },
   { value: "AR", label: "Arkansas" }, { value: "CA", label: "California" }, { value: "CO", label: "Colorado" },
   { value: "CT", label: "Connecticut" }, { value: "DE", label: "Delaware" }, { value: "DC", label: "Washington DC" },
