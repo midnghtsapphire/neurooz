@@ -4,162 +4,149 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Vine-Inspired Design System - Natural, organic, community */
+/* Dark Emerald Castle Theme - Realistic Oz */
 
 @layer base {
   :root {
-    /* Emerald City green primary */
-    --primary: 152 80% 40%;
-    --primary-foreground: 0 0% 100%;
+    /* Deep black forest background */
+    --background: 160 25% 6%;
+    --foreground: 140 15% 88%;
     
-    /* Lavender sky background */
-    --background: 260 40% 92%;
-    --foreground: 220 30% 18%;
+    /* Dark emerald cards */
+    --card: 155 20% 10%;
+    --card-foreground: 140 15% 88%;
 
-    /* Warm cream cards */
-    --card: 45 50% 97%;
-    --card-foreground: 220 30% 18%;
+    --popover: 155 20% 8%;
+    --popover-foreground: 140 15% 88%;
 
-    --popover: 45 50% 97%;
-    --popover-foreground: 220 30% 18%;
+    /* Emerald Castle Primary */
+    --primary: 152 70% 38%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Ruby slipper red accent */
-    --secondary: 345 75% 50%;
-    --secondary-foreground: 0 0% 100%;
+    /* Deep forest secondary */
+    --secondary: 160 25% 15%;
+    --secondary-foreground: 140 15% 85%;
 
-    /* Muted lavender */
-    --muted: 260 25% 88%;
-    --muted-foreground: 260 20% 45%;
+    /* Muted dark forest */
+    --muted: 160 20% 12%;
+    --muted-foreground: 140 12% 55%;
 
     /* Golden yellow brick road accent */
-    --accent: 42 95% 55%;
-    --accent-foreground: 35 90% 20%;
-
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 260 20% 82%;
-    --input: 260 20% 82%;
-    --ring: 152 80% 40%;
-
-    --radius: 0.75rem;
-
-    /* Oz-themed tokens */
-    --oz-emerald: 152 80% 40%;
-    --oz-emerald-glow: 152 75% 55%;
-    --oz-emerald-dark: 152 85% 25%;
-    --oz-yellow-brick: 42 95% 55%;
-    --oz-yellow-warm: 38 90% 50%;
-    --oz-poppy-pink: 340 70% 65%;
-    --oz-poppy-red: 350 80% 55%;
-    --oz-sky-lavender: 260 50% 75%;
-    --oz-sky-purple: 265 45% 60%;
-    --oz-meadow: 95 50% 45%;
-    --oz-meadow-dark: 100 55% 35%;
-    --oz-ruby: 345 75% 50%;
-    --oz-cream: 45 50% 97%;
-    
-    /* Legacy vine tokens (mapped to Oz) */
-    --vine-forest: 152 85% 25%;
-    --vine-leaf: 152 80% 40%;
-    --vine-spring: 152 75% 55%;
-    --vine-sage: 260 25% 80%;
-    --vine-grape: 265 45% 60%;
-    --vine-wine: 345 75% 50%;
-    --vine-harvest: 42 95% 55%;
-    --vine-cream: 45 50% 97%;
-    --vine-earth: 95 40% 30%;
-    --vine-bark: 30 35% 22%;
-    --vine-meadow: 95 50% 45%;
-    
-    /* Garden tokens (Oz-themed) */
-    --garden-sage: 260 30% 88%;
-    --garden-cream: 45 50% 96%;
-    --garden-pink: 340 70% 80%;
-    --garden-rose: 350 65% 70%;
-
-    /* Oz Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(152 80% 40%) 0%, hsl(152 75% 55%) 50%, hsl(152 70% 65%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(45 50% 97%) 0%, hsl(260 25% 94%) 100%);
-    --gradient-vine: linear-gradient(135deg, hsl(152 80% 40%) 0%, hsl(152 85% 25%) 100%);
-    --gradient-sunset: linear-gradient(135deg, hsl(42 95% 55%) 0%, hsl(345 75% 50%) 100%);
-    --gradient-meadow: linear-gradient(180deg, hsl(260 40% 92%) 0%, hsl(95 40% 85%) 100%);
-    --gradient-emerald: linear-gradient(180deg, hsl(152 80% 40%) 0%, hsl(152 85% 25%) 100%);
-    --gradient-sky: linear-gradient(180deg, hsl(260 50% 75%) 0%, hsl(265 45% 60%) 100%);
-    --gradient-poppies: linear-gradient(180deg, hsl(340 70% 65%) 0%, hsl(350 80% 55%) 100%);
-    
-    /* Oz Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(152 80% 40% / 0.15);
-    --shadow-medium: 0 8px 30px -8px hsl(152 80% 40% / 0.2);
-    --shadow-glow: 0 0 40px hsl(152 75% 55% / 0.35);
-    --shadow-grape: 0 0 30px hsl(265 45% 60% / 0.25);
-    --shadow-emerald: 0 0 50px hsl(152 80% 40% / 0.4);
-    --shadow-ruby: 0 0 30px hsl(345 75% 50% / 0.3);
-    --shadow-gold: 0 0 25px hsl(42 95% 55% / 0.4);
-
-    /* Sidebar */
-    --sidebar-background: 152 85% 25%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 42 95% 55%;
-    --sidebar-primary-foreground: 152 85% 15%;
-    --sidebar-accent: 152 75% 35%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 152 70% 30%;
-    --sidebar-ring: 152 75% 55%;
-  }
-
-  .dark {
-    /* Emerald City at night */
-    --primary: 152 75% 50%;
-    --primary-foreground: 152 90% 10%;
-
-    /* Deep purple-black sky */
-    --background: 265 45% 10%;
-    --foreground: 45 40% 95%;
-
-    /* Dark emerald cards */
-    --card: 152 50% 12%;
-    --card-foreground: 45 40% 95%;
-
-    --popover: 152 50% 12%;
-    --popover-foreground: 45 40% 95%;
-
-    /* Ruby glow */
-    --secondary: 345 70% 55%;
-    --secondary-foreground: 0 0% 100%;
-
-    /* Muted dark purple */
-    --muted: 265 35% 18%;
-    --muted-foreground: 260 20% 65%;
-
-    /* Golden glow */
-    --accent: 42 90% 50%;
-    --accent-foreground: 42 95% 10%;
+    --accent: 42 88% 52%;
+    --accent-foreground: 160 30% 8%;
 
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 265 30% 22%;
-    --input: 265 30% 22%;
-    --ring: 152 75% 50%;
+    --border: 152 25% 20%;
+    --input: 155 20% 15%;
+    --ring: 152 70% 38%;
 
-    /* Dark Oz tokens */
-    --oz-emerald: 152 75% 50%;
-    --oz-emerald-glow: 152 70% 60%;
-    --oz-emerald-dark: 152 80% 20%;
-    --oz-yellow-brick: 42 90% 50%;
-    --oz-poppy-pink: 340 65% 60%;
-    --oz-sky-lavender: 265 40% 35%;
-    --oz-ruby: 345 70% 55%;
+    --radius: 0.75rem;
 
-    --sidebar-background: 265 45% 8%;
-    --sidebar-foreground: 45 40% 95%;
-    --sidebar-primary: 152 75% 50%;
-    --sidebar-primary-foreground: 152 90% 10%;
-    --sidebar-accent: 265 35% 18%;
-    --sidebar-accent-foreground: 45 40% 95%;
-    --sidebar-border: 265 30% 22%;
-    --sidebar-ring: 152 75% 50%;
+    /* Oz-themed tokens - No Pink */
+    --oz-emerald: 152 70% 38%;
+    --oz-emerald-glow: 152 65% 50%;
+    --oz-emerald-dark: 152 75% 20%;
+    --oz-yellow-brick: 42 88% 52%;
+    --oz-yellow-warm: 38 85% 48%;
+    --oz-sky-dusk: 220 25% 18%;
+    --oz-meadow: 130 40% 28%;
+    --oz-meadow-dark: 135 45% 18%;
+    --oz-forest-black: 160 25% 6%;
+    --oz-magnolia-cream: 45 35% 88%;
+    --oz-magnolia-gold: 42 45% 72%;
+    
+    /* Legacy vine tokens (mapped to dark Oz) */
+    --vine-forest: 152 75% 20%;
+    --vine-leaf: 152 70% 38%;
+    --vine-spring: 152 65% 50%;
+    --vine-sage: 155 20% 25%;
+    --vine-grape: 220 25% 30%;
+    --vine-wine: 0 60% 40%;
+    --vine-harvest: 42 88% 52%;
+    --vine-cream: 45 35% 88%;
+    --vine-earth: 130 40% 22%;
+    --vine-bark: 30 30% 16%;
+    --vine-meadow: 130 40% 28%;
+    
+    /* Garden tokens (Dark Oz-themed) */
+    --garden-sage: 155 20% 20%;
+    --garden-cream: 45 30% 85%;
+    --garden-gold: 42 60% 65%;
+    --garden-amber: 38 70% 55%;
+
+    /* Oz Gradients - Dark Theme */
+    --gradient-hero: linear-gradient(135deg, hsl(152 70% 38%) 0%, hsl(152 65% 28%) 50%, hsl(152 75% 20%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(155 20% 12%) 0%, hsl(160 25% 8%) 100%);
+    --gradient-vine: linear-gradient(135deg, hsl(152 70% 38%) 0%, hsl(152 75% 20%) 100%);
+    --gradient-sunset: linear-gradient(135deg, hsl(42 88% 52%) 0%, hsl(38 85% 42%) 100%);
+    --gradient-meadow: linear-gradient(180deg, hsl(160 25% 10%) 0%, hsl(130 30% 15%) 100%);
+    --gradient-emerald: linear-gradient(180deg, hsl(152 70% 38%) 0%, hsl(152 75% 20%) 100%);
+    --gradient-sky: linear-gradient(180deg, hsl(220 25% 18%) 0%, hsl(160 25% 6%) 100%);
+    
+    /* Oz Shadows - Dark Theme */
+    --shadow-soft: 0 4px 20px -4px hsl(152 70% 30% / 0.25);
+    --shadow-medium: 0 8px 30px -8px hsl(152 70% 30% / 0.35);
+    --shadow-glow: 0 0 40px hsl(152 65% 50% / 0.3);
+    --shadow-grape: 0 0 30px hsl(220 30% 25% / 0.3);
+    --shadow-emerald: 0 0 50px hsl(152 70% 38% / 0.35);
+    --shadow-gold: 0 0 25px hsl(42 88% 52% / 0.35);
+
+    /* Sidebar - Dark Emerald */
+    --sidebar-background: 155 25% 8%;
+    --sidebar-foreground: 140 15% 88%;
+    --sidebar-primary: 42 88% 52%;
+    --sidebar-primary-foreground: 160 30% 8%;
+    --sidebar-accent: 152 50% 25%;
+    --sidebar-accent-foreground: 140 15% 88%;
+    --sidebar-border: 152 25% 18%;
+    --sidebar-ring: 152 65% 50%;
+  }
+
+  .dark {
+    /* Already dark by default, but darker variant */
+    --background: 160 30% 4%;
+    --foreground: 140 12% 90%;
+
+    --card: 155 22% 7%;
+    --card-foreground: 140 12% 90%;
+
+    --popover: 155 22% 6%;
+    --popover-foreground: 140 12% 90%;
+
+    --primary: 152 65% 42%;
+    --primary-foreground: 160 30% 5%;
+
+    --secondary: 160 25% 12%;
+    --secondary-foreground: 140 12% 85%;
+
+    --muted: 160 20% 10%;
+    --muted-foreground: 140 10% 50%;
+
+    --accent: 42 90% 55%;
+    --accent-foreground: 160 30% 5%;
+
+    --destructive: 0 60% 42%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 152 22% 16%;
+    --input: 155 20% 12%;
+    --ring: 152 65% 42%;
+
+    --oz-emerald: 152 65% 42%;
+    --oz-emerald-glow: 152 60% 55%;
+    --oz-emerald-dark: 152 70% 15%;
+    --oz-yellow-brick: 42 90% 55%;
+
+    --sidebar-background: 160 30% 4%;
+    --sidebar-foreground: 140 12% 90%;
+    --sidebar-primary: 152 65% 42%;
+    --sidebar-primary-foreground: 160 30% 5%;
+    --sidebar-accent: 160 25% 12%;
+    --sidebar-accent-foreground: 140 12% 90%;
+    --sidebar-border: 152 22% 14%;
+    --sidebar-ring: 152 65% 42%;
   }
 }
 
