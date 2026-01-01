@@ -20,6 +20,7 @@ import EmployerBenefitsPage from "./pages/EmployerBenefitsPage";
 import Form1099Center from "./pages/Form1099Center";
 import BusinessStructureCalculatorPage from "./pages/BusinessStructureCalculatorPage";
 import OzEngine from "./pages/OzEngine";
+import TheCrossing from "./pages/TheCrossing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/1099-center" element={<Form1099Center />} />
           <Route path="/structure-calculator" element={<BusinessStructureCalculatorPage />} />
           <Route path="/oz-engine" element={<OzEngine />} />
+          <Route path="/the-crossing" element={<TheCrossing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
