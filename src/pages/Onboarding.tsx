@@ -6,17 +6,55 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useTravelerProfile } from '@/hooks/use-traveler-profile';
 import { TravelerState, Pace, TRAVELER_STATES } from '@/types/emerald-road';
-import { Map, ChevronRight, ChevronLeft, User, Compass, Gauge } from 'lucide-react';
+import { Map, ChevronRight, ChevronLeft, User, Compass, Gauge, Brain, SkipForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import BrainMeleeCard from '@/components/BrainMeleeCard';
+import { useCreateProject, useCreateActionItem } from '@/hooks/use-projects';
+import { toast } from 'sonner';
 
 export default function Onboarding() {
   const navigate = useNavigate();
   const { initializeProfile } = useTravelerProfile();
+  const createProject = useCreateProject();
+  const createActionItem = useCreateActionItem();
   
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [currentState, setCurrentState] = useState<TravelerState>('foggy');
   const [pace, setPace] = useState<Pace>('standard');
+
+  const handleBrainMeleeComplete = async (items: any[]) => {
+    // Create projects and tasks from brain melee results
+    const projects = items.filter(i => i.type === 'project');
+    const tasks = items.filter(i => i.type === 'task' || i.type === 'idea' || i.type === 'concern');
+    
+    for (const project of projects) {
+      try {
+        await createProject.mutateAsync({
+          name: project.title,
+          description: project.description || '',
+          color: project.priority === 'high' ? '#ef4444' : project.priority === 'medium' ? '#f59e0b' : '#22c55e'
+        });
+      } catch (err) {
+        console.error('Failed to create project:', err);
+      }
+    }
+
+    for (const task of tasks) {
+      try {
+        await createActionItem.mutateAsync({
+          title: task.title,
+          description: task.description || '',
+          priority: task.priority || 'medium'
+        });
+      } catch (err) {
+        console.error('Failed to create task:', err);
+      }
+    }
+
+    toast.success(`Created ${projects.length} projects and ${tasks.length} tasks!`);
+    handleComplete();
+  };
 
   const handleComplete = () => {
     if (!name.trim()) return;
@@ -46,7 +84,7 @@ export default function Onboarding() {
       {/* Progress indicator */}
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-center gap-2 mb-8">
-          {[1, 2, 3].map((s) => (
+          {[1, 2, 3, 4].map((s) => (
             <div
               key={s}
               className={cn(
@@ -207,44 +245,86 @@ export default function Onboarding() {
             </RadioGroup>
           </div>
         )}
+
+        {step === 4 && (
+          <div className="animate-fade-in max-w-2xl mx-auto">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-gold/20 flex items-center justify-center mx-auto mb-6">
+              <Brain className="w-8 h-8 text-emerald-gold" />
+            </div>
+            <h1 className="text-2xl font-bold text-clean-white text-center mb-2">
+              Brain Melee
+            </h1>
+            <p className="text-moon-silver/80 text-center mb-8">
+              Let's get everything out of your head and organized into projects.
+            </p>
+            <BrainMeleeCard onComplete={handleBrainMeleeComplete} />
+          </div>
+        )}
       </main>
 
       {/* Footer navigation */}
-      <footer className="border-t border-moon-silver/10 bg-night-emerald">
-        <div className="container mx-auto px-4 py-4 max-w-md">
-          <div className="flex gap-3">
-            {step > 1 && (
-              <Button
-                onClick={() => setStep(step - 1)}
-                variant="outline"
-                className="flex-1 border-moon-silver/30 text-moon-silver hover:bg-dark-emerald"
-              >
-                <ChevronLeft className="w-4 h-4 mr-1" />
-                Back
-              </Button>
-            )}
-            
-            {step < 3 ? (
-              <Button
-                onClick={() => setStep(step + 1)}
-                disabled={!canProceed()}
-                className="flex-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold"
-              >
-                Continue
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
-            ) : (
+      {step < 4 && (
+        <footer className="border-t border-moon-silver/10 bg-night-emerald">
+          <div className="container mx-auto px-4 py-4 max-w-md">
+            <div className="flex gap-3">
+              {step > 1 && (
+                <Button
+                  onClick={() => setStep(step - 1)}
+                  variant="outline"
+                  className="flex-1 border-moon-silver/30 text-moon-silver hover:bg-dark-emerald"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Back
+                </Button>
+              )}
+              
+              {step < 3 ? (
+                <Button
+                  onClick={() => setStep(step + 1)}
+                  disabled={!canProceed()}
+                  className="flex-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold"
+                >
+                  Continue
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => setStep(4)}
+                  className="flex-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold"
+                >
+                  Brain Melee
+                  <Brain className="w-4 h-4 ml-1" />
+                </Button>
+              )}
+            </div>
+            {step === 3 && (
               <Button
                 onClick={handleComplete}
-                className="flex-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold"
+                variant="ghost"
+                className="w-full mt-2 text-moon-silver/70 hover:text-moon-silver"
               >
-                Begin Journey
-                <ChevronRight className="w-4 h-4 ml-1" />
+                <SkipForward className="w-4 h-4 mr-1" />
+                Skip Brain Melee
               </Button>
             )}
           </div>
-        </div>
-      </footer>
+        </footer>
+      )}
+
+      {step === 4 && (
+        <footer className="border-t border-moon-silver/10 bg-night-emerald">
+          <div className="container mx-auto px-4 py-4 max-w-md">
+            <Button
+              onClick={handleComplete}
+              variant="ghost"
+              className="w-full text-moon-silver/70 hover:text-moon-silver"
+            >
+              <SkipForward className="w-4 h-4 mr-1" />
+              Skip & Continue to Dashboard
+            </Button>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
