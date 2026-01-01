@@ -8,11 +8,14 @@ interface WizardVoiceProps {
   className?: string;
   showIcon?: boolean;
   size?: 'sm' | 'md' | 'lg';
+  dayKey?: 'day1' | 'day2' | 'day3' | 'day4' | 'day5' | 'day6' | 'day7';
 }
 
-export function WizardVoice({ message, className, showIcon = true, size = 'md' }: WizardVoiceProps) {
+export function WizardVoice({ message, className, showIcon = true, size = 'md', dayKey }: WizardVoiceProps) {
   const wizard = useWizardDialogue();
-  const displayMessage = message || wizard.getGreeting();
+  
+  // If dayKey provided, use onboarding message; otherwise use greeting
+  const displayMessage = message || (dayKey ? wizard.getOnboardingMessage(dayKey) : wizard.getGreeting());
   
   const getToneColor = () => {
     switch (displayMessage.tone) {
@@ -20,6 +23,7 @@ export function WizardVoice({ message, className, showIcon = true, size = 'md' }
       case 'encouraging': return 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30';
       case 'calming': return 'from-blue-500/20 to-emerald-500/20 border-blue-500/30';
       case 'warning': return 'from-orange-500/20 to-yellow-500/20 border-orange-500/30';
+      case 'neutral': return 'from-slate-500/20 to-emerald-500/20 border-slate-500/30';
       default: return 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30';
     }
   };
@@ -30,6 +34,7 @@ export function WizardVoice({ message, className, showIcon = true, size = 'md' }
       case 'encouraging': return 'text-emerald-400';
       case 'calming': return 'text-blue-400';
       case 'warning': return 'text-orange-400';
+      case 'neutral': return 'text-slate-400';
       default: return 'text-emerald-400';
     }
   };
@@ -70,12 +75,19 @@ export function WizardVoice({ message, className, showIcon = true, size = 'md' }
             <Sparkles className={iconSizes[size]} />
           </motion.div>
         )}
-        <p className={cn(
-          "text-foreground/90 italic leading-relaxed",
-          size === 'lg' && 'font-light'
-        )}>
-          "{displayMessage.text}"
-        </p>
+        <div className="flex-1">
+          <p className={cn(
+            "text-foreground/90 italic leading-relaxed",
+            size === 'lg' && 'font-light'
+          )}>
+            "{displayMessage.text}"
+          </p>
+          {dayKey && (
+            <p className="text-xs text-muted-foreground mt-2 not-italic">
+              — The Wizard, {dayKey.replace('day', 'Day ')}
+            </p>
+          )}
+        </div>
       </div>
     </motion.div>
   );
