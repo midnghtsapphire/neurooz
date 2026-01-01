@@ -1,5 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { 
+  calculateMACRSDepreciation, 
+  calculateSection179FullExpense, 
+  calculateBonusDepreciation,
+  getMACRSTable,
+  TAX_YEAR_RULES,
+  MACRS_5_YEAR,
+  MACRS_7_YEAR,
+  type YearlyDepreciationResult,
+  type DepreciationOptions,
+} from "@/lib/depreciation-tables";
 
 export interface DepreciationMethod {
   id: string;
@@ -58,6 +69,18 @@ export interface TrailingProductGroup {
   created_at: string;
   updated_at: string;
 }
+
+// Re-export for convenience
+export { 
+  calculateMACRSDepreciation, 
+  calculateSection179FullExpense, 
+  calculateBonusDepreciation,
+  getMACRSTable,
+  TAX_YEAR_RULES,
+  MACRS_5_YEAR,
+  MACRS_7_YEAR,
+};
+export type { YearlyDepreciationResult, DepreciationOptions };
 
 // Fetch all depreciation methods
 export function useDepreciationMethods() {
