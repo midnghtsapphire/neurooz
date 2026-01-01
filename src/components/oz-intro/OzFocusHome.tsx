@@ -136,7 +136,7 @@ export function OzFocusHome({ userEmail }: OzFocusHomeProps) {
           <p className="text-white/50 text-sm">Your Emerald City awaits</p>
         </motion.div>
 
-        {/* Dorothy greeting */}
+        {/* You ARE Dorothy */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -145,10 +145,10 @@ export function OzFocusHome({ userEmail }: OzFocusHomeProps) {
         >
           <div className="flex items-center justify-center gap-2 text-4xl mb-4">
             <span>👧</span>
-            <span>🐕</span>
+            <span className="text-2xl">← that's you</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-display font-bold text-white mb-2">
-            Hey Dorothy, how are you feeling?
+            You're Dorothy. How are you feeling?
           </h1>
           <p className="text-white/60">
             Which friend do you need right now?
