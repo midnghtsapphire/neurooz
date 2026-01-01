@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AccessibilityProvider } from "@/hooks/use-accessibility";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import Auth from "./pages/Auth";
@@ -33,41 +34,46 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/business-setup" element={<BusinessSetup />} />
-          <Route path="/tax-forms" element={<TaxFormEditor />} />
-          <Route path="/tax-forms/edit/:formId" element={<TaxFormEditor />} />
-          <Route path="/saved-forms" element={<SavedForms />} />
-          <Route path="/vine-tracker" element={<VineTracker />} />
-          <Route path="/rental-management" element={<RentalManagement />} />
-          <Route path="/tax-rules" element={<TaxRules />} />
-          <Route path="/donations" element={<DonationTrackerPage />} />
-          <Route path="/subscriptions" element={<SubscriptionsPage />} />
-          <Route path="/tax-credits-calculator" element={<TaxCreditsCalculatorPage />} />
-          <Route path="/employer-benefits" element={<EmployerBenefitsPage />} />
-          <Route path="/1099-center" element={<Form1099Center />} />
-          <Route path="/structure-calculator" element={<BusinessStructureCalculatorPage />} />
-          <Route path="/oz-engine" element={<OzEngine />} />
-          <Route path="/the-crossing" element={<TheCrossing />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          <Route path="/er-dashboard" element={<ERDashboard />} />
-          <Route path="/territory/:id" element={<TerritoryView />} />
-          <Route path="/quest/:id" element={<QuestRunner />} />
-          <Route path="/er-settings" element={<ERSettings />} />
-          <Route path="/company-wizard" element={<CompanyWizard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AccessibilityProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <a href="#main-content" className="skip-to-content">
+            Skip to main content
+          </a>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/business-setup" element={<BusinessSetup />} />
+            <Route path="/tax-forms" element={<TaxFormEditor />} />
+            <Route path="/tax-forms/edit/:formId" element={<TaxFormEditor />} />
+            <Route path="/saved-forms" element={<SavedForms />} />
+            <Route path="/vine-tracker" element={<VineTracker />} />
+            <Route path="/rental-management" element={<RentalManagement />} />
+            <Route path="/tax-rules" element={<TaxRules />} />
+            <Route path="/donations" element={<DonationTrackerPage />} />
+            <Route path="/subscriptions" element={<SubscriptionsPage />} />
+            <Route path="/tax-credits-calculator" element={<TaxCreditsCalculatorPage />} />
+            <Route path="/employer-benefits" element={<EmployerBenefitsPage />} />
+            <Route path="/1099-center" element={<Form1099Center />} />
+            <Route path="/structure-calculator" element={<BusinessStructureCalculatorPage />} />
+            <Route path="/oz-engine" element={<OzEngine />} />
+            <Route path="/the-crossing" element={<TheCrossing />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/er-dashboard" element={<ERDashboard />} />
+            <Route path="/territory/:id" element={<TerritoryView />} />
+            <Route path="/quest/:id" element={<QuestRunner />} />
+            <Route path="/er-settings" element={<ERSettings />} />
+            <Route path="/company-wizard" element={<CompanyWizard />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AccessibilityProvider>
   </QueryClientProvider>
 );
 

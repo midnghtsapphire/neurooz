@@ -482,3 +482,126 @@
     75% { transform: translateY(2px) rotate(-3deg); }
   }
 }
+
+/* ========================================
+   ACCESSIBILITY MODES
+   For ADHD, cognitive differences, and sensory needs
+   ======================================== */
+
+/* Reduced Motion - Respects system preference + manual toggle */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Focus Mode - Hide non-essential UI */
+.focus-mode .focus-hide {
+  opacity: 0.15;
+  pointer-events: none;
+  filter: blur(2px);
+  transition: all 0.3s ease;
+}
+
+.focus-mode .focus-hide:hover {
+  opacity: 0.5;
+  filter: blur(0);
+  pointer-events: auto;
+}
+
+.focus-mode .focus-primary {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 3px hsl(var(--emerald-gold) / 0.3);
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --foreground: 0 0% 100%;
+  --background: 0 0% 0%;
+  --muted-foreground: 0 0% 85%;
+  --border: 0 0% 60%;
+}
+
+.high-contrast * {
+  border-color: hsl(0 0% 60%) !important;
+}
+
+.high-contrast .text-muted-foreground {
+  color: hsl(0 0% 85%) !important;
+}
+
+.high-contrast button,
+.high-contrast a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Large Text Mode */
+.large-text {
+  font-size: 118%;
+}
+
+.large-text h1 {
+  font-size: 2.5rem;
+}
+
+.large-text h2 {
+  font-size: 2rem;
+}
+
+.large-text h3 {
+  font-size: 1.5rem;
+}
+
+.large-text p,
+.large-text span,
+.large-text li {
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+/* Time estimate badges */
+.time-estimate {
+  @apply inline-flex items-center gap-1 text-xs bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full;
+}
+
+/* Visual feedback pulses for hearing impaired */
+@keyframes visual-alert {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--emerald-gold) / 0); }
+  50% { box-shadow: 0 0 0 8px hsl(var(--emerald-gold) / 0.4); }
+}
+
+.visual-alert {
+  animation: visual-alert 1s ease-in-out 2;
+}
+
+/* Skip to content link for screen readers */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 1rem 2rem;
+  background: hsl(var(--background));
+  border: 2px solid hsl(var(--emerald-gold));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+}

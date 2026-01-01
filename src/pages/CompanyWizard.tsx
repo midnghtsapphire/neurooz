@@ -9,7 +9,9 @@ import { EinStep } from "@/components/company-wizard/EinStep";
 import { OwnershipStep } from "@/components/company-wizard/OwnershipStep";
 import { AddressStep } from "@/components/company-wizard/AddressStep";
 import { ReviewStep } from "@/components/company-wizard/ReviewStep";
-import { ArrowLeft, ArrowRight, Building2, Check, Save, X } from "lucide-react";
+import { AccessibilityTrigger } from "@/components/accessibility/AccessibilityPanel";
+import { useAccessibility, STEP_TIME_ESTIMATES } from "@/hooks/use-accessibility";
+import { ArrowLeft, ArrowRight, Building2, Check, Save, X, Clock, PartyPopper } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
@@ -34,12 +36,24 @@ const initialFormData: CompanyFormData = {
   documentsGenerated: [],
 };
 
+// Map wizard step numbers to time estimate keys
+const STEP_TIME_KEYS = [
+  "entity-type",
+  "basic-info", 
+  "ein",
+  "ownership",
+  "address",
+  "review"
+];
+
 const CompanyWizard = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<CompanyFormData>(initialFormData);
   const [isGenerating, setIsGenerating] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const { settings } = useAccessibility();
 
   // Load draft from localStorage on mount
   useEffect(() => {
@@ -86,7 +100,12 @@ const CompanyWizard = () => {
   };
 
   const handleNext = useCallback(() => {
-    if (step < 6 && canProceed()) setStep(step + 1);
+    if (step < 6 && canProceed()) {
+      setStep(step + 1);
+      // Show mini celebration on step completion
+      setShowCelebration(true);
+      setTimeout(() => setShowCelebration(false), 1500);
+    }
   }, [step, formData]);
 
   const handleBack = useCallback(() => {
@@ -96,7 +115,6 @@ const CompanyWizard = () => {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger if user is typing in an input
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       
       if (e.key === "ArrowRight" || e.key === "Enter") {
@@ -115,13 +133,19 @@ const CompanyWizard = () => {
   const handleGenerate = async () => {
     setIsGenerating(true);
     await new Promise(r => setTimeout(r, 1500));
-    localStorage.removeItem(STORAGE_KEY); // Clear draft after generation
+    localStorage.removeItem(STORAGE_KEY);
     toast.success("Document package generated! Check your downloads.");
     setIsGenerating(false);
   };
 
   const currentStepInfo = WIZARD_STEPS[step - 1];
   const progressPercent = ((step - 1) / (WIZARD_STEPS.length - 1)) * 100;
+  const currentTimeEstimate = STEP_TIME_ESTIMATES[STEP_TIME_KEYS[step - 1]];
+  
+  // Calculate remaining time
+  const remainingMinutes = STEP_TIME_KEYS
+    .slice(step - 1)
+    .reduce((acc, key) => acc + (STEP_TIME_ESTIMATES[key]?.minutes || 0), 0);
 
   return (
     <TooltipProvider>
@@ -143,6 +167,7 @@ const CompanyWizard = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <AccessibilityTrigger />
               {hasDraft && (
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -160,24 +185,48 @@ const CompanyWizard = () => {
           </div>
         </header>
 
-        <div className="container mx-auto px-6 py-8 max-w-3xl">
+        <div className="container mx-auto px-6 py-8 max-w-3xl" id="main-content">
           {/* Progress Bar */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-moon-silver">Step {step} of {WIZARD_STEPS.length}</span>
-              <span className="text-sm text-emerald-gold">{Math.round(progressPercent)}% complete</span>
+              <div className="flex items-center gap-3">
+                {settings.showTimeEstimates && (
+                  <span className="time-estimate">
+                    <Clock className="w-3 h-3" />
+                    ~{remainingMinutes} min left
+                  </span>
+                )}
+                <span className="text-sm text-emerald-gold">{Math.round(progressPercent)}% complete</span>
+              </div>
             </div>
             <Progress value={progressPercent} className="h-2 bg-muted" />
           </div>
 
-          {/* Step Title */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-display font-bold text-clean-white">{currentStepInfo.title}</h1>
-            <p className="text-moon-silver mt-1">{currentStepInfo.description}</p>
+          {/* Step Title with Time Estimate */}
+          <div className="mb-6 flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-display font-bold text-clean-white flex items-center gap-2">
+                {currentStepInfo.title}
+                {showCelebration && !settings.reducedMotion && (
+                  <PartyPopper className="w-5 h-5 text-emerald-gold animate-bounce" />
+                )}
+              </h1>
+              <p className="text-moon-silver mt-1">{currentStepInfo.description}</p>
+            </div>
+            {settings.showTimeEstimates && currentTimeEstimate && (
+              <span className="time-estimate shrink-0">
+                <Clock className="w-3 h-3" />
+                {currentTimeEstimate.label}
+              </span>
+            )}
           </div>
 
-          {/* Progress Steps */}
-          <div className="flex items-center justify-between mb-8 overflow-x-auto pb-2">
+          {/* Progress Steps - Hidden in focus mode */}
+          <div className={cn(
+            "flex items-center justify-between mb-8 overflow-x-auto pb-2",
+            settings.focusMode && "focus-hide"
+          )}>
             {WIZARD_STEPS.map((s, i) => (
               <div key={s.id} className="flex items-center">
                 <Tooltip>
@@ -185,9 +234,10 @@ const CompanyWizard = () => {
                     <button
                       onClick={() => s.id <= step && setStep(s.id)}
                       disabled={s.id > step}
+                      aria-label={`Step ${s.id}: ${s.title}${step > s.id ? " (completed)" : step === s.id ? " (current)" : " (upcoming)"}`}
                       className={cn(
                         "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                        step === s.id ? "bg-emerald-gold text-night-emerald ring-2 ring-emerald-gold/50 ring-offset-2 ring-offset-night-emerald" :
+                        step === s.id ? "bg-emerald-gold text-night-emerald ring-2 ring-emerald-gold/50 ring-offset-2 ring-offset-night-emerald focus-primary" :
                         step > s.id ? "bg-emerald-gold/20 text-emerald-gold cursor-pointer hover:bg-emerald-gold/30" : 
                         "bg-muted text-muted-foreground cursor-not-allowed"
                       )}
@@ -198,6 +248,11 @@ const CompanyWizard = () => {
                   <TooltipContent side="bottom">
                     <p className="font-medium">{s.title}</p>
                     <p className="text-xs text-muted-foreground">{s.description}</p>
+                    {settings.showTimeEstimates && STEP_TIME_ESTIMATES[STEP_TIME_KEYS[i]] && (
+                      <p className="text-xs text-blue-400 mt-1">
+                        {STEP_TIME_ESTIMATES[STEP_TIME_KEYS[i]].label}
+                      </p>
+                    )}
                   </TooltipContent>
                 </Tooltip>
                 {i < WIZARD_STEPS.length - 1 && (
@@ -211,7 +266,10 @@ const CompanyWizard = () => {
           </div>
 
           {/* Step Content */}
-          <div className="bg-dark-emerald/30 rounded-2xl border border-emerald-gold/20 p-6">
+          <div className={cn(
+            "bg-dark-emerald/30 rounded-2xl border border-emerald-gold/20 p-6",
+            settings.focusMode && "focus-primary"
+          )}>
             {step === 1 && <EntityTypeStep value={formData.entityType} onChange={(v) => setFormData({ ...formData, entityType: v })} />}
             {step === 2 && <BasicInfoStep companyName={formData.companyName} state={formData.state} formationDate={formData.formationDate} entityType={formData.entityType} onCompanyNameChange={(v) => setFormData({ ...formData, companyName: v })} onStateChange={(v) => setFormData({ ...formData, state: v })} onFormationDateChange={(v) => setFormData({ ...formData, formationDate: v })} />}
             {step === 3 && <EinStep hasEin={formData.hasEin} ein={formData.ein} onHasEinChange={(v) => setFormData({ ...formData, hasEin: v })} onEinChange={(v) => setFormData({ ...formData, ein: v })} />}
@@ -227,6 +285,7 @@ const CompanyWizard = () => {
               onClick={handleBack} 
               disabled={step === 1} 
               className="gap-2 border-moon-silver/30 text-moon-silver hover:bg-moon-silver/10"
+              aria-label="Go to previous step"
             >
               <ArrowLeft className="w-4 h-4" /> Back
             </Button>
@@ -235,19 +294,23 @@ const CompanyWizard = () => {
               <Button 
                 onClick={handleNext} 
                 disabled={!canProceed()} 
-                className="gap-2 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald"
+                className="gap-2 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald visual-alert"
+                aria-label={`Continue to step ${step + 1}`}
               >
                 Next <ArrowRight className="w-4 h-4" />
               </Button>
             ) : (
-              <div className="text-xs text-moon-silver/60">
-                Use keyboard: ← → to navigate, Esc to exit
+              <div className="text-xs text-moon-silver/60 flex items-center">
+                Keyboard: ← → to navigate, Esc to exit
               </div>
             )}
           </div>
 
-          {/* Keyboard hint */}
-          <p className="text-center text-xs text-moon-silver/40 mt-4">
+          {/* Keyboard hint - Hidden in focus mode */}
+          <p className={cn(
+            "text-center text-xs text-moon-silver/40 mt-4",
+            settings.focusMode && "focus-hide"
+          )}>
             Tip: Use arrow keys to navigate between steps
           </p>
         </div>
