@@ -1199,6 +1199,7 @@ export type Database = {
           is_required: boolean
           is_state_field: boolean
           max_length: number | null
+          state_code: string | null
           updated_at: string
           validation_regex: string | null
         }
@@ -1218,6 +1219,7 @@ export type Database = {
           is_required?: boolean
           is_state_field?: boolean
           max_length?: number | null
+          state_code?: string | null
           updated_at?: string
           validation_regex?: string | null
         }
@@ -1237,6 +1239,7 @@ export type Database = {
           is_required?: boolean
           is_state_field?: boolean
           max_length?: number | null
+          state_code?: string | null
           updated_at?: string
           validation_regex?: string | null
         }
@@ -2130,6 +2133,54 @@ export type Database = {
           user_id?: string
           vine_etv?: number
           year?: number
+        }
+        Relationships: []
+      }
+      state_tax_forms: {
+        Row: {
+          created_at: string
+          extension_deadline: string | null
+          filing_deadline: string | null
+          form_name: string
+          form_number: string
+          form_type: string
+          has_local_tax: boolean | null
+          id: string
+          is_active: boolean | null
+          notes: string | null
+          state_code: string
+          state_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          extension_deadline?: string | null
+          filing_deadline?: string | null
+          form_name: string
+          form_number: string
+          form_type: string
+          has_local_tax?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          state_code: string
+          state_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          extension_deadline?: string | null
+          filing_deadline?: string | null
+          form_name?: string
+          form_number?: string
+          form_type?: string
+          has_local_tax?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          notes?: string | null
+          state_code?: string
+          state_name?: string
+          updated_at?: string
         }
         Relationships: []
       }
