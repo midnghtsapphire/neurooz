@@ -12,6 +12,8 @@ import { QuestCompletion } from "@/components/OzEngine/QuestCompletion";
 import { VoidEvent } from "@/components/OzEngine/VoidEvent";
 import { ControlledBurn } from "@/components/OzEngine/ControlledBurn";
 import { ProjectOrbitDisplay } from "@/components/OzEngine/ProjectOrbitDisplay";
+import { EmotionalRoutingPanel } from "@/components/OzEngine/EmotionalRoutingPanel";
+import { DayProgressPanel } from "@/components/OzEngine/DayProgressPanel";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
 import { useCognitiveLoad } from "@/hooks/use-cognitive-load";
 import { useOzOnboarding } from "@/hooks/use-oz-onboarding";
@@ -27,7 +29,8 @@ import {
   Brain,
   Zap,
   RotateCcw,
-  Flame
+  Flame,
+  Settings
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -41,6 +44,7 @@ export default function OzEngine() {
   const onboarding = useOzOnboarding();
   
   const [showFirewall, setShowFirewall] = useState(false);
+  const [showDevPanel, setShowDevPanel] = useState(false);
   const [pendingImpulse, setPendingImpulse] = useState<{
     type: 'project' | 'task' | 'idea' | 'other';
     name?: string;
@@ -237,9 +241,20 @@ export default function OzEngine() {
               size="sm"
               onClick={() => handleStartBurn("Focus Session", 25)}
               className="border-orange-500/50 text-orange-400 hover:bg-orange-950/50"
+              disabled={!onboarding.state.unlockedFeatures.controlledBurn}
+              title={!onboarding.state.unlockedFeatures.controlledBurn ? "Unlocks Day 4" : undefined}
             >
               <Flame className="h-4 w-4 mr-1" />
               Burn Mode
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowDevPanel(!showDevPanel)}
+              title="Dev Controls"
+              className="text-emerald-400/50 hover:text-emerald-400"
+            >
+              <Settings className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
@@ -361,10 +376,27 @@ export default function OzEngine() {
             </Card>
           </div>
           
-          {/* Right Column - RAM, Orbits & Characters */}
+          {/* Right Column - RAM, Orbits, Emotional Routing & Characters */}
           <div className="space-y-6">
             <RAMMonitor />
+            
+            {/* Day Progress with Dev Controls */}
+            {showDevPanel && (
+              <DayProgressPanel
+                currentDay={onboarding.state.currentDay}
+                unlockedFeatures={onboarding.state.unlockedFeatures}
+                onAdvanceDay={onboarding.advanceToDay}
+                showDevControls={true}
+              />
+            )}
+            
             <ProjectOrbitDisplay />
+            
+            {/* Emotional Routing - Day 5 unlock */}
+            <EmotionalRoutingPanel 
+              isUnlocked={onboarding.state.unlockedFeatures.emotionalRouting}
+            />
+            
             <CharacterStatus />
           </div>
         </div>
