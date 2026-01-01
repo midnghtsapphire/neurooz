@@ -77,11 +77,11 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-3">
               <Button
-                onClick={() => navigate("/the-crossing")}
+                onClick={() => navigate("/onboarding")}
                 variant="ghost"
                 className="font-medium text-moon-silver hover:text-emerald-gold"
               >
-                The Crossing
+                Start Journey
               </Button>
               <Button
                 onClick={() => navigate("/auth")}
@@ -104,7 +104,7 @@ const Index = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                onClick={() => navigate("/the-crossing")}
+                onClick={() => navigate("/onboarding")}
                 size="lg"
                 className="bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-bold shadow-medium hover:shadow-glow transition-all h-14 px-10 text-lg uppercase tracking-wider"
               >
