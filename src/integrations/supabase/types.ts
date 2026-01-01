@@ -1182,6 +1182,66 @@ export type Database = {
           },
         ]
       }
+      irs_form_field_definitions: {
+        Row: {
+          allowed_values: string[] | null
+          created_at: string
+          description: string | null
+          display_order: number
+          field_label: string
+          field_name: string
+          field_type: string
+          form_type: string
+          id: string
+          irs_box_number: string | null
+          is_payer_field: boolean
+          is_recipient_field: boolean
+          is_required: boolean
+          is_state_field: boolean
+          max_length: number | null
+          updated_at: string
+          validation_regex: string | null
+        }
+        Insert: {
+          allowed_values?: string[] | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          field_label: string
+          field_name: string
+          field_type?: string
+          form_type: string
+          id?: string
+          irs_box_number?: string | null
+          is_payer_field?: boolean
+          is_recipient_field?: boolean
+          is_required?: boolean
+          is_state_field?: boolean
+          max_length?: number | null
+          updated_at?: string
+          validation_regex?: string | null
+        }
+        Update: {
+          allowed_values?: string[] | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          field_label?: string
+          field_name?: string
+          field_type?: string
+          form_type?: string
+          id?: string
+          irs_box_number?: string | null
+          is_payer_field?: boolean
+          is_recipient_field?: boolean
+          is_required?: boolean
+          is_state_field?: boolean
+          max_length?: number | null
+          updated_at?: string
+          validation_regex?: string | null
+        }
+        Relationships: []
+      }
       irwe_categories: {
         Row: {
           created_at: string
