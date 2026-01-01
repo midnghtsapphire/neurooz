@@ -2927,6 +2927,7 @@ export type Database = {
       business_structure:
         | "sole_proprietor"
         | "single_member_llc"
+        | "multi_member_llc"
         | "llc_s_corp"
         | "partnership"
         | "c_corp"
@@ -3062,6 +3063,7 @@ export const Constants = {
       business_structure: [
         "sole_proprietor",
         "single_member_llc",
+        "multi_member_llc",
         "llc_s_corp",
         "partnership",
         "c_corp",

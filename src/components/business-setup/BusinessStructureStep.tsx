@@ -26,6 +26,14 @@ const structures = [
     taxForms: ["Schedule C", "1040", "SE"],
   },
   {
+    id: "multi_member_llc" as BusinessStructure,
+    title: "Multi-Member LLC",
+    description: "Two or more owners with liability protection. Taxed as partnership by default.",
+    icon: Users,
+    bestFor: "Business partners who want liability protection",
+    taxForms: ["1065", "Schedule K-1", "SE"],
+  },
+  {
     id: "llc_s_corp" as BusinessStructure,
     title: "LLC taxed as S-Corp",
     description: "Pay reasonable salary + distributions. Save on self-employment tax.",
