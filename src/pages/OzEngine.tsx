@@ -260,8 +260,8 @@ export default function OzEngine() {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Left Column - City & Status */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Wizard Greeting */}
-            <WizardVoice size="lg" />
+            {/* Wizard Greeting - day-aware */}
+            <WizardVoice size="lg" dayKey={onboarding.showDayMessage ? onboarding.dayKey : undefined} />
             
             {/* Emerald City Visualization */}
             <Card className="border-emerald-500/30 overflow-hidden">
