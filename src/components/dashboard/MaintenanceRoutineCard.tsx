@@ -22,19 +22,29 @@ import {
   ShoppingCart,
   Sparkles,
   Check,
-  X
+  X,
+  Briefcase,
+  Target,
+  AlertTriangle,
+  Star,
+  Zap,
+  ArrowUp,
+  ArrowDown
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 
 interface RecurringTask {
   id: string;
   title: string;
-  category: "chores" | "health" | "fitness" | "shopping" | "work" | "personal";
+  category: "chores" | "health" | "fitness" | "shopping" | "work" | "personal" | "job";
   frequency: "daily" | "weekly" | "monthly";
   daysOfWeek?: number[]; // 0-6, Sunday-Saturday
   time?: string;
   icon: string;
+  priority?: "high" | "medium" | "low";
+  energyLevel?: "high" | "medium" | "low"; // best time of day
 }
 
 const DAYS_OF_WEEK = [
@@ -54,14 +64,38 @@ const CATEGORY_ICONS: Record<string, { icon: any; color: string; emoji: string }
   shopping: { icon: ShoppingCart, color: "text-blue-500", emoji: "🛒" },
   work: { icon: Calendar, color: "text-purple-500", emoji: "💼" },
   personal: { icon: Sparkles, color: "text-primary", emoji: "✨" },
+  job: { icon: Briefcase, color: "text-indigo-500", emoji: "👔" },
 };
 
 const PRESET_TASKS: RecurringTask[] = [
-  { id: "trash", title: "Take out trash", category: "chores", frequency: "weekly", daysOfWeek: [1], icon: "🗑️" },
-  { id: "workout-mwf", title: "Workout", category: "fitness", frequency: "weekly", daysOfWeek: [1, 3, 5], time: "18:00", icon: "💪" },
-  { id: "meds", title: "Take medications", category: "health", frequency: "daily", icon: "💊" },
-  { id: "groceries", title: "Grocery shopping", category: "shopping", frequency: "weekly", daysOfWeek: [6], icon: "🛒" },
+  { id: "trash", title: "Take out trash", category: "chores", frequency: "weekly", daysOfWeek: [1], icon: "🗑️", priority: "medium" },
+  { id: "workout-mwf", title: "Workout", category: "fitness", frequency: "weekly", daysOfWeek: [1, 3, 5], time: "18:00", icon: "💪", priority: "high", energyLevel: "high" },
+  { id: "meds", title: "Take medications", category: "health", frequency: "daily", icon: "💊", priority: "high" },
+  { id: "groceries", title: "Grocery shopping", category: "shopping", frequency: "weekly", daysOfWeek: [6], icon: "🛒", priority: "medium" },
 ];
+
+const JOB_PRESET_TASKS: RecurringTask[] = [
+  { id: "check-email", title: "Check & respond to emails", category: "job", frequency: "daily", time: "09:00", icon: "📧", priority: "high", energyLevel: "high" },
+  { id: "standup", title: "Daily standup/check-in", category: "job", frequency: "daily", time: "09:30", icon: "🗣️", priority: "high" },
+  { id: "timesheet", title: "Submit timesheet", category: "job", frequency: "weekly", daysOfWeek: [5], icon: "⏱️", priority: "high" },
+  { id: "expense-report", title: "Submit expense reports", category: "job", frequency: "monthly", icon: "🧾", priority: "medium" },
+  { id: "1on1", title: "1-on-1 with manager", category: "job", frequency: "weekly", daysOfWeek: [2], icon: "👥", priority: "high" },
+  { id: "review-tasks", title: "Review & plan tasks", category: "job", frequency: "daily", time: "08:30", icon: "📋", priority: "high", energyLevel: "high" },
+  { id: "documentation", title: "Update documentation", category: "job", frequency: "weekly", daysOfWeek: [4], icon: "📝", priority: "medium" },
+  { id: "training", title: "Professional development", category: "job", frequency: "weekly", daysOfWeek: [3], icon: "📚", priority: "low", energyLevel: "low" },
+];
+
+const PRIORITY_CONFIG = {
+  high: { color: "text-red-500", bg: "bg-red-500/10", icon: AlertTriangle, label: "High" },
+  medium: { color: "text-amber-500", bg: "bg-amber-500/10", icon: Star, label: "Medium" },
+  low: { color: "text-blue-500", bg: "bg-blue-500/10", icon: ArrowDown, label: "Low" },
+};
+
+const ENERGY_CONFIG = {
+  high: { label: "Morning (high energy)", time: "morning" },
+  medium: { label: "Afternoon (medium energy)", time: "afternoon" },
+  low: { label: "Evening (low energy)", time: "evening" },
+};
 
 interface MaintenanceRoutineCardProps {
   onOpenWizard?: () => void;
@@ -69,21 +103,58 @@ interface MaintenanceRoutineCardProps {
 
 export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardProps) {
   const [showWizard, setShowWizard] = useState(false);
+  const [showPrioritizer, setShowPrioritizer] = useState(false);
   const [wizardStep, setWizardStep] = useState(1);
   const [tasks, setTasks] = useState<RecurringTask[]>(PRESET_TASKS);
   const [newTask, setNewTask] = useState<Partial<RecurringTask>>({
     category: "personal",
     frequency: "weekly",
     daysOfWeek: [],
+    priority: "medium",
   });
   const [todayCompleted, setTodayCompleted] = useState<string[]>([]);
 
   const today = new Date().getDay();
+  const currentHour = new Date().getHours();
+  
   const todaysTasks = tasks.filter(task => {
     if (task.frequency === "daily") return true;
     if (task.frequency === "weekly" && task.daysOfWeek?.includes(today)) return true;
     return false;
   });
+
+  // Prioritize tasks based on priority and energy level matching current time
+  const prioritizedTasks = [...todaysTasks].sort((a, b) => {
+    const priorityOrder = { high: 0, medium: 1, low: 2 };
+    const aPriority = priorityOrder[a.priority || "medium"];
+    const bPriority = priorityOrder[b.priority || "medium"];
+    
+    // First sort by priority
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    
+    // Then by time if available
+    if (a.time && b.time) return a.time.localeCompare(b.time);
+    if (a.time) return -1;
+    if (b.time) return 1;
+    
+    return 0;
+  });
+
+  const getTimeOfDay = () => {
+    if (currentHour < 12) return "morning";
+    if (currentHour < 17) return "afternoon";
+    return "evening";
+  };
+
+  const suggestedNextTask = prioritizedTasks.find(task => {
+    if (todayCompleted.includes(task.id)) return false;
+    const timeOfDay = getTimeOfDay();
+    if (task.energyLevel === "high" && timeOfDay === "morning") return true;
+    if (task.energyLevel === "medium" && timeOfDay === "afternoon") return true;
+    if (task.energyLevel === "low" && timeOfDay === "evening") return true;
+    if (!task.energyLevel) return true;
+    return false;
+  }) || prioritizedTasks.find(task => !todayCompleted.includes(task.id));
 
   const toggleComplete = (taskId: string) => {
     setTodayCompleted(prev => 
@@ -104,9 +175,11 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
       daysOfWeek: newTask.daysOfWeek || [],
       time: newTask.time,
       icon: CATEGORY_ICONS[newTask.category || "personal"].emoji,
+      priority: newTask.priority as any || "medium",
+      energyLevel: newTask.energyLevel as any,
     };
     setTasks(prev => [...prev, task]);
-    setNewTask({ category: "personal", frequency: "weekly", daysOfWeek: [] });
+    setNewTask({ category: "personal", frequency: "weekly", daysOfWeek: [], priority: "medium" });
     toast.success("Task added!");
   };
 
@@ -123,7 +196,15 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
     }));
   };
 
+  const addJobPresets = () => {
+    const existingIds = tasks.map(t => t.id);
+    const newJobTasks = JOB_PRESET_TASKS.filter(t => !existingIds.includes(t.id));
+    setTasks(prev => [...prev, ...newJobTasks]);
+    toast.success(`Added ${newJobTasks.length} job maintenance tasks!`);
+  };
+
   const completedCount = todaysTasks.filter(t => todayCompleted.includes(t.id)).length;
+  const highPriorityRemaining = prioritizedTasks.filter(t => t.priority === "high" && !todayCompleted.includes(t.id)).length;
   const completionPercent = todaysTasks.length > 0 ? (completedCount / todaysTasks.length) * 100 : 0;
 
   if (showWizard) {
@@ -146,7 +227,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
             </div>
             {/* Step indicators */}
             <div className="flex gap-2 mt-2">
-              {[1, 2, 3].map(step => (
+              {[1, 2, 3, 4].map(step => (
                 <div 
                   key={step}
                   className={cn(
@@ -211,13 +292,79 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
 
               {wizardStep === 2 && (
                 <motion.div
-                  key="step2"
+                  key="step2-job"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-4"
                 >
-                  <h3 className="font-semibold">Step 2: Add Custom Task</h3>
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-indigo-500" />
+                    Step 2: Job Maintenance Tasks
+                  </h3>
+                  <p className="text-sm text-muted-foreground">Add work-related recurring tasks:</p>
+                  
+                  <ScrollArea className="h-48">
+                    <div className="space-y-2">
+                      {JOB_PRESET_TASKS.map(preset => (
+                        <div 
+                          key={preset.id}
+                          className={cn(
+                            "p-3 rounded-lg border flex items-center justify-between cursor-pointer transition-all",
+                            tasks.find(t => t.id === preset.id)
+                              ? "border-indigo-500 bg-indigo-500/10"
+                              : "border-border hover:border-indigo-500/50"
+                          )}
+                          onClick={() => {
+                            if (tasks.find(t => t.id === preset.id)) {
+                              removeTask(preset.id);
+                            } else {
+                              setTasks(prev => [...prev, preset]);
+                            }
+                          }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-xl">{preset.icon}</span>
+                            <div>
+                              <div className="text-sm font-medium flex items-center gap-2">
+                                {preset.title}
+                                {preset.priority && (
+                                  <Badge variant="outline" className={cn("text-xs", PRIORITY_CONFIG[preset.priority].color)}>
+                                    {PRIORITY_CONFIG[preset.priority].label}
+                                  </Badge>
+                                )}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {preset.frequency === "daily" ? "Every day" : 
+                                  preset.daysOfWeek?.map(d => DAYS_OF_WEEK[d].full).join(", ")}
+                                {preset.time && ` at ${preset.time}`}
+                              </div>
+                            </div>
+                          </div>
+                          {tasks.find(t => t.id === preset.id) && (
+                            <Check className="w-5 h-5 text-indigo-500" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                  
+                  <Button variant="outline" onClick={addJobPresets} className="w-full gap-2">
+                    <Briefcase className="w-4 h-4" />
+                    Add All Job Tasks
+                  </Button>
+                </motion.div>
+              )}
+
+              {wizardStep === 3 && (
+                <motion.div
+                  key="step3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-4"
+                >
+                  <h3 className="font-semibold">Step 3: Add Custom Task</h3>
                   
                   <div className="space-y-3">
                     <div>
@@ -288,6 +435,41 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                       </div>
                     )}
 
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label>Priority</Label>
+                        <Select 
+                          value={newTask.priority || "medium"} 
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, priority: v as any }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="high">🔴 High</SelectItem>
+                            <SelectItem value="medium">🟡 Medium</SelectItem>
+                            <SelectItem value="low">🔵 Low</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label>Best Time</Label>
+                        <Select 
+                          value={newTask.energyLevel || ""} 
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, energyLevel: v as any }))}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Any time" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="high">☀️ Morning</SelectItem>
+                            <SelectItem value="medium">🌤️ Afternoon</SelectItem>
+                            <SelectItem value="low">🌙 Evening</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
                     <div>
                       <Label>Time (optional)</Label>
                       <Input 
@@ -305,15 +487,15 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                 </motion.div>
               )}
 
-              {wizardStep === 3 && (
+              {wizardStep === 4 && (
                 <motion.div
-                  key="step3"
+                  key="step4"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-4"
                 >
-                  <h3 className="font-semibold">Step 3: Review Your Routine</h3>
+                  <h3 className="font-semibold">Step 4: Review Your Routine</h3>
                   
                   <ScrollArea className="h-64">
                     <div className="space-y-2">
@@ -325,7 +507,15 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                           <div className="flex items-center gap-3">
                             <span className="text-xl">{task.icon}</span>
                             <div>
-                              <div className="text-sm font-medium">{task.title}</div>
+                              <div className="text-sm font-medium flex items-center gap-2">
+                                {task.title}
+                                {task.priority && (
+                                  <span className={cn("w-2 h-2 rounded-full", 
+                                    task.priority === "high" ? "bg-red-500" :
+                                    task.priority === "medium" ? "bg-amber-500" : "bg-blue-500"
+                                  )} />
+                                )}
+                              </div>
                               <div className="text-xs text-muted-foreground">
                                 {task.frequency === "daily" ? "Every day" : 
                                   task.daysOfWeek?.map(d => DAYS_OF_WEEK[d].short).join(", ")}
@@ -371,7 +561,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                 <ChevronLeft className="w-4 h-4 mr-1" />
                 Back
               </Button>
-              {wizardStep < 3 && (
+              {wizardStep < 4 && (
                 <Button
                   size="sm"
                   onClick={() => setWizardStep(prev => prev + 1)}
@@ -402,17 +592,66 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
               </div>
               <div>
                 <h3 className="text-lg font-display font-bold text-foreground">Maintenance</h3>
-                <p className="text-sm text-muted-foreground">Daily & weekly routines</p>
+                <p className="text-sm text-muted-foreground">Daily, weekly & job routines</p>
               </div>
             </div>
-            <Button size="sm" variant="secondary" className="gap-1" onClick={() => setShowWizard(true)}>
-              <Plus className="w-4 h-4" />
-              Setup
-            </Button>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" className="gap-1" onClick={() => setShowPrioritizer(!showPrioritizer)}>
+                <Target className="w-4 h-4" />
+                Prioritize
+              </Button>
+              <Button size="sm" variant="secondary" className="gap-1" onClick={() => setShowWizard(true)}>
+                <Plus className="w-4 h-4" />
+                Setup
+              </Button>
+            </div>
           </div>
         </div>
 
         <CardContent className="p-4 space-y-4">
+          {/* High priority alert */}
+          {highPriorityRemaining > 0 && (
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20">
+              <AlertTriangle className="w-4 h-4 text-red-500" />
+              <span className="text-xs font-medium text-red-600">
+                {highPriorityRemaining} high priority task{highPriorityRemaining > 1 ? 's' : ''} remaining
+              </span>
+            </div>
+          )}
+
+          {/* Suggested next task */}
+          {suggestedNextTask && !todayCompleted.includes(suggestedNextTask.id) && (
+            <div className="p-3 rounded-lg bg-gradient-to-r from-primary/10 to-amber-500/10 border border-primary/20">
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-xs font-semibold text-primary uppercase tracking-wide">Suggested Next</span>
+              </div>
+              <div 
+                onClick={() => toggleComplete(suggestedNextTask.id)}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <Checkbox checked={false} />
+                <span className="text-lg">{suggestedNextTask.icon}</span>
+                <div className="flex-1">
+                  <div className="text-sm font-medium">{suggestedNextTask.title}</div>
+                  <div className="text-xs text-muted-foreground flex items-center gap-2">
+                    {suggestedNextTask.time && (
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {suggestedNextTask.time}
+                      </span>
+                    )}
+                    {suggestedNextTask.priority && (
+                      <Badge variant="outline" className={cn("text-xs", PRIORITY_CONFIG[suggestedNextTask.priority].color)}>
+                        {PRIORITY_CONFIG[suggestedNextTask.priority].label}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Today's progress */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Today's Progress</span>
@@ -428,43 +667,124 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
             />
           </div>
 
-          {/* Today's tasks */}
-          <div className="space-y-2">
-            {todaysTasks.slice(0, 4).map(task => (
-              <div 
-                key={task.id}
-                onClick={() => toggleComplete(task.id)}
-                className={cn(
-                  "p-3 rounded-lg border flex items-center gap-3 cursor-pointer transition-all",
-                  todayCompleted.includes(task.id)
-                    ? "border-emerald-500/50 bg-emerald-500/10 opacity-60"
-                    : "border-border hover:border-amber-500/50"
-                )}
-              >
-                <Checkbox checked={todayCompleted.includes(task.id)} />
-                <span className="text-lg">{task.icon}</span>
-                <div className="flex-1">
-                  <div className={cn(
-                    "text-sm font-medium",
-                    todayCompleted.includes(task.id) && "line-through"
-                  )}>
-                    {task.title}
-                  </div>
-                  {task.time && (
-                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {task.time}
+          {/* Prioritized task list or regular list */}
+          {showPrioritizer ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Prioritized Order</span>
+                <Badge variant="outline" className="text-xs">
+                  {getTimeOfDay() === "morning" ? "☀️ Morning" : 
+                   getTimeOfDay() === "afternoon" ? "🌤️ Afternoon" : "🌙 Evening"}
+                </Badge>
+              </div>
+              <ScrollArea className="h-48">
+                <div className="space-y-2">
+                  {prioritizedTasks.map((task, index) => (
+                    <div 
+                      key={task.id}
+                      onClick={() => toggleComplete(task.id)}
+                      className={cn(
+                        "p-3 rounded-lg border flex items-center gap-3 cursor-pointer transition-all",
+                        todayCompleted.includes(task.id)
+                          ? "border-emerald-500/50 bg-emerald-500/10 opacity-60"
+                          : task.priority === "high" 
+                            ? "border-red-500/30 hover:border-red-500/50"
+                            : "border-border hover:border-amber-500/50"
+                      )}
+                    >
+                      <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-bold">
+                        {index + 1}
+                      </span>
+                      <Checkbox checked={todayCompleted.includes(task.id)} />
+                      <span className="text-lg">{task.icon}</span>
+                      <div className="flex-1">
+                        <div className={cn(
+                          "text-sm font-medium flex items-center gap-2",
+                          todayCompleted.includes(task.id) && "line-through"
+                        )}>
+                          {task.title}
+                          {task.priority && (
+                            <span className={cn("w-2 h-2 rounded-full", 
+                              task.priority === "high" ? "bg-red-500" :
+                              task.priority === "medium" ? "bg-amber-500" : "bg-blue-500"
+                            )} />
+                          )}
+                        </div>
+                        <div className="text-xs text-muted-foreground flex items-center gap-2">
+                          {task.time && (
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3 h-3" />
+                              {task.time}
+                            </span>
+                          )}
+                          {task.category === "job" && (
+                            <Badge variant="outline" className="text-xs text-indigo-500">Job</Badge>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  )}
+                  ))}
                 </div>
-              </div>
-            ))}
-            {todaysTasks.length === 0 && (
-              <div className="text-center py-4 text-sm text-muted-foreground">
-                No tasks scheduled for today
-              </div>
-            )}
-          </div>
+              </ScrollArea>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {prioritizedTasks.slice(0, 4).map(task => (
+                <div 
+                  key={task.id}
+                  onClick={() => toggleComplete(task.id)}
+                  className={cn(
+                    "p-3 rounded-lg border flex items-center gap-3 cursor-pointer transition-all",
+                    todayCompleted.includes(task.id)
+                      ? "border-emerald-500/50 bg-emerald-500/10 opacity-60"
+                      : task.priority === "high"
+                        ? "border-red-500/30 hover:border-red-500/50"
+                        : "border-border hover:border-amber-500/50"
+                  )}
+                >
+                  <Checkbox checked={todayCompleted.includes(task.id)} />
+                  <span className="text-lg">{task.icon}</span>
+                  <div className="flex-1">
+                    <div className={cn(
+                      "text-sm font-medium flex items-center gap-2",
+                      todayCompleted.includes(task.id) && "line-through"
+                    )}>
+                      {task.title}
+                      {task.priority === "high" && (
+                        <span className="w-2 h-2 rounded-full bg-red-500" />
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground flex items-center gap-2">
+                      {task.time && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {task.time}
+                        </span>
+                      )}
+                      {task.category === "job" && (
+                        <Badge variant="outline" className="text-xs text-indigo-500">Job</Badge>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {todaysTasks.length === 0 && (
+                <div className="text-center py-4 text-sm text-muted-foreground">
+                  No tasks scheduled for today
+                </div>
+              )}
+              {todaysTasks.length > 4 && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="w-full text-muted-foreground"
+                  onClick={() => setShowPrioritizer(true)}
+                >
+                  +{todaysTasks.length - 4} more tasks
+                </Button>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </motion.div>
