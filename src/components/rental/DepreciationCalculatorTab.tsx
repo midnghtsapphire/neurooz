@@ -43,8 +43,7 @@ import {
   Layers,
   Edit,
   Trash2,
-  ChevronRight,
-  Info,
+  BookOpen,
 } from "lucide-react";
 import {
   useDepreciationMethods,
@@ -57,10 +56,12 @@ import {
   useDeleteTrailingGroup,
   useDepreciationStats,
   calculateDepreciationSchedule,
-  DepreciationMethod,
-  ProductDepreciation,
+  TAX_YEAR_RULES,
+  type DepreciationMethod,
+  type ProductDepreciation,
 } from "@/hooks/use-depreciation";
 import { useRentalInventory } from "@/hooks/use-rental-inventory";
+import { MACRSReferencePanel } from "./MACRSReferencePanel";
 import { toast } from "@/hooks/use-toast";
 
 interface DepreciationCalculatorTabProps {
@@ -610,7 +611,7 @@ export function DepreciationCalculatorTab({ userId }: DepreciationCalculatorTabP
                             max={formData.original_cost}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
-                            Max deduction for 2024: $1,220,000
+                            2025 Max: ${TAX_YEAR_RULES[2025].section179Limit.toLocaleString()}
                           </p>
                         </div>
 
@@ -628,7 +629,7 @@ export function DepreciationCalculatorTab({ userId }: DepreciationCalculatorTabP
                               max={100}
                             />
                             <p className="text-xs text-muted-foreground mt-1">
-                              2024: 60%, 2025: 40%, 2026: 20%
+                              2025: 100% (OBBBA), 2026: 20%, 2027: 0%
                             </p>
                           </div>
                         )}
@@ -937,66 +938,7 @@ export function DepreciationCalculatorTab({ userId }: DepreciationCalculatorTabP
 
         {/* Methods Reference Tab */}
         <TabsContent value="methods">
-          <Card>
-            <CardHeader>
-              <CardTitle>Depreciation Methods Reference</CardTitle>
-              <CardDescription>
-                Available depreciation methods and their schedules
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                {methods.map((method) => (
-                  <Card key={method.id} className="bg-muted/30">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{method.name}</CardTitle>
-                          <Badge className={`mt-1 ${getMethodBadgeColor(method.method_type)}`}>
-                            {method.method_type.replace("_", " ").toUpperCase()}
-                          </Badge>
-                        </div>
-                        {method.first_year_bonus_eligible && (
-                          <Badge variant="outline" className="bg-green-500/10 text-green-600">
-                            Bonus Eligible
-                          </Badge>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground mb-3">{method.description}</p>
-                      
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <Badge variant="outline">
-                          {method.useful_life_years} year{method.useful_life_years !== 1 ? "s" : ""}
-                        </Badge>
-                        {method.business_types.map((type) => (
-                          <Badge key={type} variant="secondary" className="text-xs">
-                            {type}
-                          </Badge>
-                        ))}
-                      </div>
-
-                      {method.year_percentages && method.year_percentages.length > 0 && (
-                        <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">
-                            YEARLY PERCENTAGES:
-                          </p>
-                          <div className="flex flex-wrap gap-1">
-                            {method.year_percentages.map((pct, idx) => (
-                              <Badge key={idx} variant="outline" className="text-xs">
-                                Y{idx + 1}: {pct}%
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <MACRSReferencePanel showExamples={true} />
         </TabsContent>
       </Tabs>
     </div>
