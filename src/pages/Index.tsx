@@ -40,7 +40,7 @@ const Index = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="text-6xl animate-pulse">🐕</div>
+        <div className="text-6xl opacity-70">🐕</div>
       </div>
     );
   }
