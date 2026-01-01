@@ -8,6 +8,7 @@ import PricingManager from "@/components/PricingManager";
 import { toast } from "sonner";
 import emeraldRoadHero from "@/assets/emerald-road-hero.jpg";
 import { PicketFence, GardenGate } from "@/components/PicketFence";
+import DashboardCards from "@/components/dashboard/DashboardCards";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -169,10 +170,14 @@ const Index = () => {
             Welcome back! 👋
           </h1>
           <p className="text-muted-foreground mb-8">
-            Here's your tax overview. Let's keep things organized.
+            Here's your command center. Let's keep things organized.
           </p>
 
-          {/* Quick Actions */}
+          {/* Dashboard Cards - Brain Melee, Business Wizard, Projects, Wellness */}
+          <div className="mb-8">
+            <DashboardCards />
+          </div>
+
           {/* Featured Tax Credits Calculator */}
           <div 
             onClick={() => navigate("/tax-credits-calculator")}
