@@ -120,6 +120,8 @@ export const ENTITY_TYPES = [
     description: "Simplest structure. No separate legal entity. Personal liability.",
     pros: ["Easy to start", "No formation fees", "Simple taxes (Schedule C)"],
     cons: ["Personal liability", "Self-employment tax", "Hard to raise capital"],
+    taxRule: "File Schedule C with Form 1040. All profit subject to 15.3% self-employment tax.",
+    tips: ["Best for testing a business idea", "Can convert to LLC later"],
   },
   {
     value: "llc_single",
@@ -127,6 +129,8 @@ export const ENTITY_TYPES = [
     description: "One owner with liability protection. Taxed as sole prop by default.",
     pros: ["Liability protection", "Pass-through taxation", "Flexible"],
     cons: ["State fees", "Self-employment tax", "Annual reports"],
+    taxRule: "Disregarded entity - taxed same as Sole Prop (Schedule C). Can elect S-Corp taxation.",
+    tips: ["Same tax treatment as Sole Prop but with liability shield", "Consider S-Corp election at $60K+ profit"],
   },
   {
     value: "llc_multi",
@@ -134,6 +138,8 @@ export const ENTITY_TYPES = [
     description: "Two+ owners with liability protection. Taxed as partnership by default.",
     pros: ["Liability protection", "Flexible profit sharing", "Pass-through taxation"],
     cons: ["Operating agreement needed", "State fees", "Complex tax returns"],
+    taxRule: "Taxed as Partnership (Form 1065). Each member gets K-1. Profits flow to personal returns.",
+    tips: ["Same tax rules as General Partnership", "Operating agreement defines profit splits", "Can elect S-Corp taxation"],
   },
   {
     value: "s_corp",
@@ -141,6 +147,8 @@ export const ENTITY_TYPES = [
     description: "Corporation with pass-through taxation. Salary + distribution model.",
     pros: ["Save on self-employment tax", "Liability protection", "Credibility"],
     cons: ["Reasonable salary required", "Payroll taxes", "More compliance"],
+    taxRule: "File Form 1120-S. Pay reasonable salary (W-2), then distributions avoid SE tax.",
+    tips: ["Must pay yourself 'reasonable compensation'", "Best at $60K+ net profit", "Saves ~7.65% on distributions"],
   },
   {
     value: "c_corp",
@@ -148,13 +156,26 @@ export const ENTITY_TYPES = [
     description: "Standard corporation. Double taxation but unlimited growth potential.",
     pros: ["Unlimited shareholders", "Raise capital easily", "Fringe benefits"],
     cons: ["Double taxation", "Complex compliance", "More expensive"],
+    taxRule: "Corporate tax (21%) + shareholder dividend tax. Double taxation on distributions.",
+    tips: ["Not recommended for most small businesses", "Used for venture capital, going public"],
   },
   {
-    value: "partnership",
-    label: "Partnership",
-    description: "Two+ owners sharing profits. No separate entity for tax.",
-    pros: ["Easy to form", "Pass-through taxation", "Flexible"],
-    cons: ["Personal liability (general)", "Partner disputes", "Complex exits"],
+    value: "partnership_general",
+    label: "General Partnership",
+    description: "Two+ owners sharing profits. All partners have management rights and liability.",
+    pros: ["Easy to form", "Pass-through taxation", "No state filing required"],
+    cons: ["Unlimited personal liability", "Partner disputes", "Each partner binds the others"],
+    taxRule: "File Form 1065. Each partner gets K-1. All profit subject to SE tax for active partners.",
+    tips: ["All partners share unlimited liability", "Any partner can create obligations for all"],
+  },
+  {
+    value: "partnership_limited",
+    label: "Limited Partnership (LP)",
+    description: "Has General Partners (manage) and Limited Partners (invest only).",
+    pros: ["Limited partners have liability protection", "Attract passive investors", "Pass-through taxation"],
+    cons: ["General partner has unlimited liability", "State filing required", "More complex structure"],
+    taxRule: "File Form 1065. Limited partners' share not subject to SE tax (passive income).",
+    tips: ["Limited Partner = Funder who provides capital", "LP cannot participate in management", "Great for family investments"],
   },
   {
     value: "nonprofit",
@@ -162,6 +183,8 @@ export const ENTITY_TYPES = [
     description: "Tax-exempt organization for charitable, religious, or educational purposes.",
     pros: ["Tax exempt", "Donations deductible", "Grant eligible"],
     cons: ["No profit distribution", "Complex compliance", "Public scrutiny"],
+    taxRule: "File Form 990. Exempt from income tax. Donors can deduct contributions.",
+    tips: ["Must serve public benefit", "No private benefit to founders", "Requires IRS 501(c)(3) application"],
   },
 ];
 
