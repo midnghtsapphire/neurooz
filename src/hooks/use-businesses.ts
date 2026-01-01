@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 export type BusinessStructure = 
   | 'sole_proprietor'
   | 'single_member_llc'
+  | 'multi_member_llc'
   | 'llc_s_corp'
   | 'partnership'
   | 'c_corp';
