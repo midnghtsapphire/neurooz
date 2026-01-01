@@ -8,122 +8,158 @@
 
 @layer base {
   :root {
-    /* Deep forest green primary */
-    --primary: 142 45% 32%;
+    /* Emerald City green primary */
+    --primary: 152 80% 40%;
     --primary-foreground: 0 0% 100%;
     
-    /* Soft sage green background */
-    --background: 120 25% 94%;
-    --foreground: 150 20% 15%;
+    /* Lavender sky background */
+    --background: 260 40% 92%;
+    --foreground: 220 30% 18%;
 
-    /* Warm white cards with green tint */
-    --card: 100 20% 98%;
-    --card-foreground: 150 20% 15%;
+    /* Warm cream cards */
+    --card: 45 50% 97%;
+    --card-foreground: 220 30% 18%;
 
-    --popover: 100 20% 98%;
-    --popover-foreground: 150 20% 15%;
+    --popover: 45 50% 97%;
+    --popover-foreground: 220 30% 18%;
 
-    /* Warm grape purple accent */
-    --secondary: 280 35% 45%;
+    /* Ruby slipper red accent */
+    --secondary: 345 75% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Muted sage */
-    --muted: 120 18% 88%;
-    --muted-foreground: 150 15% 40%;
+    /* Muted lavender */
+    --muted: 260 25% 88%;
+    --muted-foreground: 260 20% 45%;
 
-    /* Golden harvest accent */
-    --accent: 38 70% 55%;
-    --accent-foreground: 150 20% 15%;
+    /* Golden yellow brick road accent */
+    --accent: 42 95% 55%;
+    --accent-foreground: 35 90% 20%;
 
     --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 120 20% 82%;
-    --input: 120 20% 82%;
-    --ring: 142 45% 32%;
+    --border: 260 20% 82%;
+    --input: 260 20% 82%;
+    --ring: 152 80% 40%;
 
     --radius: 0.75rem;
 
-    /* Custom Vine tokens */
-    --vine-forest: 142 45% 32%;
-    --vine-leaf: 142 50% 45%;
-    --vine-spring: 142 60% 65%;
-    --vine-sage: 120 25% 75%;
-    --vine-grape: 280 35% 45%;
-    --vine-wine: 345 50% 40%;
-    --vine-harvest: 38 70% 55%;
-    --vine-cream: 60 40% 97%;
-    --vine-earth: 30 25% 25%;
-    --vine-bark: 25 30% 20%;
-    --vine-meadow: 100 35% 85%;
+    /* Oz-themed tokens */
+    --oz-emerald: 152 80% 40%;
+    --oz-emerald-glow: 152 75% 55%;
+    --oz-emerald-dark: 152 85% 25%;
+    --oz-yellow-brick: 42 95% 55%;
+    --oz-yellow-warm: 38 90% 50%;
+    --oz-poppy-pink: 340 70% 65%;
+    --oz-poppy-red: 350 80% 55%;
+    --oz-sky-lavender: 260 50% 75%;
+    --oz-sky-purple: 265 45% 60%;
+    --oz-meadow: 95 50% 45%;
+    --oz-meadow-dark: 100 55% 35%;
+    --oz-ruby: 345 75% 50%;
+    --oz-cream: 45 50% 97%;
     
-    /* Garden tokens */
-    --garden-sage: 120 30% 88%;
+    /* Legacy vine tokens (mapped to Oz) */
+    --vine-forest: 152 85% 25%;
+    --vine-leaf: 152 80% 40%;
+    --vine-spring: 152 75% 55%;
+    --vine-sage: 260 25% 80%;
+    --vine-grape: 265 45% 60%;
+    --vine-wine: 345 75% 50%;
+    --vine-harvest: 42 95% 55%;
+    --vine-cream: 45 50% 97%;
+    --vine-earth: 95 40% 30%;
+    --vine-bark: 30 35% 22%;
+    --vine-meadow: 95 50% 45%;
+    
+    /* Garden tokens (Oz-themed) */
+    --garden-sage: 260 30% 88%;
     --garden-cream: 45 50% 96%;
-    --garden-pink: 340 60% 85%;
-    --garden-rose: 350 50% 75%;
+    --garden-pink: 340 70% 80%;
+    --garden-rose: 350 65% 70%;
 
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(142 45% 32%) 0%, hsl(142 60% 45%) 50%, hsl(100 50% 55%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(100 20% 98%) 0%, hsl(120 18% 94%) 100%);
-    --gradient-vine: linear-gradient(135deg, hsl(142 45% 32%) 0%, hsl(280 35% 45%) 100%);
-    --gradient-sunset: linear-gradient(135deg, hsl(38 70% 55%) 0%, hsl(345 50% 40%) 100%);
-    --gradient-meadow: linear-gradient(180deg, hsl(120 25% 94%) 0%, hsl(120 30% 88%) 100%);
+    /* Oz Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(152 80% 40%) 0%, hsl(152 75% 55%) 50%, hsl(152 70% 65%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(45 50% 97%) 0%, hsl(260 25% 94%) 100%);
+    --gradient-vine: linear-gradient(135deg, hsl(152 80% 40%) 0%, hsl(152 85% 25%) 100%);
+    --gradient-sunset: linear-gradient(135deg, hsl(42 95% 55%) 0%, hsl(345 75% 50%) 100%);
+    --gradient-meadow: linear-gradient(180deg, hsl(260 40% 92%) 0%, hsl(95 40% 85%) 100%);
+    --gradient-emerald: linear-gradient(180deg, hsl(152 80% 40%) 0%, hsl(152 85% 25%) 100%);
+    --gradient-sky: linear-gradient(180deg, hsl(260 50% 75%) 0%, hsl(265 45% 60%) 100%);
+    --gradient-poppies: linear-gradient(180deg, hsl(340 70% 65%) 0%, hsl(350 80% 55%) 100%);
     
-    /* Shadows */
-    --shadow-soft: 0 4px 20px -4px hsl(142 45% 32% / 0.12);
-    --shadow-medium: 0 8px 30px -8px hsl(142 45% 32% / 0.18);
-    --shadow-glow: 0 0 40px hsl(142 60% 45% / 0.25);
-    --shadow-grape: 0 0 30px hsl(280 35% 45% / 0.2);
+    /* Oz Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(152 80% 40% / 0.15);
+    --shadow-medium: 0 8px 30px -8px hsl(152 80% 40% / 0.2);
+    --shadow-glow: 0 0 40px hsl(152 75% 55% / 0.35);
+    --shadow-grape: 0 0 30px hsl(265 45% 60% / 0.25);
+    --shadow-emerald: 0 0 50px hsl(152 80% 40% / 0.4);
+    --shadow-ruby: 0 0 30px hsl(345 75% 50% / 0.3);
+    --shadow-gold: 0 0 25px hsl(42 95% 55% / 0.4);
 
     /* Sidebar */
-    --sidebar-background: 100 20% 98%;
-    --sidebar-foreground: 150 20% 15%;
-    --sidebar-primary: 142 45% 32%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 120 18% 88%;
-    --sidebar-accent-foreground: 150 20% 15%;
-    --sidebar-border: 120 20% 82%;
-    --sidebar-ring: 142 45% 32%;
+    --sidebar-background: 152 85% 25%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 42 95% 55%;
+    --sidebar-primary-foreground: 152 85% 15%;
+    --sidebar-accent: 152 75% 35%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 152 70% 30%;
+    --sidebar-ring: 152 75% 55%;
   }
 
   .dark {
-    --primary: 142 50% 50%;
-    --primary-foreground: 150 20% 10%;
+    /* Emerald City at night */
+    --primary: 152 75% 50%;
+    --primary-foreground: 152 90% 10%;
 
-    --background: 150 25% 8%;
-    --foreground: 60 20% 95%;
+    /* Deep purple-black sky */
+    --background: 265 45% 10%;
+    --foreground: 45 40% 95%;
 
-    --card: 150 22% 12%;
-    --card-foreground: 60 20% 95%;
+    /* Dark emerald cards */
+    --card: 152 50% 12%;
+    --card-foreground: 45 40% 95%;
 
-    --popover: 150 22% 12%;
-    --popover-foreground: 60 20% 95%;
+    --popover: 152 50% 12%;
+    --popover-foreground: 45 40% 95%;
 
-    --secondary: 280 40% 55%;
+    /* Ruby glow */
+    --secondary: 345 70% 55%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 150 18% 18%;
-    --muted-foreground: 120 15% 65%;
+    /* Muted dark purple */
+    --muted: 265 35% 18%;
+    --muted-foreground: 260 20% 65%;
 
-    --accent: 38 65% 50%;
-    --accent-foreground: 150 20% 10%;
+    /* Golden glow */
+    --accent: 42 90% 50%;
+    --accent-foreground: 42 95% 10%;
 
     --destructive: 0 65% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 18% 22%;
-    --input: 150 18% 22%;
-    --ring: 142 50% 50%;
+    --border: 265 30% 22%;
+    --input: 265 30% 22%;
+    --ring: 152 75% 50%;
 
-    --sidebar-background: 150 22% 10%;
-    --sidebar-foreground: 60 20% 95%;
-    --sidebar-primary: 142 50% 50%;
-    --sidebar-primary-foreground: 150 20% 10%;
-    --sidebar-accent: 150 18% 18%;
-    --sidebar-accent-foreground: 60 20% 95%;
-    --sidebar-border: 150 18% 22%;
-    --sidebar-ring: 142 50% 50%;
+    /* Dark Oz tokens */
+    --oz-emerald: 152 75% 50%;
+    --oz-emerald-glow: 152 70% 60%;
+    --oz-emerald-dark: 152 80% 20%;
+    --oz-yellow-brick: 42 90% 50%;
+    --oz-poppy-pink: 340 65% 60%;
+    --oz-sky-lavender: 265 40% 35%;
+    --oz-ruby: 345 70% 55%;
+
+    --sidebar-background: 265 45% 8%;
+    --sidebar-foreground: 45 40% 95%;
+    --sidebar-primary: 152 75% 50%;
+    --sidebar-primary-foreground: 152 90% 10%;
+    --sidebar-accent: 265 35% 18%;
+    --sidebar-accent-foreground: 45 40% 95%;
+    --sidebar-border: 265 30% 22%;
+    --sidebar-ring: 152 75% 50%;
   }
 }
 
@@ -174,20 +210,20 @@
     text-wrap: balance;
   }
 
-  /* Vine decorative patterns */
+  /* Oz decorative patterns */
   .vine-pattern {
     background-image: 
-      radial-gradient(circle at 20% 80%, hsl(142 50% 45% / 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(280 35% 45% / 0.06) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, hsl(38 70% 55% / 0.04) 0%, transparent 40%);
+      radial-gradient(circle at 20% 80%, hsl(152 80% 40% / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(265 45% 60% / 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, hsl(42 95% 55% / 0.06) 0%, transparent 40%);
   }
 
   .leaf-shimmer {
     background: linear-gradient(
       90deg,
-      hsl(142 45% 32% / 0) 0%,
-      hsl(142 60% 45% / 0.1) 50%,
-      hsl(142 45% 32% / 0) 100%
+      hsl(152 80% 40% / 0) 0%,
+      hsl(152 75% 55% / 0.15) 50%,
+      hsl(152 80% 40% / 0) 100%
     );
     animation: shimmer 3s ease-in-out infinite;
   }
@@ -216,19 +252,19 @@
   .vine-border::before {
     top: -2px;
     left: -2px;
-    border-top: 2px solid hsl(142 45% 32%);
-    border-left: 2px solid hsl(142 45% 32%);
+    border-top: 2px solid hsl(152 80% 40%);
+    border-left: 2px solid hsl(152 80% 40%);
     border-top-left-radius: 12px;
-    background: radial-gradient(ellipse 20px 20px at 8px 8px, hsl(142 50% 45% / 0.15), transparent);
+    background: radial-gradient(ellipse 20px 20px at 8px 8px, hsl(152 75% 55% / 0.2), transparent);
   }
 
   .vine-border::after {
     bottom: -2px;
     right: -2px;
-    border-bottom: 2px solid hsl(142 45% 32%);
-    border-right: 2px solid hsl(142 45% 32%);
+    border-bottom: 2px solid hsl(152 80% 40%);
+    border-right: 2px solid hsl(152 80% 40%);
     border-bottom-right-radius: 12px;
-    background: radial-gradient(ellipse 20px 20px at calc(100% - 8px) calc(100% - 8px), hsl(142 50% 45% / 0.15), transparent);
+    background: radial-gradient(ellipse 20px 20px at calc(100% - 8px) calc(100% - 8px), hsl(152 75% 55% / 0.2), transparent);
   }
 
   .vine-border:hover::before,
@@ -243,13 +279,13 @@
   }
 
   .leaf-corner::before {
-    content: '🌿';
+    content: '✨';
     position: absolute;
     top: -8px;
     right: -8px;
     font-size: 16px;
-    opacity: 0.5;
-    transform: rotate(45deg);
+    opacity: 0.6;
+    transform: rotate(15deg);
     pointer-events: none;
     transition: all 0.3s ease;
   }
@@ -259,41 +295,41 @@
     transform: rotate(45deg) scale(1.1);
   }
 
-  /* Organic section divider */
+  /* Emerald section divider */
   .vine-divider {
     position: relative;
     height: 2px;
     background: linear-gradient(
       90deg,
       transparent 0%,
-      hsl(142 45% 32% / 0.3) 20%,
-      hsl(142 50% 45% / 0.5) 50%,
-      hsl(142 45% 32% / 0.3) 80%,
+      hsl(152 80% 40% / 0.3) 20%,
+      hsl(152 75% 55% / 0.6) 50%,
+      hsl(152 80% 40% / 0.3) 80%,
       transparent 100%
     );
   }
 
   .vine-divider::before {
-    content: '❀';
+    content: '💎';
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     background: hsl(var(--background));
     padding: 0 8px;
-    color: hsl(142 50% 45%);
+    color: hsl(152 75% 55%);
     font-size: 14px;
   }
 
-  /* Subtle card glow on hover */
+  /* Emerald card glow on hover */
   .card-vine-glow {
     transition: all 0.3s ease;
   }
 
   .card-vine-glow:hover {
     box-shadow: 
-      0 4px 20px -4px hsl(142 45% 32% / 0.15),
-      0 0 0 1px hsl(142 50% 45% / 0.1);
+      0 4px 20px -4px hsl(152 80% 40% / 0.2),
+      0 0 0 1px hsl(152 75% 55% / 0.15);
   }
 
   /* Organic floating animation */
@@ -355,21 +391,21 @@
     opacity: 0.7;
   }
 
-  /* Rich vine section background */
+  /* Oz section background - emerald glow */
   .vine-section {
     background: 
-      radial-gradient(ellipse 80% 50% at 20% 100%, hsl(142 45% 32% / 0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 0%, hsl(142 60% 45% / 0.06) 0%, transparent 50%),
-      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(120 30% 90%) 100%);
+      radial-gradient(ellipse 80% 50% at 20% 100%, hsl(152 80% 40% / 0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 0%, hsl(152 75% 55% / 0.08) 0%, transparent 50%),
+      linear-gradient(180deg, hsl(var(--background)) 0%, hsl(260 30% 90%) 100%);
   }
 
-  /* White page variant */
+  /* Lavender sky page variant */
   .page-white {
     background: 
-      radial-gradient(ellipse 100% 60% at 50% 0%, hsl(0 0% 100%) 0%, transparent 70%),
-      radial-gradient(ellipse 80% 40% at 20% 100%, hsl(142 50% 45% / 0.05) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, hsl(280 35% 45% / 0.04) 0%, transparent 50%),
-      hsl(0 0% 99%);
+      radial-gradient(ellipse 100% 60% at 50% 0%, hsl(260 40% 95%) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 40% at 20% 100%, hsl(152 75% 55% / 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, hsl(265 45% 60% / 0.06) 0%, transparent 50%),
+      hsl(260 30% 97%);
   }
 
   /* Meadow gradient background */
