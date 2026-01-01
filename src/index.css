@@ -4,60 +4,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark Oz Theme - Starry Night Sky, Emerald City, Golden Brick Road */
+/* Emerald Road OS - Cinematic Mission Control Theme */
+/* "This is where real people rebuild real lives." */
 
 @layer base {
   :root {
-    /* Deep navy starry sky background */
-    --background: 225 45% 8%;
-    --foreground: 45 35% 90%;
+    /* Deep night emerald background #0B1F16 */
+    --background: 150 45% 8%;
+    --foreground: 160 20% 95%;
     
-    /* Dark night sky cards */
-    --card: 225 40% 12%;
-    --card-foreground: 45 30% 88%;
+    /* Dark emerald panels #0F3D2E */
+    --card: 155 55% 15%;
+    --card-foreground: 160 15% 92%;
 
-    --popover: 225 42% 10%;
-    --popover-foreground: 45 35% 90%;
+    --popover: 150 50% 10%;
+    --popover-foreground: 160 20% 95%;
 
-    /* Glowing Emerald City Primary */
-    --primary: 145 80% 40%;
-    --primary-foreground: 225 45% 5%;
+    /* Glowing Emerald Primary */
+    --primary: 145 75% 38%;
+    --primary-foreground: 150 45% 5%;
 
-    /* Deep forest hills secondary */
-    --secondary: 150 35% 15%;
-    --secondary-foreground: 45 25% 85%;
+    /* Deep forest secondary */
+    --secondary: 150 40% 12%;
+    --secondary-foreground: 160 15% 88%;
 
-    /* Night forest muted */
-    --muted: 220 30% 14%;
-    --muted-foreground: 45 15% 55%;
+    /* Mission control muted */
+    --muted: 150 30% 10%;
+    --muted-foreground: 160 10% 55%;
 
-    /* Golden Yellow Brick Road accent */
-    --accent: 42 95% 50%;
-    --accent-foreground: 225 45% 8%;
+    /* Golden Yellow Brick Road accent #E6C200 */
+    --accent: 48 100% 45%;
+    --accent-foreground: 150 45% 5%;
 
-    --destructive: 15 75% 45%;
+    /* Amber warning #FFB703 */
+    --destructive: 40 100% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 145 35% 22%;
-    --input: 225 35% 15%;
-    --ring: 145 80% 40%;
+    --border: 150 35% 20%;
+    --input: 150 35% 12%;
+    --ring: 145 75% 38%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Oz-themed tokens from the images */
-    --oz-emerald: 145 80% 40%;
-    --oz-emerald-glow: 140 85% 55%;
-    --oz-emerald-dark: 150 70% 18%;
-    --oz-yellow-brick: 42 95% 50%;
-    --oz-yellow-warm: 38 90% 55%;
-    --oz-sky-night: 225 45% 8%;
-    --oz-sky-starry: 230 50% 18%;
-    --oz-amber-moon: 38 85% 62%;
-    --oz-meadow: 110 45% 28%;
-    --oz-meadow-dark: 120 40% 18%;
-    --oz-forest-black: 150 30% 5%;
+    /* Emerald Road OS tokens */
+    --oz-emerald: 145 75% 38%;
+    --oz-emerald-glow: 140 80% 50%;
+    --oz-emerald-dark: 150 55% 15%;
+    --oz-yellow-brick: 48 100% 45%;
+    --oz-yellow-warm: 45 95% 55%;
+    --oz-sky-night: 150 45% 8%;
+    --oz-sky-starry: 155 50% 12%;
+    --oz-amber-moon: 40 100% 50%;
+    --oz-moon-silver: 160 15% 82%;
+    --oz-meadow: 145 45% 25%;
+    --oz-meadow-dark: 150 40% 15%;
+    --oz-forest-black: 150 60% 3%;
+    --oz-text-white: 160 20% 97%;
     --oz-magnolia-cream: 45 45% 88%;
-    --oz-magnolia-gold: 42 65% 70%;
+    --oz-magnolia-gold: 48 80% 65%;
     --oz-poppy-red: 15 75% 50%;
     --oz-rainbow-red: 0 75% 55%;
     --oz-rainbow-orange: 25 85% 55%;
@@ -67,98 +71,98 @@
     --oz-rainbow-indigo: 250 65% 55%;
     --oz-rainbow-violet: 280 60% 55%;
     
-    /* Legacy vine tokens (mapped to Oz) */
-    --vine-forest: 150 70% 18%;
-    --vine-leaf: 145 80% 40%;
-    --vine-spring: 140 85% 55%;
-    --vine-sage: 150 25% 25%;
+    /* Legacy vine tokens (mapped to Emerald Road) */
+    --vine-forest: 150 55% 15%;
+    --vine-leaf: 145 75% 38%;
+    --vine-spring: 140 80% 50%;
+    --vine-sage: 150 30% 22%;
     --vine-grape: 250 30% 30%;
     --vine-wine: 15 60% 40%;
-    --vine-harvest: 42 95% 50%;
-    --vine-cream: 45 45% 88%;
-    --vine-earth: 110 35% 22%;
-    --vine-bark: 30 35% 14%;
-    --vine-meadow: 110 45% 28%;
+    --vine-harvest: 48 100% 45%;
+    --vine-cream: 160 20% 95%;
+    --vine-earth: 145 35% 20%;
+    --vine-bark: 30 35% 12%;
+    --vine-meadow: 145 45% 25%;
     
-    /* Garden tokens (Oz-themed) */
-    --garden-sage: 150 25% 20%;
-    --garden-cream: 45 40% 85%;
-    --garden-gold: 42 80% 60%;
-    --garden-amber: 38 85% 58%;
+    /* Control room tokens */
+    --garden-sage: 150 30% 18%;
+    --garden-cream: 160 15% 88%;
+    --garden-gold: 48 90% 55%;
+    --garden-amber: 40 95% 55%;
 
-    /* Oz Gradients - Starry Sky & Emerald Glow */
-    --gradient-hero: linear-gradient(135deg, hsl(145 80% 40%) 0%, hsl(150 70% 25%) 50%, hsl(145 80% 18%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(225 40% 14%) 0%, hsl(225 45% 8%) 100%);
-    --gradient-vine: linear-gradient(135deg, hsl(145 80% 40%) 0%, hsl(150 70% 18%) 100%);
-    --gradient-sunset: linear-gradient(135deg, hsl(42 95% 50%) 0%, hsl(38 85% 42%) 100%);
-    --gradient-meadow: linear-gradient(180deg, hsl(150 35% 12%) 0%, hsl(110 30% 15%) 100%);
-    --gradient-emerald: linear-gradient(180deg, hsl(145 80% 40%) 0%, hsl(150 70% 18%) 100%);
-    --gradient-sky: linear-gradient(180deg, hsl(230 50% 22%) 0%, hsl(225 45% 8%) 100%);
-    --gradient-rainbow: linear-gradient(90deg, hsl(0 75% 55%), hsl(25 85% 55%), hsl(50 90% 55%), hsl(145 70% 45%), hsl(210 80% 55%), hsl(250 65% 55%), hsl(280 60% 55%));
+    /* Cinematic Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(145 75% 38%) 0%, hsl(150 55% 20%) 50%, hsl(150 55% 10%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(155 55% 18%) 0%, hsl(150 45% 8%) 100%);
+    --gradient-vine: linear-gradient(135deg, hsl(145 75% 38%) 0%, hsl(150 55% 15%) 100%);
+    --gradient-sunset: linear-gradient(135deg, hsl(48 100% 45%) 0%, hsl(40 90% 38%) 100%);
+    --gradient-meadow: linear-gradient(180deg, hsl(150 40% 12%) 0%, hsl(145 30% 10%) 100%);
+    --gradient-emerald: linear-gradient(180deg, hsl(145 75% 38%) 0%, hsl(150 55% 15%) 100%);
+    --gradient-sky: linear-gradient(180deg, hsl(155 50% 15%) 0%, hsl(150 45% 8%) 100%);
+    --gradient-control: linear-gradient(180deg, hsl(150 50% 12%) 0%, hsl(150 60% 5%) 100%);
     
-    /* Oz Shadows - Night Glow */
-    --shadow-soft: 0 4px 20px -4px hsl(145 70% 35% / 0.25);
-    --shadow-medium: 0 8px 30px -8px hsl(145 70% 35% / 0.35);
-    --shadow-glow: 0 0 40px hsl(140 85% 55% / 0.35);
+    /* Mission Control Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(145 70% 30% / 0.3);
+    --shadow-medium: 0 8px 30px -8px hsl(145 70% 30% / 0.4);
+    --shadow-glow: 0 0 40px hsl(140 80% 50% / 0.4);
     --shadow-grape: 0 0 30px hsl(250 40% 30% / 0.3);
-    --shadow-emerald: 0 0 50px hsl(145 80% 40% / 0.4);
-    --shadow-gold: 0 0 30px hsl(42 95% 50% / 0.4);
-    --shadow-moon: 0 0 60px hsl(38 85% 62% / 0.5);
+    --shadow-emerald: 0 0 60px hsl(145 75% 38% / 0.5);
+    --shadow-gold: 0 0 40px hsl(48 100% 45% / 0.5);
+    --shadow-moon: 0 0 80px hsl(40 100% 50% / 0.4);
 
-    /* Sidebar - Dark Night Sky */
-    --sidebar-background: 225 45% 6%;
-    --sidebar-foreground: 45 35% 88%;
-    --sidebar-primary: 42 95% 50%;
-    --sidebar-primary-foreground: 225 45% 8%;
-    --sidebar-accent: 145 60% 25%;
-    --sidebar-accent-foreground: 45 30% 88%;
-    --sidebar-border: 145 30% 20%;
-    --sidebar-ring: 140 85% 55%;
+    /* Sidebar - Control Room Dark */
+    --sidebar-background: 150 55% 5%;
+    --sidebar-foreground: 160 15% 90%;
+    --sidebar-primary: 48 100% 45%;
+    --sidebar-primary-foreground: 150 45% 5%;
+    --sidebar-accent: 145 50% 22%;
+    --sidebar-accent-foreground: 160 15% 90%;
+    --sidebar-border: 150 35% 18%;
+    --sidebar-ring: 140 80% 50%;
   }
 
   .dark {
-    /* Darker night sky variant */
-    --background: 225 50% 5%;
-    --foreground: 45 30% 92%;
+    /* Deeper night emerald variant */
+    --background: 150 60% 4%;
+    --foreground: 160 18% 94%;
 
-    --card: 225 45% 8%;
-    --card-foreground: 45 28% 90%;
+    --card: 150 50% 8%;
+    --card-foreground: 160 15% 92%;
 
-    --popover: 225 48% 6%;
-    --popover-foreground: 45 30% 92%;
+    --popover: 150 55% 5%;
+    --popover-foreground: 160 18% 94%;
 
-    --primary: 145 75% 45%;
-    --primary-foreground: 225 50% 5%;
+    --primary: 145 70% 42%;
+    --primary-foreground: 150 60% 4%;
 
-    --secondary: 150 30% 12%;
-    --secondary-foreground: 45 25% 85%;
+    --secondary: 150 35% 10%;
+    --secondary-foreground: 160 12% 88%;
 
-    --muted: 220 28% 10%;
-    --muted-foreground: 45 12% 50%;
+    --muted: 150 25% 8%;
+    --muted-foreground: 160 8% 52%;
 
-    --accent: 42 92% 55%;
-    --accent-foreground: 225 50% 5%;
+    --accent: 48 95% 50%;
+    --accent-foreground: 150 60% 4%;
 
-    --destructive: 15 70% 42%;
+    --destructive: 40 95% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 145 28% 18%;
-    --input: 225 40% 12%;
-    --ring: 145 75% 45%;
+    --border: 150 30% 16%;
+    --input: 150 40% 10%;
+    --ring: 145 70% 42%;
 
-    --oz-emerald: 145 75% 45%;
-    --oz-emerald-glow: 140 80% 58%;
-    --oz-emerald-dark: 150 65% 15%;
-    --oz-yellow-brick: 42 92% 55%;
+    --oz-emerald: 145 70% 42%;
+    --oz-emerald-glow: 140 75% 52%;
+    --oz-emerald-dark: 150 50% 12%;
+    --oz-yellow-brick: 48 95% 50%;
 
-    --sidebar-background: 225 50% 4%;
-    --sidebar-foreground: 45 30% 90%;
-    --sidebar-primary: 145 75% 45%;
-    --sidebar-primary-foreground: 225 50% 5%;
-    --sidebar-accent: 150 30% 12%;
-    --sidebar-accent-foreground: 45 28% 90%;
-    --sidebar-border: 145 25% 15%;
-    --sidebar-ring: 140 80% 55%;
+    --sidebar-background: 150 60% 3%;
+    --sidebar-foreground: 160 12% 92%;
+    --sidebar-primary: 145 70% 42%;
+    --sidebar-primary-foreground: 150 60% 4%;
+    --sidebar-accent: 150 35% 10%;
+    --sidebar-accent-foreground: 160 14% 92%;
+    --sidebar-border: 150 28% 14%;
+    --sidebar-ring: 140 75% 52%;
   }
 }
 
