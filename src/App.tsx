@@ -26,6 +26,7 @@ import ERDashboard from "./pages/ERDashboard";
 import TerritoryView from "./pages/TerritoryView";
 import QuestRunner from "./pages/QuestRunner";
 import ERSettings from "./pages/ERSettings";
+import CompanyWizard from "./pages/CompanyWizard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => (
           <Route path="/territory/:id" element={<TerritoryView />} />
           <Route path="/quest/:id" element={<QuestRunner />} />
           <Route path="/er-settings" element={<ERSettings />} />
+          <Route path="/company-wizard" element={<CompanyWizard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
