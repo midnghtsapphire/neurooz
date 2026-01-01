@@ -225,7 +225,7 @@ const CompanyWizard = () => {
           </div>
 
           {/* Step Title with Time Estimate */}
-          <div className="mb-6 flex items-start justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-display font-bold text-clean-white flex items-center gap-2">
                 {currentStepInfo.title}
@@ -235,11 +235,45 @@ const CompanyWizard = () => {
               </h1>
               <p className="text-moon-silver mt-1">{currentStepInfo.description}</p>
             </div>
-            {settings.showTimeEstimates && currentTimeEstimate && (
-              <span className="time-estimate shrink-0">
-                <Clock className="w-3 h-3" />
-                {currentTimeEstimate.label}
-              </span>
+            <div className="flex items-center gap-2">
+              {settings.showTimeEstimates && currentTimeEstimate && (
+                <span className="time-estimate shrink-0">
+                  <Clock className="w-3 h-3" />
+                  {currentTimeEstimate.label}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Top Navigation - Per IRS IRIS Portal UX guidelines */}
+          <div className="flex justify-between items-center mb-6 p-3 rounded-lg bg-dark-emerald/30 border border-emerald-gold/10">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={handleBack} 
+              disabled={step === 1} 
+              className="gap-1 text-moon-silver hover:text-clean-white hover:bg-moon-silver/10"
+              aria-label="Go to previous step"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back
+            </Button>
+            <span className="text-sm text-moon-silver/80">
+              Step {step} of {WIZARD_STEPS.length}
+            </span>
+            {step < 6 ? (
+              <Button 
+                size="sm"
+                onClick={handleNext}
+                className={cn(
+                  "gap-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald",
+                  !canProceed() && "opacity-60"
+                )}
+                aria-label={`Continue to step ${step + 1}`}
+              >
+                Next <ArrowRight className="w-4 h-4" />
+              </Button>
+            ) : (
+              <div className="w-16" />
             )}
           </div>
 
