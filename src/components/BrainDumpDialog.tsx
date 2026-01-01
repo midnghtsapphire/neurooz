@@ -17,7 +17,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, Upload, Sparkles, Trash2, FileText, Loader2 } from "lucide-react";
+import { Upload, Sparkles, Trash2, FileText, Loader2 } from "lucide-react";
+import brainMeleeIcon from "@/assets/brain-melee.png";
 import { toast } from "@/hooks/use-toast";
 
 export function BrainDumpDialog() {
@@ -104,15 +105,15 @@ export function BrainDumpDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="gap-2">
-          <Brain className="h-4 w-4" />
-          Brain Dump
+          <img src={brainMeleeIcon} alt="Brain Melee" className="h-5 w-5" />
+          Brain Melee
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Brain className="h-5 w-5" />
-            Brain Dump - AI Organizer
+            <img src={brainMeleeIcon} alt="Brain Melee" className="h-6 w-6" />
+            Brain Melee - AI Organizer
           </DialogTitle>
         </DialogHeader>
 
@@ -202,7 +203,7 @@ export function BrainDumpDialog() {
                 </div>
               ) : brainDumps?.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">
-                  No brain dumps yet. Start dumping!
+                  No brain melees yet. Start your melee!
                 </p>
               ) : (
                 <div className="space-y-4">
