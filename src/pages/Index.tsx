@@ -8,9 +8,7 @@ import OzFocusHome from "@/components/oz-intro/OzFocusHome";
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [hasSeenIntro, setHasSeenIntro] = useState(() => {
-    return localStorage.getItem("oz-intro-seen") === "true";
-  });
+  const [hasSeenIntro, setHasSeenIntro] = useState(false); // Always start fresh for testing
   const navigate = useNavigate();
 
   useEffect(() => {
