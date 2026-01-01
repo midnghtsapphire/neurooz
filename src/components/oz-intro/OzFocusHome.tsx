@@ -23,8 +23,8 @@ const CHARACTER_STATES = [
   {
     emoji: "🧠",
     character: "Scarecrow",
-    feeling: "I can't think straight",
-    subtext: "Brain overload. Too many thoughts.",
+    feeling: "My brain is mush",
+    subtext: "Too many thoughts. Can't remember what I was doing 5 minutes ago.",
     action: "dump",
     color: "from-amber-600 to-yellow-700",
     hoverColor: "hover:from-amber-500 hover:to-yellow-600",
@@ -32,8 +32,8 @@ const CHARACTER_STATES = [
   {
     emoji: "❤️",
     character: "Tin Man",
-    feeling: "I feel stuck or heartless",
-    subtext: "Emotionally rusty. Need to reconnect.",
+    feeling: "I need to deal with feelings",
+    subtext: "Bottled up emotions. Need to tell someone how I feel. Or process anger.",
     action: "heart",
     color: "from-rose-600 to-red-700",
     hoverColor: "hover:from-rose-500 hover:to-red-600",
@@ -41,8 +41,8 @@ const CHARACTER_STATES = [
   {
     emoji: "🦁",
     character: "Lion",
-    feeling: "I'm scared to start",
-    subtext: "It feels too big. Need courage.",
+    feeling: "I need to do something scary",
+    subtext: "Ask for a raise. Make that phone call. Send that email. Be brave.",
     action: "courage",
     color: "from-orange-600 to-amber-700",
     hoverColor: "hover:from-orange-500 hover:to-amber-600",
