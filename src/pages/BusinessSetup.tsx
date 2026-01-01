@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Check, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, Loader2, Wand2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 import { supabase } from "@/integrations/supabase/client";
 import { BusinessStructureStep } from "@/components/business-setup/BusinessStructureStep";
@@ -238,6 +239,43 @@ export default function BusinessSetup() {
 
       {/* Content */}
       <main className="container mx-auto px-4 py-8">
+        {/* Company Wizard Card - Always visible on step 1 */}
+        {currentStep === 1 && (
+          <Card className="mb-8 border-2 border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
+            <CardHeader className="pb-3">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-xl bg-primary text-primary-foreground">
+                  <Wand2 className="h-6 w-6" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Company Formation Wizard</CardTitle>
+                  <CardDescription>
+                    Full-service company setup with documents, EIN guidance, and Secretary of State links
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Operating Agreement & Articles of Organization</li>
+                  <li>• EIN Application Assistance (IRS link)</li>
+                  <li>• State Filing Links & Fee Information</li>
+                  <li>• Tax Forms Checklist & Compliance Calendar</li>
+                </ul>
+                <Button 
+                  onClick={() => navigate("/company-wizard")}
+                  className="gap-2 shrink-0"
+                  size="lg"
+                >
+                  Start Wizard
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {currentStep === 1 && (
           <BusinessStructureStep
             selected={businessStructure}
