@@ -100,12 +100,33 @@ const CompanyWizard = () => {
   };
 
   const handleNext = useCallback(() => {
-    if (step < 6 && canProceed()) {
-      setStep(step + 1);
-      // Show mini celebration on step completion
-      setShowCelebration(true);
-      setTimeout(() => setShowCelebration(false), 1500);
+    if (step >= 6) return;
+
+    if (!canProceed()) {
+      const message = (() => {
+        switch (step) {
+          case 1:
+            return "Select a business structure to continue.";
+          case 2:
+            return "Enter a company name and select a state to continue.";
+          case 4:
+            return "Add at least one owner/member name to continue.";
+          case 5:
+            return "Complete the address fields (street, city, state, ZIP) to continue.";
+          default:
+            return "Complete this step to continue.";
+        }
+      })();
+
+      toast.error(message);
+      return;
     }
+
+    setStep((s) => Math.min(6, s + 1));
+
+    // Show mini celebration on step completion
+    setShowCelebration(true);
+    setTimeout(() => setShowCelebration(false), 1500);
   }, [step, formData]);
 
   const handleBack = useCallback(() => {
@@ -116,9 +137,9 @@ const CompanyWizard = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-      
+
       if (e.key === "ArrowRight" || e.key === "Enter") {
-        if (canProceed() && step < 6) handleNext();
+        if (step < 6) handleNext();
       } else if (e.key === "ArrowLeft" || e.key === "Backspace") {
         if (step > 1) handleBack();
       } else if (e.key === "Escape") {
@@ -309,9 +330,12 @@ const CompanyWizard = () => {
             
             {step < 6 ? (
               <Button 
-                onClick={handleNext} 
-                disabled={!canProceed()} 
-                className="gap-2 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald visual-alert"
+                onClick={handleNext}
+                aria-disabled={!canProceed()}
+                className={cn(
+                  "gap-2 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald visual-alert",
+                  !canProceed() && "opacity-60 cursor-not-allowed"
+                )}
                 aria-label={`Continue to step ${step + 1}`}
               >
                 Next <ArrowRight className="w-4 h-4" />
