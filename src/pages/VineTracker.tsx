@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Grape, ArrowLeft, Settings } from "lucide-react";
 import { VineIncomeTracker } from "@/components/vine-income/VineIncomeTracker";
 import { User } from "@supabase/supabase-js";
-import magnoliaFlowers from "@/assets/magnolia-flowers.png";
-import { FloatingPetals } from "@/components/FloatingPetals";
 
 const VineTracker = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -44,21 +42,6 @@ const VineTracker = () => {
 
   return (
     <div className="min-h-screen vine-section relative overflow-hidden">
-      <FloatingPetals count={8} />
-      
-      {/* Decorative Magnolias */}
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute top-24 right-0 w-48 opacity-25 pointer-events-none select-none transform translate-x-1/3"
-        aria-hidden="true"
-      />
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute bottom-20 left-0 w-36 opacity-20 pointer-events-none select-none transform -translate-x-1/4 rotate-12"
-        aria-hidden="true"
-      />
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">

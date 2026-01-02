@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FloatingPetals } from "@/components/FloatingPetals";
 import { NavLink } from "@/components/NavLink";
 import { TaxCreditsCalculator } from "@/components/tax-credits/TaxCreditsCalculator";
 
@@ -10,7 +9,6 @@ export default function TaxCreditsCalculatorPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <FloatingPetals />
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
