@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { NavLink } from "@/components/NavLink";
-import { FloatingPetals } from "@/components/FloatingPetals";
 import { TaxDeductionRulesPanel } from "@/components/tax-rules/TaxDeductionRulesPanel";
 import { TaxLawChangesPanel } from "@/components/tax-rules/TaxLawChangesPanel";
 import { ArrowLeft } from "lucide-react";
@@ -15,7 +14,6 @@ export default function TaxRules() {
 
   return (
     <div className="min-h-screen bg-background">
-      <FloatingPetals />
       
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

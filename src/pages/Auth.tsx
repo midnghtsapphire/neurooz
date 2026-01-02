@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Coffee, DollarSign, Users, Sparkles, ArrowRight, Eye, EyeOff } from "lucide-react";
-import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Please enter a valid email" }),
@@ -140,19 +139,6 @@ const Auth = () => {
 
       {/* Right Panel - Auth Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative overflow-hidden">
-        {/* Decorative Magnolia */}
-        <img 
-          src={magnoliaFlowers} 
-          alt="" 
-          className="absolute top-0 right-0 w-32 opacity-30 pointer-events-none select-none transform translate-x-8 -translate-y-4"
-          aria-hidden="true"
-        />
-        <img 
-          src={magnoliaFlowers} 
-          alt="" 
-          className="absolute bottom-0 left-0 w-28 opacity-25 pointer-events-none select-none transform -translate-x-8 translate-y-4 rotate-180"
-          aria-hidden="true"
-        />
         <div className="w-full max-w-md relative z-10">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">

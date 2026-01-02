@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FloatingPetals } from "@/components/FloatingPetals";
 import { NavLink } from "@/components/NavLink";
 import { SubscriptionTracker } from "@/components/subscriptions/SubscriptionTracker";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,7 +37,6 @@ export default function SubscriptionsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <FloatingPetals />
 
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

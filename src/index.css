@@ -352,27 +352,6 @@
     animation: float 4s ease-in-out infinite;
   }
 
-  /* Falling petal animation */
-  @keyframes petal-fall {
-    0% {
-      transform: translateY(-20px) rotate(0deg) translateX(0px);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.6;
-    }
-    90% {
-      opacity: 0.4;
-    }
-    100% {
-      transform: translateY(100vh) rotate(360deg) translateX(100px);
-      opacity: 0;
-    }
-  }
-
-  .animate-petal-fall {
-    animation: petal-fall 10s linear infinite;
-  }
 
   /* White fence decorative border */
   .fence-border {
