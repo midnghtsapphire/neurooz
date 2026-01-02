@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, FileText, Edit, Download, Trash2, Plus, Loader2 } from "lucide-react";
-import magnoliaFlowers from "@/assets/magnolia-flowers.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -91,19 +90,6 @@ export default function SavedForms() {
 
   return (
     <div className="min-h-screen page-white relative overflow-hidden">
-      {/* Decorative Magnolias */}
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute top-20 right-0 w-40 opacity-25 pointer-events-none select-none transform translate-x-1/4"
-        aria-hidden="true"
-      />
-      <img 
-        src={magnoliaFlowers} 
-        alt="" 
-        className="absolute bottom-10 left-0 w-32 opacity-20 pointer-events-none select-none transform -translate-x-1/4 rotate-180"
-        aria-hidden="true"
-      />
       <header className="border-b bg-card sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
