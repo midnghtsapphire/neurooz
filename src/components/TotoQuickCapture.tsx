@@ -185,13 +185,20 @@ export function TotoQuickCapture() {
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.5, opacity: 0 }}
-                className="w-full h-full"
+                className="w-full h-full relative"
               >
                 <img 
                   src={munchkinHelper} 
                   alt="Munchkin Helper" 
                   className="w-full h-full object-cover"
                 />
+                {/* Symbol badge - pencil for notes */}
+                <div className="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-1.5 border-2 border-card shadow-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                    <path d="m15 5 4 4"/>
+                  </svg>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
