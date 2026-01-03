@@ -32,6 +32,7 @@ import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { StickyNotesInbox } from "@/components/StickyNotesInbox";
 import { ThemeToggle } from "@/components/neuro/ThemeToggle";
 import { SensorAdaptiveBanner } from "@/components/neuro/SensorAdaptiveBanner";
+import { NeuroProfileSelector } from "@/components/neuro/NeuroProfileSelector";
 
 const defaultFilters: ProjectFilters = {
   search: "",
@@ -373,11 +374,11 @@ export default function Projects() {
 
   // Projects list view
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden pt-2">
       {/* Toto Quick Capture - Always available */}
       <TotoQuickCapture />
       
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 mt-2">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
@@ -398,6 +399,7 @@ export default function Projects() {
               </Button>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              <NeuroProfileSelector />
               <ThemeToggle />
               <EnvironmentSelector value={environment} onChange={setEnvironment} />
               <BrainDumpDialog />

@@ -9,148 +9,102 @@
  * visual landmark to find help: "Go to tornado."
  * 
  * ACCESSIBILITY CONSIDERATIONS (ADHD-friendly):
- * - Positioned at TOP of screen (natural eye line)
- * - MOVES occasionally to break hyperfocus loops
+ * - Draggable to any position (user preference)
  * - Large enough to find when stressed/impaired
  * - Animated to draw attention
  * - Always visible on every page
- * 
- * FUTURE ENHANCEMENTS:
- * - Voice activation ("Hey Toto, I'm overwhelmed")
- * - Haptic feedback on mobile
- * - Keyboard shortcut (Cmd+Shift+T for "Tornado")
  * ============================================================
  */
 
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
+import { DraggableFloatingButton } from "@/components/neuro/DraggableFloatingButton";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
-
-// Possible positions the tornado can drift to (top area)
-const positions = [
-  { top: "1rem", left: "1rem", right: "auto" },
-  { top: "1rem", left: "auto", right: "1rem" },
-  { top: "1rem", left: "50%", right: "auto", transform: "translateX(-50%)" },
-  { top: "1rem", left: "25%", right: "auto" },
-  { top: "1rem", left: "75%", right: "auto" },
-];
 
 export function FloatingTornadoButton() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [positionIndex, setPositionIndex] = useState(0);
-
-  // Occasionally drift to a new position to catch ADHD peripheral vision
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPositionIndex((prev) => {
-        // Pick a different random position
-        let next = Math.floor(Math.random() * positions.length);
-        while (next === prev && positions.length > 1) {
-          next = Math.floor(Math.random() * positions.length);
-        }
-        return next;
-      });
-    }, 45000); // Drift every 45 seconds - subtle but noticeable
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Don't show on the Tornado Alley page itself
   if (location.pathname === "/tornado-alley") {
     return null;
   }
 
-  const currentPosition = positions[positionIndex];
-
   return (
-    <motion.button
-      onClick={() => navigate("/tornado-alley")}
-      className="fixed z-50 group"
-      style={{
-        top: currentPosition.top,
-        left: currentPosition.left,
-        right: currentPosition.right,
-        transform: currentPosition.transform,
-      }}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ 
-        opacity: 1, 
-        scale: 1,
-        x: 0,
-        y: 0,
-      }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 150,
-        damping: 20,
-      }}
-      layout
-      aria-label="Go to Tornado Alley - Emergency overwhelm support"
+    <DraggableFloatingButton
+      defaultPosition={{ x: 16, y: 80 }}
+      storageKey="tornado-button-position"
     >
-      {/* Outer glow ring - pulses to draw attention */}
-      <motion.div
-        className="absolute inset-0 rounded-full bg-amber-500/20"
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.3, 0.1, 0.3],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{ width: "100%", height: "100%" }}
-      />
-
-      {/* Button container */}
-      <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-lg shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-400/30 transition-all duration-300 bg-slate-900/80 backdrop-blur-sm">
-        {/* Swirling tornado image */}
-        <motion.img
-          src={tornadoAlleyImg}
-          alt="Tornado Alley"
-          className="w-full h-full object-cover"
-          animate={{
-            rotate: [0, 5, -5, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Swirl overlay effect */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-amber-500/30 via-transparent to-transparent"
-          animate={{
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Symbol badge - wind/tornado for overwhelm */}
-        <div className="absolute bottom-0 right-0 bg-amber-600 rounded-full p-1.5 border-2 border-slate-900 shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/>
-            <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
-            <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
-          </svg>
-        </div>
-      </div>
-
-      {/* Label - visible on hover */}
-      <motion.span
-        className="absolute left-1/2 -translate-x-1/2 top-full mt-1 text-xs font-medium text-amber-400/80 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/80 px-2 py-0.5 rounded"
-        initial={false}
+      <motion.button
+        onClick={() => navigate("/tornado-alley")}
+        className="group"
+        aria-label="Go to Tornado Alley - Emergency overwhelm support"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
-        Tornado Alley
-      </motion.span>
-    </motion.button>
+        {/* Outer glow ring - pulses to draw attention */}
+        <motion.div
+          className="absolute inset-0 rounded-full bg-amber-500/20"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.1, 0.3],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{ width: "100%", height: "100%" }}
+        />
+
+        {/* Button container - same size as Toto (h-20 w-20) */}
+        <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-lg shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-400/30 transition-all duration-300 bg-slate-900/80 backdrop-blur-sm">
+          {/* Swirling tornado image */}
+          <motion.img
+            src={tornadoAlleyImg}
+            alt="Tornado Alley"
+            className="w-full h-full object-cover"
+            animate={{
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+
+          {/* Swirl overlay effect */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-t from-amber-500/30 via-transparent to-transparent"
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+
+          {/* Symbol badge - wind/tornado for overwhelm */}
+          <div className="absolute bottom-0 right-0 bg-amber-600 rounded-full p-1.5 border-2 border-slate-900 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/>
+              <path d="M9.6 4.6A2 2 0 1 1 11 8H2"/>
+              <path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* Label - visible on hover */}
+        <motion.span
+          className="absolute left-1/2 -translate-x-1/2 top-full mt-1 text-xs font-medium text-amber-400/80 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/80 px-2 py-0.5 rounded"
+          initial={false}
+        >
+          Tornado Alley
+        </motion.span>
+      </motion.button>
+    </DraggableFloatingButton>
   );
 }
