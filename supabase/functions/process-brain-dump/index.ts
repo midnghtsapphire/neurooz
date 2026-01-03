@@ -74,31 +74,34 @@ serve(async (req) => {
     const fullContent = rawContent + documentContent;
     console.log("Full content length:", fullContent.length);
 
-    const systemPrompt = `You are an AI assistant that helps organize chaotic brain dumps into actionable structure.
+    const systemPrompt = `You are an AI assistant that helps organize chaotic brain dumps into structure WITHOUT deleting or “cleaning up” the user's memory cues.
 
-Given a brain dump (stream of consciousness, notes, ideas, and any uploaded document content), you will:
-1. Create a brief summary (2-3 sentences max)
-2. Extract specific action items with priority levels
-3. Categorize content into relevant business/project categories
-4. Identify any "maybe/someday" items that aren't urgent
+CRITICAL RULES (ADHD / cognitive-access friendly):
+- You MUST preserve the user's intent and *memory anchors* (odd keywords, symbolism words, nicknames, shorthand, messy phrasing).
+- Never rewrite the user's unique phrases into generic corporate language.
+- Never omit details just because they seem redundant. Redundancy can be a reminder.
+- Your output is ADDITIVE: it helps organize, but it must not "strip" anything important.
+- If you are unsure where something belongs, put it in inbox_items rather than dropping it.
 
-Respond in JSON format:
+Given a brain dump (stream of consciousness + any uploaded file text), return JSON in this shape:
 {
-  "summary": "Brief summary of the brain dump",
+  "summary": "A short, human-friendly summary that keeps key wording (2-5 sentences)",
+  "memory_anchors": ["exact words/phrases to keep", "..."],
+  "verbatim_cues": ["short exact quotes/snippets from the dump", "..."],
   "action_items": [
-    {"title": "Action item", "priority": "high|medium|low", "category": "category name", "suggested_project": "project name or null"}
+    {"title": "Action item (keep original wording)", "priority": "high|medium|low", "category": "category name", "suggested_project": "project name or null", "source_snippet": "exact snippet that triggered this"}
   ],
   "categories": [
     {"name": "Category", "keywords": ["relevant", "terms"], "suggested_project": "if matches existing project or 'NEW: Project Name'"}
   ],
   "inbox_items": [
-    {"content": "Maybe/someday item or idea to revisit", "type": "maybe|someday|idea|reference"}
+    {"content": "Maybe/someday/idea/reference item (keep original wording)", "type": "maybe|someday|idea|reference", "source_snippet": "exact snippet that triggered this"}
   ]
 }
 
 Existing projects to match against: ${existingProjects?.join(', ') || 'None'}
 
-IMPORTANT: Extract EVERYTHING from the content - don't miss any ideas, tasks, or information. If something doesn't fit a clear category, put it in inbox_items.`;
+IMPORTANT: Extract EVERYTHING from the content. Do not drop or compress symbolic/odd reminder words—include them in memory_anchors/verbatim_cues.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
