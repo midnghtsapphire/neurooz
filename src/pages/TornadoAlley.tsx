@@ -37,10 +37,12 @@ import {
   Music,
   Heart,
   ArrowLeft,
-  Sparkles
+  Sparkles,
+  Dumbbell
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
 import { AwarenessImage } from "@/components/TornadoAlley/AwarenessImage";
+import { CognitiveTestsHub } from "@/components/cognitive-tests/CognitiveTestsHub";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
 
 /**
@@ -93,7 +95,7 @@ const eyeOfStormTools = [
 
 export default function TornadoAlley() {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<"hub" | "brain-dump" | "eye">("hub");
+  const [activeSection, setActiveSection] = useState<"hub" | "brain-dump" | "eye" | "cognitive-gym">("hub");
 
   // Handle completion of brain dump
   const handleBrainDumpComplete = (items: any[]) => {
@@ -187,11 +189,37 @@ export default function TornadoAlley() {
             </Card>
           </motion.div>
 
-          {/* Eye of the Tornado Section */}
+          {/* Cognitive Gym Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
+          >
+            <Card 
+              className="cursor-pointer border-2 border-emerald-500/20 hover:border-emerald-500/40 transition-all hover:shadow-glow group overflow-hidden"
+              onClick={() => setActiveSection("cognitive-gym")}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-emerald-500/10 group-hover:bg-emerald-500/20 transition-colors">
+                    <Dumbbell className="w-8 h-8 text-emerald-400" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl mb-1">Cognitive Gym</CardTitle>
+                    <CardDescription>
+                      Measurable brain exercises • Track improvement over time • Export for grants
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Eye of the Tornado Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
             <Card className="border-2 border-sky-500/20 overflow-hidden">
               {/* Awareness Image - rotates subtly, tracks if user notices */}
@@ -269,6 +297,33 @@ export default function TornadoAlley() {
 
         <main className="p-6">
           <BrainDumpCard onComplete={handleBrainDumpComplete} />
+        </main>
+      </div>
+    );
+  }
+
+  // Cognitive Gym view
+  if (activeSection === "cognitive-gym") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+        <header className="p-4 border-b border-border/30">
+          <div className="max-w-4xl mx-auto flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setActiveSection("hub")}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <Dumbbell className="w-6 h-6 text-emerald-400" />
+              <h1 className="text-lg font-semibold">Cognitive Gym</h1>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto p-6">
+          <CognitiveTestsHub />
         </main>
       </div>
     );
