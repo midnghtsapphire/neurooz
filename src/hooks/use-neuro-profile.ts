@@ -5,7 +5,8 @@ export type NeuroProfile =
   | "adhd"
   | "asd"      // Autism Spectrum
   | "hearing"  // Hearing impaired
-  | "vision";  // Vision impaired
+  | "vision"   // Vision impaired
+  | "vampire"; // Nocturnal / light-sensitive
 
 interface NeuroProfileSettings {
   profile: NeuroProfile;
@@ -18,6 +19,9 @@ interface NeuroProfileSettings {
     simplifiedUI: boolean;
     focusIndicators: boolean;
     longerTimeouts: boolean;
+    vampireMode: boolean;    // OLED black, ember accents
+    noAnimations: boolean;   // Complete animation disable
+    nightAnchors: boolean;   // Time/grounding markers
   };
 }
 
@@ -26,7 +30,7 @@ const STORAGE_KEY = "neuro-profile-settings";
 const PROFILE_DEFAULTS: Record<NeuroProfile, Partial<NeuroProfileSettings["customizations"]>> = {
   default: {},
   adhd: {
-    reducedMotion: false, // Movement can help ADHD
+    reducedMotion: false,
     simplifiedUI: true,
     longerTimeouts: true,
   },
@@ -46,6 +50,14 @@ const PROFILE_DEFAULTS: Record<NeuroProfile, Partial<NeuroProfileSettings["custo
     screenReaderHints: true,
     focusIndicators: true,
   },
+  vampire: {
+    vampireMode: true,
+    noAnimations: true,
+    reducedMotion: true,
+    simplifiedUI: true,
+    nightAnchors: true,
+    longerTimeouts: true,
+  },
 };
 
 const defaultSettings: NeuroProfileSettings = {
@@ -59,6 +71,9 @@ const defaultSettings: NeuroProfileSettings = {
     simplifiedUI: false,
     focusIndicators: false,
     longerTimeouts: false,
+    vampireMode: false,
+    noAnimations: false,
+    nightAnchors: false,
   },
 };
 
@@ -89,6 +104,9 @@ export function useNeuroProfile() {
     root.classList.toggle("captions-enabled", customizations.captions);
     root.classList.toggle("simplified-ui", customizations.simplifiedUI);
     root.classList.toggle("focus-indicators", customizations.focusIndicators);
+    root.classList.toggle("vampire-mode", customizations.vampireMode);
+    root.classList.toggle("no-animations", customizations.noAnimations);
+    root.classList.toggle("night-anchors", customizations.nightAnchors);
 
     // Persist
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -168,5 +186,11 @@ export const NEURO_PROFILE_INFO: Record<NeuroProfile, {
     shortLabel: "LV",
     description: "High contrast, large text, screen reader optimized",
     icon: "👁️",
+  },
+  vampire: {
+    label: "Vampire Mode",
+    shortLabel: "🦇",
+    description: "OLED black, ember accents, zero animation, night-safe",
+    icon: "🦇",
   },
 };
