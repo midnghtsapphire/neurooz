@@ -150,9 +150,9 @@ export function TotoQuickCapture() {
 
   return (
     <>
-      {/* Floating Toto Button */}
+      {/* Floating Toto Button - positioned higher to avoid bottom toolbars */}
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-24 right-6 z-50"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
@@ -160,9 +160,9 @@ export function TotoQuickCapture() {
         <Button
           size="lg"
           className={cn(
-            "h-14 w-14 rounded-full shadow-lg transition-all",
+            "h-20 w-20 rounded-full shadow-xl transition-all text-2xl",
             "bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
-            "border-2 border-amber-300/50",
+            "border-4 border-amber-300/50",
             isOpen && "rotate-180"
           )}
           onClick={() => setIsOpen(!isOpen)}
@@ -175,7 +175,7 @@ export function TotoQuickCapture() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 180, opacity: 0 }}
               >
-                <X className="h-6 w-6 text-white" />
+                <X className="h-8 w-8 text-white" />
               </motion.div>
             ) : (
               <motion.div
@@ -184,7 +184,7 @@ export function TotoQuickCapture() {
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: -180, opacity: 0 }}
               >
-                <Dog className="h-6 w-6 text-white" />
+                <Dog className="h-8 w-8 text-white" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -209,7 +209,7 @@ export function TotoQuickCapture() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-24 right-6 z-50 w-80 sm:w-96"
+            className="fixed bottom-48 right-6 z-50 w-80 sm:w-96"
           >
             <div className="bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
               {/* Header */}
