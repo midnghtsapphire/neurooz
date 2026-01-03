@@ -304,7 +304,7 @@ export function TotoQuickCapture() {
                   )}
                 </ScrollArea>
               ) : (
-                /* Quick Input */
+              /* Quick Input */
                 <div className="p-4">
                   <Textarea
                     ref={textareaRef}
@@ -312,7 +312,8 @@ export function TotoQuickCapture() {
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Quick thought... (⌘+Enter to save)"
-                    className="min-h-[100px] resize-none bg-muted/50 border-muted"
+                    className="min-h-[100px] resize-none bg-muted/50 border-muted focus:ring-2 focus:ring-primary"
+                    autoFocus
                   />
                   
                   <div className="flex items-center justify-between mt-3">
