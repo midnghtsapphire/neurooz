@@ -41,6 +41,7 @@ import {
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
+import witchLandingImg from "@/assets/witch-landing.png";
 
 /**
  * Eye of the Storm Tools
@@ -192,8 +193,23 @@ export default function TornadoAlley() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="border-2 border-sky-500/20">
-              <CardHeader>
+            <Card className="border-2 border-sky-500/20 overflow-hidden">
+              {/* Surreal Dalí-style hero image */}
+              <div className="relative h-56 sm:h-64 overflow-hidden">
+                <img 
+                  src={witchLandingImg} 
+                  alt="The Landing - Find your calm" 
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <p className="text-sm text-muted-foreground italic">
+                    Sometimes we're so overwhelmed we don't notice what's right in front of us...
+                  </p>
+                </div>
+              </div>
+              
+              <CardHeader className="pt-4">
                 <div className="flex items-center gap-4">
                   <div className="p-3 rounded-xl bg-sky-500/10">
                     <Eye className="w-8 h-8 text-sky-400" />
