@@ -19,7 +19,7 @@
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { DraggableFloatingButton } from "@/components/neuro/DraggableFloatingButton";
-import tornadoAlleyImg from "@/assets/tornado-alley.png";
+import ozTornadoImg from "@/assets/oz-tornado-icon.png";
 
 export function FloatingTornadoButton() {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export function FloatingTornadoButton() {
 
   return (
     <DraggableFloatingButton
-      defaultPosition={{ x: 16, y: 80 }}
+      defaultPosition={{ x: window.innerWidth - 100, y: 80 }}
       storageKey="tornado-button-position"
     >
       <motion.button
@@ -61,7 +61,7 @@ export function FloatingTornadoButton() {
         <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-lg shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-400/30 transition-all duration-300 bg-slate-900/80 backdrop-blur-sm">
           {/* Swirling tornado image */}
           <motion.img
-            src={tornadoAlleyImg}
+            src={ozTornadoImg}
             alt="Tornado Alley"
             className="w-full h-full object-cover"
             animate={{
