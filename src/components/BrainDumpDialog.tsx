@@ -35,9 +35,32 @@ export function BrainDumpDialog() {
   const processBrainDump = useProcessBrainDump();
   const deleteBrainDump = useDeleteBrainDump();
 
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+    if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)}KB`;
+    return `${bytes}B`;
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files?.length) return;
+
+    // Check for oversized files
+    const oversizedFiles = Array.from(files).filter(f => f.size > MAX_FILE_SIZE);
+    if (oversizedFiles.length > 0) {
+      const fileList = oversizedFiles.map(f => `• ${f.name} (${formatFileSize(f.size)})`).join('\n');
+      toast({
+        title: "📦 Files too large - please zip first!",
+        description: `These files exceed 10MB:\n${fileList}\n\nTip: Compress them into a .zip file to upload.`,
+        variant: "destructive",
+        duration: 8000,
+      });
+      // Filter out oversized files and continue with valid ones
+      const validFiles = Array.from(files).filter(f => f.size <= MAX_FILE_SIZE);
+      if (validFiles.length === 0) return;
+    }
 
     setIsUploading(true);
     try {
@@ -45,7 +68,9 @@ export function BrainDumpDialog() {
       if (!user) throw new Error("Not authenticated");
 
       const urls: string[] = [];
-      for (const file of Array.from(files)) {
+      const validFiles = Array.from(files).filter(f => f.size <= MAX_FILE_SIZE);
+      
+      for (const file of validFiles) {
         const filePath = `${user.id}/${Date.now()}-${file.name}`;
         const { error } = await supabase.storage
           .from("user-documents")
@@ -56,7 +81,7 @@ export function BrainDumpDialog() {
       }
 
       setUploadedFiles(prev => [...prev, ...urls]);
-      toast({ title: `${files.length} file(s) uploaded` });
+      toast({ title: `${validFiles.length} file(s) uploaded` });
     } catch (error: any) {
       toast({ title: "Upload failed", description: error.message, variant: "destructive" });
     } finally {
