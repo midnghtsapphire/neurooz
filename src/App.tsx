@@ -45,6 +45,7 @@ const App = () => (
           </a>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<Index />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/pricing" element={<Pricing />} />
