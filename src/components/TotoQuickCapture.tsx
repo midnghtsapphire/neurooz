@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import { DraggableFloatingButton } from "@/components/neuro/DraggableFloatingButton";
 import munchkinHelper from "@/assets/munchkin-helper.png";
 
 export function TotoQuickCapture() {
@@ -31,7 +32,6 @@ export function TotoQuickCapture() {
     try {
       await createNote.mutateAsync({ content: content.trim() });
       setContent("");
-      // Keep panel open for quick successive notes
     } catch {
       // Errors are surfaced via the mutation's onError toast
     }
@@ -81,7 +81,6 @@ export function TotoQuickCapture() {
             type: mediaRecorder.mimeType || "audio/webm",
           });
 
-          // Convert to base64 and send for transcription
           const reader = new FileReader();
           reader.onloadend = async () => {
             const base64Audio = (reader.result as string).split(",")[1];
@@ -95,7 +94,7 @@ export function TotoQuickCapture() {
               if (data?.text) {
                 setContent((prev) => prev + (prev ? " " : "") + data.text);
               }
-            } catch (err) {
+            } catch {
               toast({
                 title: "Voice recognition failed",
                 description: "Please try again or type your note",
@@ -111,7 +110,7 @@ export function TotoQuickCapture() {
 
       mediaRecorder.start();
       setIsRecording(true);
-    } catch (err) {
+    } catch {
       toast({
         title: "Microphone access denied",
         description: "Please enable microphone access to use voice input",
@@ -127,7 +126,6 @@ export function TotoQuickCapture() {
     }
   };
 
-  // Send unprocessed notes to Brain Dump AI for organization
   const organizeWithAI = async () => {
     const unprocessedNotes = notes.filter(n => !n.is_processed);
     if (unprocessedNotes.length === 0) {
@@ -152,12 +150,11 @@ export function TotoQuickCapture() {
         title: "✨ Notes organized!", 
         description: "Check your Sticky Notes Inbox for the organized items." 
       });
-
-      // Could mark notes as processed here if desired
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Please try again";
       toast({
         title: "Organization failed",
-        description: err.message || "Please try again",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -167,79 +164,78 @@ export function TotoQuickCapture() {
 
   return (
     <>
-      {/* Floating Toto Button - positioned higher to avoid bottom toolbars */}
-      <motion.div
-        className="fixed bottom-24 right-6 z-50"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      {/* Floating Toto Button - Draggable */}
+      <DraggableFloatingButton
+        defaultPosition={{ x: window.innerWidth - 100, y: window.innerHeight - 180 }}
+        storageKey="toto-button-position"
       >
-        <Button
-          size="lg"
-          className={cn(
-            "h-20 w-20 rounded-full shadow-xl transition-all overflow-hidden p-0",
-            "bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
-            "border-4 border-amber-300/50",
-            isOpen && "ring-4 ring-amber-300"
-          )}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <motion.div
-                key="close"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.5, opacity: 0 }}
-                className="flex items-center justify-center w-full h-full bg-amber-600"
-              >
-                <X className="h-8 w-8 text-white" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="munchkin"
-                initial={{ scale: 0.5, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.5, opacity: 0 }}
-                className="w-full h-full relative"
-              >
-                <img 
-                  src={munchkinHelper} 
-                  alt="Munchkin Helper" 
-                  className="w-full h-full object-cover"
-                />
-                {/* Symbol badge - pencil for notes */}
-                <div className="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-1.5 border-2 border-card shadow-lg">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                    <path d="m15 5 4 4"/>
-                  </svg>
-                </div>
-              </motion.div>
+        <div className="relative">
+          <Button
+            size="lg"
+            className={cn(
+              "h-20 w-20 rounded-full shadow-xl transition-all overflow-hidden p-0",
+              "bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
+              "border-4 border-amber-300/50",
+              isOpen && "ring-4 ring-amber-300"
             )}
-          </AnimatePresence>
-        </Button>
-        
-        {/* Pulse indicator for unprocessed notes */}
-        {notes.filter(n => !n.is_processed).length > 0 && !isOpen && (
-          <span className="absolute -top-1 -right-1 flex h-5 w-5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-emerald-500 text-white text-xs items-center justify-center font-medium">
-              {notes.filter(n => !n.is_processed).length}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <AnimatePresence mode="wait">
+              {isOpen ? (
+                <motion.div
+                  key="close"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.5, opacity: 0 }}
+                  className="flex items-center justify-center w-full h-full bg-amber-600"
+                >
+                  <X className="h-8 w-8 text-white" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="munchkin"
+                  initial={{ scale: 0.5, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.5, opacity: 0 }}
+                  className="w-full h-full relative"
+                >
+                  <img 
+                    src={munchkinHelper} 
+                    alt="Munchkin Helper" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-1.5 border-2 border-card shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                      <path d="m15 5 4 4"/>
+                    </svg>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Button>
+          
+          {/* Pulse indicator for unprocessed notes */}
+          {notes.filter(n => !n.is_processed).length > 0 && !isOpen && (
+            <span className="absolute -top-1 -right-1 flex h-5 w-5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-5 w-5 bg-emerald-500 text-white text-xs items-center justify-center font-medium">
+                {notes.filter(n => !n.is_processed).length}
+              </span>
             </span>
-          </span>
-        )}
-      </motion.div>
+          )}
+        </div>
+      </DraggableFloatingButton>
 
       {/* Quick Capture Panel */}
       <AnimatePresence>
         {isOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="fixed bottom-48 right-6 z-50 w-80 sm:w-96"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="fixed bottom-32 right-6 z-50 w-80 sm:w-96"
           >
             <div className="bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
               <div className="px-4 py-3 bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border-b border-border">
@@ -275,7 +271,6 @@ export function TotoQuickCapture() {
               </div>
 
               {showHistory ? (
-                /* Notes History */
                 <ScrollArea className="h-64">
                   {notes.length === 0 ? (
                     <div className="p-6 text-center text-muted-foreground">
@@ -296,7 +291,6 @@ export function TotoQuickCapture() {
                   )}
                 </ScrollArea>
               ) : (
-              /* Quick Input */
                 <div className="p-4">
                   <Textarea
                     value={content}
