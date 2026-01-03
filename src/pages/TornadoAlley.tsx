@@ -9,7 +9,7 @@
  * 
  * SECTIONS:
  * 1. Brain Dump - Externalize swirling thoughts (implemented)
- * 2. Eye of the Storm - Calming tools refuge (ASMR, vagus nerve, breathing)
+ * 2. Eye of the Tornado - Calming tools refuge (ASMR, vagus nerve, breathing)
  * 
  * FUTURE EXPANSION IDEAS:
  * - ASMR audio player with curated calming sounds
@@ -19,7 +19,7 @@
  * - Emergency contacts / support resources
  * - Progress tracking for overwhelm episodes
  * 
- * The Eye of the Storm is the quiet center WITHIN the chaos.
+ * The Eye of the Tornado is the quiet center WITHIN the chaos.
  * Users acknowledge they're in the storm but find refuge.
  * ============================================================
  */
@@ -44,7 +44,7 @@ import tornadoAlleyImg from "@/assets/tornado-alley.png";
 import witchLandingImg from "@/assets/witch-landing.png";
 
 /**
- * Eye of the Storm Tools
+ * Eye of the Tornado Tools
  * These are placeholders for future calming tools.
  * Each tool should help the user find calm within the chaos.
  */
@@ -141,7 +141,7 @@ export default function TornadoAlley() {
               <CardContent className="p-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   Feeling overwhelmed? You're in the right place. Tornado Alley is where the chaos meets calm. 
-                  <span className="text-foreground font-medium"> Dump your thoughts, then find the Eye of the Storm.</span>
+                  <span className="text-foreground font-medium"> Dump your thoughts, then find the Eye of the Tornado.</span>
                 </p>
               </CardContent>
             </Card>
@@ -187,7 +187,7 @@ export default function TornadoAlley() {
             </Card>
           </motion.div>
 
-          {/* Eye of the Storm Section */}
+          {/* Eye of the Tornado Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,7 +215,7 @@ export default function TornadoAlley() {
                     <Eye className="w-8 h-8 text-sky-400" />
                   </div>
                   <div>
-                    <CardTitle className="text-2xl">Eye of the Storm</CardTitle>
+                    <CardTitle className="text-2xl">Eye of the Tornado</CardTitle>
                     <CardDescription className="text-base">
                       The quiet center — tools to calm your nervous system
                     </CardDescription>
