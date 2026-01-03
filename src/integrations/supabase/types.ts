@@ -313,6 +313,198 @@ export type Database = {
         }
         Relationships: []
       }
+      cognitive_baselines: {
+        Row: {
+          average_score: number | null
+          baseline_date: string | null
+          baseline_score: number | null
+          created_at: string
+          current_best_date: string | null
+          current_best_score: number | null
+          id: string
+          improvement_percentage: number | null
+          last_session_date: string | null
+          streak_days: number | null
+          test_type: string
+          total_sessions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          average_score?: number | null
+          baseline_date?: string | null
+          baseline_score?: number | null
+          created_at?: string
+          current_best_date?: string | null
+          current_best_score?: number | null
+          id?: string
+          improvement_percentage?: number | null
+          last_session_date?: string | null
+          streak_days?: number | null
+          test_type: string
+          total_sessions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          average_score?: number | null
+          baseline_date?: string | null
+          baseline_score?: number | null
+          created_at?: string
+          current_best_date?: string | null
+          current_best_score?: number | null
+          id?: string
+          improvement_percentage?: number | null
+          last_session_date?: string | null
+          streak_days?: number | null
+          test_type?: string
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cognitive_metrics: {
+        Row: {
+          context_location: string | null
+          context_task: string | null
+          created_at: string
+          id: string
+          is_baseline: boolean | null
+          metric_type: string
+          session_date: string
+          session_end: string | null
+          session_start: string | null
+          unit: string
+          updated_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          context_location?: string | null
+          context_task?: string | null
+          created_at?: string
+          id?: string
+          is_baseline?: boolean | null
+          metric_type: string
+          session_date?: string
+          session_end?: string | null
+          session_start?: string | null
+          unit?: string
+          updated_at?: string
+          user_id: string
+          value: number
+        }
+        Update: {
+          context_location?: string | null
+          context_task?: string | null
+          created_at?: string
+          id?: string
+          is_baseline?: boolean | null
+          metric_type?: string
+          session_date?: string
+          session_end?: string | null
+          session_start?: string | null
+          unit?: string
+          updated_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      cognitive_progress: {
+        Row: {
+          baseline_date: string | null
+          baseline_value: number | null
+          best_date: string | null
+          best_value: number | null
+          created_at: string
+          current_average: number | null
+          current_streak: number | null
+          id: string
+          improvement_percentage: number | null
+          longest_streak: number | null
+          metric_type: string
+          total_sessions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          baseline_date?: string | null
+          baseline_value?: number | null
+          best_date?: string | null
+          best_value?: number | null
+          created_at?: string
+          current_average?: number | null
+          current_streak?: number | null
+          id?: string
+          improvement_percentage?: number | null
+          longest_streak?: number | null
+          metric_type: string
+          total_sessions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          baseline_date?: string | null
+          baseline_value?: number | null
+          best_date?: string | null
+          best_value?: number | null
+          created_at?: string
+          current_average?: number | null
+          current_streak?: number | null
+          id?: string
+          improvement_percentage?: number | null
+          longest_streak?: number | null
+          metric_type?: string
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cognitive_test_sessions: {
+        Row: {
+          completed_at: string
+          correct_answers: number | null
+          created_at: string
+          difficulty_level: number | null
+          duration_seconds: number | null
+          id: string
+          metadata: Json | null
+          score: number | null
+          test_type: string
+          total_questions: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          correct_answers?: number | null
+          created_at?: string
+          difficulty_level?: number | null
+          duration_seconds?: number | null
+          id?: string
+          metadata?: Json | null
+          score?: number | null
+          test_type: string
+          total_questions?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          correct_answers?: number | null
+          created_at?: string
+          difficulty_level?: number | null
+          duration_seconds?: number | null
+          id?: string
+          metadata?: Json | null
+          score?: number | null
+          test_type?: string
+          total_questions?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       depreciation_methods: {
         Row: {
           business_types: string[] | null
