@@ -41,6 +41,7 @@ import {
   Dumbbell
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
+import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { CognitiveTestsHub } from "@/components/cognitive-tests/CognitiveTestsHub";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
 import witchLandingImg from "@/assets/witch-landing.png";
@@ -108,6 +109,7 @@ export default function TornadoAlley() {
   if (activeSection === "hub") {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+        <TotoQuickCapture />
         {/* Header */}
         <header className="p-4 border-b border-border/30">
           <div className="max-w-4xl mx-auto flex items-center gap-4">
