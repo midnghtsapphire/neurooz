@@ -188,8 +188,30 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
     }
   };
 
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB limit
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;
+    if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)}KB`;
+    return `${bytes}B`;
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
+    
+    // Check for oversized files
+    const oversizedFiles = files.filter(f => f.size > MAX_FILE_SIZE);
+    if (oversizedFiles.length > 0) {
+      const fileList = oversizedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', ');
+      toast.error(`📦 Files too large - please zip first! These exceed 10MB: ${fileList}`);
+      // Filter out oversized files and continue with valid ones
+      const validFiles = files.filter(f => f.size <= MAX_FILE_SIZE);
+      if (validFiles.length === 0) return;
+      setUploadedFiles(prev => [...prev, ...validFiles]);
+      toast.success(`Added ${validFiles.length} file(s)`);
+      return;
+    }
+    
     setUploadedFiles(prev => [...prev, ...files]);
     toast.success(`Added ${files.length} file(s)`);
   };
