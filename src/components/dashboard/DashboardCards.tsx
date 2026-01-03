@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import BrainMeleeReviewCard from "./BrainMeleeReviewCard";
+import BrainDumpReviewCard from "@/components/TornadoAlley/BrainDumpReviewCard";
 import BusinessWizardCard from "./BusinessWizardCard";
 import ProjectsQuickCard from "./ProjectsQuickCard";
 import WellnessPlanCard from "./WellnessPlanCard";
@@ -14,7 +14,7 @@ export function DashboardCards() {
   const { data: businesses = [] } = useBusinesses();
   const activeBusiness = businesses.find(b => b.is_active);
 
-  const handleStartMelee = () => {
+  const handleStartBrainDump = () => {
     navigate("/onboarding");
   };
 
@@ -26,7 +26,7 @@ export function DashboardCards() {
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <BrainMeleeReviewCard onStartMelee={handleStartMelee} />
+      <BrainDumpReviewCard onStartBrainDump={handleStartBrainDump} />
       <BusinessWizardCard 
         hasExistingBusiness={!!activeBusiness}
         businessName={activeBusiness?.name}
