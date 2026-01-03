@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain, StickyNote } from "lucide-react";
+import { X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import munchkinHelper from "@/assets/munchkin-helper.png";
 
 export function TotoQuickCapture() {
   const [isOpen, setIsOpen] = useState(false);
@@ -160,7 +161,7 @@ export function TotoQuickCapture() {
         <Button
           size="lg"
           className={cn(
-            "h-14 w-14 rounded-full shadow-xl transition-all overflow-hidden p-0",
+            "h-20 w-20 rounded-full shadow-xl transition-all overflow-hidden p-0",
             "bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
             "border-4 border-amber-300/50",
             isOpen && "ring-4 ring-amber-300"
@@ -180,14 +181,17 @@ export function TotoQuickCapture() {
               </motion.div>
             ) : (
               <motion.div
-                key="notes"
+                key="munchkin"
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.5, opacity: 0 }}
-                className="w-full h-full relative flex items-center justify-center bg-amber-600"
+                className="w-full h-full relative"
               >
-                <StickyNote className="h-9 w-9 text-white" aria-hidden="true" />
-
+                <img 
+                  src={munchkinHelper} 
+                  alt="Munchkin Helper" 
+                  className="w-full h-full object-cover"
+                />
                 {/* Symbol badge - pencil for notes */}
                 <div className="absolute bottom-0 right-0 bg-emerald-600 rounded-full p-1.5 border-2 border-card shadow-lg">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -225,10 +229,8 @@ export function TotoQuickCapture() {
               <div className="px-4 py-3 bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border-b border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-amber-600/30 flex items-center justify-center">
-                      <StickyNote className="h-3.5 w-3.5 text-foreground" aria-hidden="true" />
-                    </div>
-                    <span className="font-semibold text-sm">Quick Notes</span>
+                    <img src={munchkinHelper} alt="" className="h-6 w-6 rounded-full object-cover" />
+                    <span className="font-semibold text-sm">Munchkin Notes</span>
                   </div>
                   <div className="flex items-center gap-1">
                     {notes.filter(n => !n.is_processed).length > 0 && (
