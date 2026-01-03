@@ -233,21 +233,24 @@ export default function Projects() {
             )}
           </div>
 
-          {/* Action Items with Yellow Brick Road View */}
+          {/* Action Items - Vertical Flow Default (Brain-Safe) */}
           <Tabs defaultValue="road" className="w-full">
             <div className="flex items-center justify-between mb-4">
               <TabsList>
-                <TabsTrigger value="road" className="gap-2">
+                <TabsTrigger value="road" className="gap-2" title="Brain-safe vertical flow">
                   <MapPin className="h-4 w-4" />
-                  Yellow Brick Road
+                  <span className="hidden sm:inline">Yellow Brick Road</span>
+                  <span className="sm:hidden">Road</span>
                 </TabsTrigger>
-                <TabsTrigger value="kanban" className="gap-2">
-                  <Columns className="h-4 w-4" />
-                  Kanban
-                </TabsTrigger>
-                <TabsTrigger value="list" className="gap-2">
+                <TabsTrigger value="list" className="gap-2" title="Simple list view">
                   <ListTodo className="h-4 w-4" />
-                  List View
+                  <span className="hidden sm:inline">List View</span>
+                  <span className="sm:hidden">List</span>
+                </TabsTrigger>
+                <TabsTrigger value="kanban" className="gap-2 text-muted-foreground" title="Power mode: horizontal columns (high cognitive load)">
+                  <Columns className="h-4 w-4" />
+                  <span className="hidden sm:inline">Kanban</span>
+                  <span className="sm:hidden">Grid</span>
                 </TabsTrigger>
               </TabsList>
               <div className="flex items-center gap-2">
@@ -261,10 +264,6 @@ export default function Projects() {
                 actionItems={projectActionItems} 
                 allActionItems={allActionItems}
               />
-            </TabsContent>
-
-            <TabsContent value="kanban">
-              <KanbanBoard actionItems={projectActionItems} />
             </TabsContent>
 
             <TabsContent value="list">
@@ -282,6 +281,18 @@ export default function Projects() {
                 </div>
               )}
             </TabsContent>
+
+            <TabsContent value="kanban">
+              {/* Cognitive load warning for Kanban */}
+              <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <p className="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                  <Columns className="h-4 w-4" />
+                  <span><strong>Power Mode:</strong> Horizontal layout uses more working memory. Switch to Road view if feeling overwhelmed.</span>
+                </p>
+              </div>
+              <KanbanBoard actionItems={projectActionItems} />
+            </TabsContent>
+
           </Tabs>
 
           {/* Project Garden */}
