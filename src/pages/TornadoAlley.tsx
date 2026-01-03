@@ -222,11 +222,15 @@ export default function TornadoAlley() {
             transition={{ delay: 0.3 }}
           >
             <Card className="border-2 border-sky-500/20 overflow-hidden">
-              {/* Awareness Image - rotates subtly, tracks if user notices */}
-              <AwarenessImage 
-                location="tornado_alley_eye"
-                caption="Sometimes we're so overwhelmed we don't notice what's right in front of us..."
-              />
+              {/* Hero image - same size as Brain Dump */}
+              <div className="relative h-48 sm:h-56 overflow-hidden">
+                <AwarenessImage 
+                  location="tornado_alley_eye"
+                  className="h-full"
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent pointer-events-none" />
+              </div>
               
               <CardHeader className="pt-4">
                 <div className="flex items-center gap-4">
@@ -242,6 +246,9 @@ export default function TornadoAlley() {
                 </div>
               </CardHeader>
               <CardContent>
+                <p className="text-sm text-muted-foreground italic mb-4">
+                  Sometimes we're so overwhelmed we don't notice what's right in front of us...
+                </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {eyeOfStormTools.map((tool) => (
                     <div 
