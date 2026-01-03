@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dog, X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain } from "lucide-react";
+import { X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import munchkinHelper from "@/assets/munchkin-helper.png";
 
 export function TotoQuickCapture() {
   const [isOpen, setIsOpen] = useState(false);
@@ -160,10 +161,10 @@ export function TotoQuickCapture() {
         <Button
           size="lg"
           className={cn(
-            "h-20 w-20 rounded-full shadow-xl transition-all text-2xl",
+            "h-20 w-20 rounded-full shadow-xl transition-all overflow-hidden p-0",
             "bg-gradient-to-br from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500",
             "border-4 border-amber-300/50",
-            isOpen && "rotate-180"
+            isOpen && "ring-4 ring-amber-300"
           )}
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -171,20 +172,26 @@ export function TotoQuickCapture() {
             {isOpen ? (
               <motion.div
                 key="close"
-                initial={{ rotate: -180, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 180, opacity: 0 }}
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                className="flex items-center justify-center w-full h-full bg-amber-600"
               >
                 <X className="h-8 w-8 text-white" />
               </motion.div>
             ) : (
               <motion.div
-                key="toto"
-                initial={{ rotate: 180, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -180, opacity: 0 }}
+                key="munchkin"
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.5, opacity: 0 }}
+                className="w-full h-full"
               >
-                <Dog className="h-8 w-8 text-white" />
+                <img 
+                  src={munchkinHelper} 
+                  alt="Munchkin Helper" 
+                  className="w-full h-full object-cover"
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -212,12 +219,11 @@ export function TotoQuickCapture() {
             className="fixed bottom-48 right-6 z-50 w-80 sm:w-96"
           >
             <div className="bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
-              {/* Header */}
               <div className="px-4 py-3 bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border-b border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Dog className="h-5 w-5 text-amber-500" />
-                    <span className="font-semibold text-sm">Toto Quick Capture</span>
+                    <img src={munchkinHelper} alt="" className="h-6 w-6 rounded-full object-cover" />
+                    <span className="font-semibold text-sm">Munchkin Notes</span>
                   </div>
                   <div className="flex items-center gap-1">
                     {notes.filter(n => !n.is_processed).length > 0 && (
