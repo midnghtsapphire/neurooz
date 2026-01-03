@@ -39,7 +39,13 @@ Sample conversation starters you might use:
 
 Remember: You're here to listen, not to fix. Build rapport first.`;
     } else if (phase === "organizing") {
-      systemPrompt = `You are an organizing assistant that takes a brain dump and structures it into actionable items.
+      systemPrompt = `You are an organizing assistant that takes a brain dump conversation and structures it into actionable items WITHOUT stripping the user's memory cues.
+
+CRITICAL (ADHD / cognitive-access friendly):
+- Keep the user's original wording as much as possible.
+- Preserve "symbol" words, nicknames, odd phrasing, and shorthand—these are memory anchors.
+- Do NOT rewrite into generic language.
+- If you're unsure where something belongs, keep it as an idea/concern rather than dropping it.
 
 Given the conversation history, extract:
 1. All tasks, to-dos, and action items
@@ -50,10 +56,10 @@ Given the conversation history, extract:
 
 Format your response as JSON:
 {
-  "projects": [{"name": "Project Name", "description": "Brief description", "priority": "high|medium|low"}],
-  "tasks": [{"title": "Task", "project": "Parent project or null", "priority": "high|medium|low", "due_context": "any deadline mentioned"}],
-  "ideas": [{"title": "Idea", "notes": "Details"}],
-  "concerns": [{"issue": "Concern", "suggested_action": "What might help"}]
+  "projects": [{"name": "Project Name (keep original wording)", "description": "Brief description (can include original phrases)", "priority": "high|medium|low", "memory_anchors": ["..."], "source_snippet": "..."}],
+  "tasks": [{"title": "Task (keep original wording)", "project": "Parent project or null", "priority": "high|medium|low", "due_context": "any deadline mentioned", "source_snippet": "..."}],
+  "ideas": [{"title": "Idea (keep original wording)", "notes": "Details", "source_snippet": "..."}],
+  "concerns": [{"issue": "Concern (keep original wording)", "suggested_action": "What might help", "source_snippet": "..."}]
 }`;
     } else {
       systemPrompt = `You are a helpful assistant guiding someone through organizing their thoughts. Be warm and supportive.`;
