@@ -211,11 +211,19 @@ export function CognitiveModeSelector({
               })}
             </div>
 
-            {/* Footer note */}
-            <p className="text-xs text-muted-foreground text-center mt-6 max-w-lg mx-auto">
-              This app adapts to your energy, focus, and nervous system — not the other way around.
-              Your choice is always respected and can be changed anytime.
-            </p>
+            {/* Branded footer - The Oz Engine */}
+            <div className="mt-8 pt-4 border-t border-border/50 text-center">
+              <p className="text-xs text-muted-foreground mb-1">
+                Powered by
+              </p>
+              <p className="text-sm font-medium text-primary flex items-center justify-center gap-2">
+                <span className="text-lg">🌀</span>
+                The Oz Engine™
+              </p>
+              <p className="text-[10px] text-muted-foreground/70 mt-1 max-w-sm mx-auto">
+                Your interface adapts to your energy, focus, and nervous system — never the other way around.
+              </p>
+            </div>
           </div>
         </ScrollArea>
       </DialogContent>
