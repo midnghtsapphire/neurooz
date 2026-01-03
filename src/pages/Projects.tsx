@@ -26,10 +26,12 @@ import { RecoveryModeView } from "@/components/neuro/RecoveryModeView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns, StickyNote, Eye, EyeOff, Brain, Zap, Heart } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns, StickyNote, Eye, EyeOff, Brain, Zap, Heart, Target } from "lucide-react";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { StickyNotesInbox } from "@/components/StickyNotesInbox";
+import { ThemeToggle } from "@/components/neuro/ThemeToggle";
+import { SensorAdaptiveBanner } from "@/components/neuro/SensorAdaptiveBanner";
 
 const defaultFilters: ProjectFilters = {
   search: "",
@@ -396,6 +398,7 @@ export default function Projects() {
               </Button>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              <ThemeToggle />
               <EnvironmentSelector value={environment} onChange={setEnvironment} />
               <BrainDumpDialog />
               <EmploymentRulesDialog />
@@ -413,13 +416,31 @@ export default function Projects() {
       </header>
 
       <main className="container mx-auto px-4 py-6">
+        {/* Sensor-based adaptation suggestions */}
+        <SensorAdaptiveBanner />
+
         {/* Focus Mode: Only show Sticky Notes + Toto */}
         {focusMode ? (
           <div className="space-y-6">
-            <div className="text-center py-4 px-6 bg-primary/5 border border-primary/20 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                🎯 <strong>Focus Mode</strong> — Just your notes & quick capture. Click "Show All" when ready.
-              </p>
+            {/* Improved Focus Mode banner - calming, clear */}
+            <div className="relative overflow-hidden rounded-xl border-2 border-emerald-300 dark:border-emerald-700 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 p-5">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-200/30 dark:bg-emerald-800/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+              <div className="relative flex items-center gap-4">
+                <div className="p-3 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl">
+                  <Target className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-emerald-800 dark:text-emerald-200 flex items-center gap-2">
+                    Focus Mode
+                    <span className="text-xs font-normal px-2 py-0.5 bg-emerald-200/50 dark:bg-emerald-800/50 rounded-full">
+                      Brain-safe
+                    </span>
+                  </h3>
+                  <p className="text-sm text-emerald-700/80 dark:text-emerald-300/80 mt-0.5">
+                    Just your notes & quick capture. Click "Show All" when you're ready for more.
+                  </p>
+                </div>
+              </div>
             </div>
             
             {/* Sticky Notes Inbox - Primary in focus mode */}
