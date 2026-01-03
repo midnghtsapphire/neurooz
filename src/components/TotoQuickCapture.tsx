@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,18 +20,10 @@ export function TotoQuickCapture() {
   const [showHistory, setShowHistory] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: notes = [] } = useQuickNotes();
   const createNote = useCreateQuickNote();
   const deleteNote = useDeleteQuickNote();
-
-  // Focus textarea when opened
-  useEffect(() => {
-    if (isOpen && textareaRef.current) {
-      setTimeout(() => textareaRef.current?.focus(), 100);
-    }
-  }, [isOpen]);
 
   const handleSubmit = async () => {
     if (!content.trim()) return;
@@ -242,11 +234,11 @@ export function TotoQuickCapture() {
       {/* Quick Capture Panel */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="fixed bottom-48 right-6 z-50 w-80 sm:w-96"
           >
             <div className="bg-card border border-border rounded-xl shadow-2xl overflow-hidden">
@@ -307,13 +299,11 @@ export function TotoQuickCapture() {
               /* Quick Input */
                 <div className="p-4">
                   <Textarea
-                    ref={textareaRef}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Quick thought... (⌘+Enter to save)"
-                    className="min-h-[100px] resize-none bg-muted/50 border-muted focus:ring-2 focus:ring-primary"
-                    autoFocus
+                    className="min-h-[100px] resize-none bg-muted/50 border-muted"
                   />
                   
                   <div className="flex items-center justify-between mt-3">
