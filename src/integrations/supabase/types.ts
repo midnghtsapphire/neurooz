@@ -23,6 +23,8 @@ export type Database = {
           id: string
           is_completed: boolean
           is_setback: boolean | null
+          kanban_status: string | null
+          parent_id: string | null
           priority: string | null
           priority_score: number | null
           project_id: string | null
@@ -30,6 +32,7 @@ export type Database = {
           task_type: string | null
           title: string
           updated_at: string
+          waiting_on: string | null
         }
         Insert: {
           blocked_by?: string | null
@@ -39,6 +42,8 @@ export type Database = {
           id?: string
           is_completed?: boolean
           is_setback?: boolean | null
+          kanban_status?: string | null
+          parent_id?: string | null
           priority?: string | null
           priority_score?: number | null
           project_id?: string | null
@@ -46,6 +51,7 @@ export type Database = {
           task_type?: string | null
           title: string
           updated_at?: string
+          waiting_on?: string | null
         }
         Update: {
           blocked_by?: string | null
@@ -55,6 +61,8 @@ export type Database = {
           id?: string
           is_completed?: boolean
           is_setback?: boolean | null
+          kanban_status?: string | null
+          parent_id?: string | null
           priority?: string | null
           priority_score?: number | null
           project_id?: string | null
@@ -62,11 +70,19 @@ export type Database = {
           task_type?: string | null
           title?: string
           updated_at?: string
+          waiting_on?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "action_items_blocked_by_fkey"
             columns: ["blocked_by"]
+            isOneToOne: false
+            referencedRelation: "action_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_items_parent_id_fkey"
+            columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "action_items"
             referencedColumns: ["id"]
@@ -1785,6 +1801,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      quick_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_processed: boolean | null
+          project_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_processed?: boolean | null
+          project_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_processed?: boolean | null
+          project_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quick_notes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rental_customers: {
         Row: {
