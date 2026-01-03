@@ -8,12 +8,12 @@
  * When users are overwhelmed and can't think, they need one
  * visual landmark to find help: "Go to tornado."
  * 
- * ACCESSIBILITY CONSIDERATIONS:
+ * ACCESSIBILITY CONSIDERATIONS (ADHD-friendly):
+ * - Positioned at TOP of screen (natural eye line)
+ * - MOVES occasionally to break hyperfocus loops
  * - Large enough to find when stressed/impaired
  * - Animated to draw attention
  * - Always visible on every page
- * - Positioned opposite from Munchkin Notes (left side)
- * - High contrast for visibility
  * 
  * FUTURE ENHANCEMENTS:
  * - Voice activation ("Hey Toto, I'm overwhelmed")
@@ -22,26 +22,71 @@
  * ============================================================
  */
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
 
+// Possible positions the tornado can drift to (top area)
+const positions = [
+  { top: "1rem", left: "1rem", right: "auto" },
+  { top: "1rem", left: "auto", right: "1rem" },
+  { top: "1rem", left: "50%", right: "auto", transform: "translateX(-50%)" },
+  { top: "1rem", left: "25%", right: "auto" },
+  { top: "1rem", left: "75%", right: "auto" },
+];
+
 export function FloatingTornadoButton() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [positionIndex, setPositionIndex] = useState(0);
+
+  // Occasionally drift to a new position to catch ADHD peripheral vision
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPositionIndex((prev) => {
+        // Pick a different random position
+        let next = Math.floor(Math.random() * positions.length);
+        while (next === prev && positions.length > 1) {
+          next = Math.floor(Math.random() * positions.length);
+        }
+        return next;
+      });
+    }, 45000); // Drift every 45 seconds - subtle but noticeable
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Don't show on the Tornado Alley page itself
   if (location.pathname === "/tornado-alley") {
     return null;
   }
 
+  const currentPosition = positions[positionIndex];
+
   return (
     <motion.button
       onClick={() => navigate("/tornado-alley")}
-      className="fixed bottom-6 left-6 z-50 group"
+      className="fixed z-50 group"
+      style={{
+        top: currentPosition.top,
+        left: currentPosition.left,
+        right: currentPosition.right,
+        transform: currentPosition.transform,
+      }}
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+      animate={{ 
+        opacity: 1, 
+        scale: 1,
+        x: 0,
+        y: 0,
+      }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 150,
+        damping: 20,
+      }}
+      layout
       aria-label="Go to Tornado Alley - Emergency overwhelm support"
     >
       {/* Outer glow ring - pulses to draw attention */}
@@ -60,7 +105,7 @@ export function FloatingTornadoButton() {
       />
 
       {/* Button container */}
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-lg shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-400/30 transition-all duration-300">
+      <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-amber-500/50 shadow-lg shadow-amber-500/20 group-hover:border-amber-400 group-hover:shadow-amber-400/30 transition-all duration-300 bg-slate-900/80 backdrop-blur-sm">
         {/* Swirling tornado image */}
         <motion.img
           src={tornadoAlleyImg}
@@ -90,9 +135,9 @@ export function FloatingTornadoButton() {
         />
       </div>
 
-      {/* Label - visible on hover for sighted users, always in aria for screen readers */}
+      {/* Label - visible on hover */}
       <motion.span
-        className="absolute left-1/2 -translate-x-1/2 -bottom-7 text-xs font-medium text-amber-400/80 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        className="absolute left-1/2 -translate-x-1/2 top-full mt-1 text-xs font-medium text-amber-400/80 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-900/80 px-2 py-0.5 rounded"
         initial={false}
       >
         Tornado Alley
