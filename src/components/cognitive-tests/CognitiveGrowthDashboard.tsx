@@ -4,10 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { 
-  Brain, 
-  TrendingUp, 
-  Trophy, 
-  Flame, 
   ChartLine, 
   Download,
   Eye,
@@ -19,11 +15,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { useCognitiveTests, TestType } from '@/hooks/use-cognitive-tests';
 import {
-  ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { XAxis, YAxis, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import { StreakCalendar } from './StreakCalendar';
+import { ImpactStatsCards } from './ImpactStatsCards';
 
 const TEST_INFO: Record<TestType, { label: string; icon: React.ComponentType<{ className?: string }>; description: string }> = {
   change_blindness: { label: 'Awareness', icon: Eye, description: 'Visual attention' },
@@ -118,50 +115,11 @@ export function CognitiveGrowthDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Summary Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="border-primary/20">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <Brain className="h-4 w-4 text-primary" />
-              <span className="text-xs text-muted-foreground">Total Sessions</span>
-            </div>
-            <p className="text-2xl font-bold mt-1">{overallStats?.totalSessions || 0}</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-green-500/20">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-green-500" />
-              <span className="text-xs text-muted-foreground">Avg Improvement</span>
-            </div>
-            <p className="text-2xl font-bold mt-1 text-green-500">
-              {overallStats?.avgImprovement?.toFixed(1) || 0}%
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-yellow-500/20">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <Flame className="h-4 w-4 text-yellow-500" />
-              <span className="text-xs text-muted-foreground">Best Streak</span>
-            </div>
-            <p className="text-2xl font-bold mt-1">{overallStats?.maxStreak || 0} days</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-accent/20">
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-accent" />
-              <span className="text-xs text-muted-foreground">Tests Unlocked</span>
-            </div>
-            <p className="text-2xl font-bold mt-1">{overallStats?.testsCompleted || 0}/5</p>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Streak Calendar - Featured at top */}
+      <StreakCalendar />
+      
+      {/* Impact Stats Cards */}
+      <ImpactStatsCards />
 
       {/* Individual Test Progress */}
       <Card className="border-accent/30">
