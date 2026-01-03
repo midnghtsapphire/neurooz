@@ -128,8 +128,19 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
 
   const startRecording = async () => {
     try {
+      if (typeof MediaRecorder === "undefined") {
+        toast.error("Voice recording isn't supported in this browser. Please type instead.");
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+      const preferredTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+      const mimeType = preferredTypes.find((t) => MediaRecorder.isTypeSupported(t));
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -140,9 +151,14 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        await transcribeAudio(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+        try {
+          const audioBlob = new Blob(audioChunksRef.current, {
+            type: mediaRecorder.mimeType || "audio/webm",
+          });
+          await transcribeAudio(audioBlob);
+        } finally {
+          stream.getTracks().forEach((track) => track.stop());
+        }
       };
 
       mediaRecorder.start();
@@ -164,22 +180,34 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
   const transcribeAudio = async (audioBlob: Blob) => {
     setIsLoading(true);
     try {
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
-      reader.onloadend = async () => {
-        const base64Audio = (reader.result as string).split(',')[1];
-        
-        const { data, error } = await supabase.functions.invoke("voice-to-text", {
-          body: { audio: base64Audio }
-        });
+      const base64Audio = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error("Failed to read audio"));
+        reader.onloadend = () => {
+          try {
+            const result = reader.result as string;
+            const b64 = result.split(",")[1];
+            if (!b64) throw new Error("Invalid audio encoding");
+            resolve(b64);
+          } catch (e) {
+            reject(e);
+          }
+        };
+        reader.readAsDataURL(audioBlob);
+      });
 
-        if (error) throw error;
+      const { data, error } = await supabase.functions.invoke("voice-to-text", {
+        body: { audio: base64Audio },
+      });
 
-        if (data.text) {
-          setInput(prev => prev + (prev ? " " : "") + data.text);
-          toast.success("Voice transcribed!");
-        }
-      };
+      if (error) throw error;
+
+      if (data?.text) {
+        setInput((prev) => prev + (prev ? " " : "") + data.text);
+        toast.success("Voice transcribed!");
+      } else {
+        toast.error("No speech detected. Try again.");
+      }
     } catch (err) {
       console.error("Transcription error:", err);
       toast.error("Could not transcribe audio. Try typing instead.");

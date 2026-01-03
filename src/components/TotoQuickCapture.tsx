@@ -35,10 +35,14 @@ export function TotoQuickCapture() {
 
   const handleSubmit = async () => {
     if (!content.trim()) return;
-    
-    await createNote.mutateAsync({ content: content.trim() });
-    setContent("");
-    // Keep panel open for quick successive notes
+
+    try {
+      await createNote.mutateAsync({ content: content.trim() });
+      setContent("");
+      // Keep panel open for quick successive notes
+    } catch {
+      // Errors are surfaced via the mutation's onError toast
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -53,8 +57,23 @@ export function TotoQuickCapture() {
 
   const startRecording = async () => {
     try {
+      if (typeof MediaRecorder === "undefined") {
+        toast({
+          title: "Voice input not supported",
+          description: "This browser doesn't support recording. Please type your note.",
+          variant: "destructive",
+        });
+        return;
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+
+      const preferredTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+      const mimeType = preferredTypes.find((t) => MediaRecorder.isTypeSupported(t));
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
+
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -65,32 +84,37 @@ export function TotoQuickCapture() {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
-        stream.getTracks().forEach((track) => track.stop());
-        
-        // Convert to base64 and send for transcription
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const base64Audio = (reader.result as string).split(",")[1];
-          
-          try {
-            const { data, error } = await supabase.functions.invoke("voice-to-text", {
-              body: { audio: base64Audio },
-            });
-            
-            if (error) throw error;
-            if (data?.text) {
-              setContent((prev) => prev + (prev ? " " : "") + data.text);
+        try {
+          const audioBlob = new Blob(chunksRef.current, {
+            type: mediaRecorder.mimeType || "audio/webm",
+          });
+
+          // Convert to base64 and send for transcription
+          const reader = new FileReader();
+          reader.onloadend = async () => {
+            const base64Audio = (reader.result as string).split(",")[1];
+
+            try {
+              const { data, error } = await supabase.functions.invoke("voice-to-text", {
+                body: { audio: base64Audio },
+              });
+
+              if (error) throw error;
+              if (data?.text) {
+                setContent((prev) => prev + (prev ? " " : "") + data.text);
+              }
+            } catch (err) {
+              toast({
+                title: "Voice recognition failed",
+                description: "Please try again or type your note",
+                variant: "destructive",
+              });
             }
-          } catch (err) {
-            toast({
-              title: "Voice recognition failed",
-              description: "Please try again or type your note",
-              variant: "destructive",
-            });
-          }
-        };
-        reader.readAsDataURL(audioBlob);
+          };
+          reader.readAsDataURL(audioBlob);
+        } finally {
+          stream.getTracks().forEach((track) => track.stop());
+        }
       };
 
       mediaRecorder.start();
