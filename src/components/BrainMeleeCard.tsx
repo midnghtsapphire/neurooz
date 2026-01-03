@@ -203,7 +203,20 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
     const oversizedFiles = files.filter(f => f.size > MAX_FILE_SIZE);
     if (oversizedFiles.length > 0) {
       const fileList = oversizedFiles.map(f => `${f.name} (${formatFileSize(f.size)})`).join(', ');
-      toast.error(`📦 Files too large - please zip first! These exceed 10MB: ${fileList}`);
+      toast.error(
+        <div className="space-y-1">
+          <p>📦 Files too large - please zip first!</p>
+          <p className="text-xs">Exceeds 10MB: {fileList}</p>
+          <a 
+            href="https://www.ezyzip.com/compress-files-online.html" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-primary underline text-sm"
+          >
+            🔗 Compress free at ezyZip.com
+          </a>
+        </div>
+      );
       // Filter out oversized files and continue with valid ones
       const validFiles = files.filter(f => f.size <= MAX_FILE_SIZE);
       if (validFiles.length === 0) return;

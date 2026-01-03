@@ -53,9 +53,22 @@ export function BrainDumpDialog() {
       const fileList = oversizedFiles.map(f => `• ${f.name} (${formatFileSize(f.size)})`).join('\n');
       toast({
         title: "📦 Files too large - please zip first!",
-        description: `These files exceed 10MB:\n${fileList}\n\nTip: Compress them into a .zip file to upload.`,
+        description: (
+          <div className="space-y-2">
+            <p>These files exceed 10MB:</p>
+            <p className="text-xs">{fileList}</p>
+            <a 
+              href="https://www.ezyzip.com/compress-files-online.html" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-primary underline hover:no-underline text-sm"
+            >
+              🔗 Compress files free at ezyZip.com
+            </a>
+          </div>
+        ),
         variant: "destructive",
-        duration: 8000,
+        duration: 12000,
       });
       // Filter out oversized files and continue with valid ones
       const validFiles = Array.from(files).filter(f => f.size <= MAX_FILE_SIZE);
