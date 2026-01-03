@@ -41,7 +41,7 @@ import {
   Dumbbell
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
-import { AwarenessImage } from "@/components/TornadoAlley/AwarenessImage";
+
 import { CognitiveTestsHub } from "@/components/cognitive-tests/CognitiveTestsHub";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
 
@@ -224,9 +224,10 @@ export default function TornadoAlley() {
             <Card className="border-2 border-sky-500/20 overflow-hidden">
               {/* Hero image - same size as Brain Dump */}
               <div className="relative h-48 sm:h-56 overflow-hidden">
-                <AwarenessImage 
-                  location="tornado_alley_eye"
-                  className="h-full"
+                <img 
+                  src={tornadoAlleyImg} 
+                  alt="Eye of the Tornado" 
+                  className="w-full h-full object-cover"
                 />
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent pointer-events-none" />
