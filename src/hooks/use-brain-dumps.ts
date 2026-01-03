@@ -76,16 +76,18 @@ export function useProcessBrainDump() {
     mutationFn: async ({ 
       brainDumpId, 
       rawContent, 
-      existingProjects 
+      existingProjects,
+      documentUrls
     }: { 
       brainDumpId: string; 
       rawContent: string; 
       existingProjects: string[];
+      documentUrls?: string[];
     }) => {
-      // Call AI to process
+      // Call AI to process - now includes document URLs
       const { data: aiResult, error: fnError } = await supabase.functions.invoke(
         "process-brain-dump",
-        { body: { rawContent, existingProjects } }
+        { body: { rawContent, existingProjects, documentUrls } }
       );
 
       if (fnError) throw fnError;
@@ -103,7 +105,7 @@ export function useProcessBrainDump() {
         .single();
 
       if (error) throw error;
-      return data;
+      return { ...data, inbox_items: aiResult.inbox_items };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["brain-dumps"] });

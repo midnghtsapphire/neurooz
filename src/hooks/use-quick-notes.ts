@@ -8,6 +8,7 @@ export interface QuickNote {
   content: string;
   project_id: string | null;
   is_processed: boolean;
+  category: "inbox" | "maybe" | "someday" | "idea" | "reference";
   created_at: string;
   updated_at: string;
 }
