@@ -41,9 +41,10 @@ import {
   Dumbbell
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
-
+import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { CognitiveTestsHub } from "@/components/cognitive-tests/CognitiveTestsHub";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
+import witchLandingImg from "@/assets/witch-landing.png";
 
 /**
  * Eye of the Tornado Tools
@@ -108,6 +109,8 @@ export default function TornadoAlley() {
   if (activeSection === "hub") {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+        {/* Toto Quick Capture - Notes button */}
+        <TotoQuickCapture />
         {/* Header */}
         <header className="p-4 border-b border-border/30">
           <div className="max-w-4xl mx-auto flex items-center gap-4">
@@ -222,11 +225,11 @@ export default function TornadoAlley() {
             transition={{ delay: 0.3 }}
           >
             <Card className="border-2 border-sky-500/20 overflow-hidden">
-              {/* Hero image - same size as Brain Dump */}
+              {/* Hero image - Witch landing scene */}
               <div className="relative h-48 sm:h-56 overflow-hidden">
                 <img 
-                  src={tornadoAlleyImg} 
-                  alt="Eye of the Tornado" 
+                  src={witchLandingImg} 
+                  alt="The witch's house landing in Oz" 
                   className="w-full h-full object-cover"
                 />
                 {/* Gradient overlay */}
