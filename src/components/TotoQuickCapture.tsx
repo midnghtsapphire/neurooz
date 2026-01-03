@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Dog, X, Send, Mic, MicOff, Sparkles, Clock, Trash2 } from "lucide-react";
+import { Dog, X, Send, Mic, MicOff, Sparkles, Clock, Trash2, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -15,6 +15,7 @@ export function TotoQuickCapture() {
   const [isOpen, setIsOpen] = useState(false);
   const [content, setContent] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const [isOrganizing, setIsOrganizing] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -109,6 +110,44 @@ export function TotoQuickCapture() {
     }
   };
 
+  // Send unprocessed notes to Brain Melee AI for organization
+  const organizeWithAI = async () => {
+    const unprocessedNotes = notes.filter(n => !n.is_processed);
+    if (unprocessedNotes.length === 0) {
+      toast({ title: "No notes to organize", description: "Add some notes first!" });
+      return;
+    }
+
+    setIsOrganizing(true);
+    try {
+      const allContent = unprocessedNotes.map(n => n.content).join("\n\n---\n\n");
+      
+      const { data, error } = await supabase.functions.invoke("brain-melee-chat", {
+        body: { 
+          messages: [{ role: "user", content: allContent }],
+          phase: "organizing"
+        },
+      });
+
+      if (error) throw error;
+
+      toast({ 
+        title: "✨ Notes organized!", 
+        description: "Check your Sticky Notes Inbox for the organized items." 
+      });
+
+      // Could mark notes as processed here if desired
+    } catch (err: any) {
+      toast({
+        title: "Organization failed",
+        description: err.message || "Please try again",
+        variant: "destructive",
+      });
+    } finally {
+      setIsOrganizing(false);
+    }
+  };
+
   return (
     <>
       {/* Floating Toto Button */}
@@ -181,6 +220,18 @@ export function TotoQuickCapture() {
                     <span className="font-semibold text-sm">Toto Quick Capture</span>
                   </div>
                   <div className="flex items-center gap-1">
+                    {notes.filter(n => !n.is_processed).length > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-2 text-xs gap-1"
+                        onClick={organizeWithAI}
+                        disabled={isOrganizing}
+                      >
+                        <Brain className="h-3 w-3" />
+                        {isOrganizing ? "..." : "Organize"}
+                      </Button>
+                    )}
                     <Button
                       variant="ghost"
                       size="sm"
