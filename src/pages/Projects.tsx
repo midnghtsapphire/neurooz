@@ -22,9 +22,10 @@ import { ScoreProjectDialog } from "@/components/ProjectCompletionScorer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns, StickyNote } from "lucide-react";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { TotoQuickCapture } from "@/components/TotoQuickCapture";
+import { StickyNotesInbox } from "@/components/StickyNotesInbox";
 
 const defaultFilters: ProjectFilters = {
   search: "",
@@ -369,6 +370,15 @@ export default function Projects() {
           open={!!editingProject}
           onOpenChange={(open) => !open && setEditingProject(null)}
         />
+
+        {/* Sticky Notes Inbox - Maybes, Ideas, Somedays */}
+        <div className="mt-10">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <StickyNote className="h-5 w-5 text-amber-500" />
+            Sticky Notes Inbox
+          </h2>
+          <StickyNotesInbox />
+        </div>
 
         {/* Unassigned action items section */}
         {filteredActionItems.filter((i) => !i.project_id).length > 0 && (

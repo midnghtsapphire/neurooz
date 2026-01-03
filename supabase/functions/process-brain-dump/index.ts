@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    const { rawContent, existingProjects } = await req.json();
+    const { rawContent, existingProjects, documentUrls } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -19,26 +20,85 @@ serve(async (req) => {
     }
 
     console.log("Processing brain dump, content length:", rawContent?.length);
+    console.log("Document URLs to process:", documentUrls?.length || 0);
+
+    // Initialize Supabase client to read uploaded files
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Collect content from uploaded documents
+    let documentContent = "";
+    if (documentUrls && documentUrls.length > 0) {
+      console.log("Fetching uploaded documents...");
+      
+      for (const filePath of documentUrls) {
+        try {
+          // Download the file
+          const { data, error } = await supabase.storage
+            .from("user-documents")
+            .download(filePath);
+          
+          if (error) {
+            console.error(`Error downloading ${filePath}:`, error);
+            continue;
+          }
+
+          // Get file extension
+          const ext = filePath.split('.').pop()?.toLowerCase();
+          
+          // For text-based files, read directly
+          if (['txt', 'md', 'csv', 'json'].includes(ext || '')) {
+            const text = await data.text();
+            documentContent += `\n\n--- File: ${filePath.split('/').pop()} ---\n${text}`;
+            console.log(`Read text file: ${filePath}`);
+          } 
+          // For PDFs and other documents, note that they were uploaded
+          // (Full parsing would require a PDF library)
+          else if (['pdf', 'doc', 'docx'].includes(ext || '')) {
+            documentContent += `\n\n--- Document: ${filePath.split('/').pop()} (uploaded, needs manual review) ---`;
+            console.log(`Noted document: ${filePath}`);
+          }
+          // For images, note they were uploaded
+          else if (['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext || '')) {
+            documentContent += `\n\n--- Image: ${filePath.split('/').pop()} (uploaded for reference) ---`;
+            console.log(`Noted image: ${filePath}`);
+          }
+        } catch (fileErr) {
+          console.error(`Error processing file ${filePath}:`, fileErr);
+        }
+      }
+    }
+
+    // Combine raw content with document content
+    const fullContent = rawContent + documentContent;
+    console.log("Full content length:", fullContent.length);
 
     const systemPrompt = `You are an AI assistant that helps organize chaotic brain dumps into actionable structure.
 
-Given a brain dump (stream of consciousness, notes, ideas), you will:
+Given a brain dump (stream of consciousness, notes, ideas, and any uploaded document content), you will:
 1. Create a brief summary (2-3 sentences max)
 2. Extract specific action items with priority levels
 3. Categorize content into relevant business/project categories
+4. Identify any "maybe/someday" items that aren't urgent
 
 Respond in JSON format:
 {
   "summary": "Brief summary of the brain dump",
   "action_items": [
-    {"title": "Action item", "priority": "high|medium|low", "category": "category name"}
+    {"title": "Action item", "priority": "high|medium|low", "category": "category name", "suggested_project": "project name or null"}
   ],
   "categories": [
     {"name": "Category", "keywords": ["relevant", "terms"], "suggested_project": "if matches existing project or 'NEW: Project Name'"}
+  ],
+  "inbox_items": [
+    {"content": "Maybe/someday item or idea to revisit", "type": "maybe|someday|idea|reference"}
   ]
 }
 
-Existing projects to match against: ${existingProjects?.join(', ') || 'None'}`;
+Existing projects to match against: ${existingProjects?.join(', ') || 'None'}
+
+IMPORTANT: Extract EVERYTHING from the content - don't miss any ideas, tasks, or information. If something doesn't fit a clear category, put it in inbox_items.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -50,7 +110,7 @@ Existing projects to match against: ${existingProjects?.join(', ') || 'None'}`;
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: rawContent }
+          { role: "user", content: fullContent }
         ],
       }),
     });
@@ -92,7 +152,8 @@ Existing projects to match against: ${existingProjects?.join(', ') || 'None'}`;
       parsed = {
         summary: "Unable to parse brain dump. Please try again.",
         action_items: [],
-        categories: []
+        categories: [],
+        inbox_items: []
       };
     }
 

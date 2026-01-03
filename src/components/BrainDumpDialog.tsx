@@ -73,12 +73,13 @@ export function BrainDumpDialog() {
       document_urls: uploadedFiles.length ? uploadedFiles : undefined,
     });
 
-    // Auto-process with AI
+    // Auto-process with AI - now includes document URLs
     if (result) {
       await processBrainDump.mutateAsync({
         brainDumpId: result.id,
         rawContent: content,
         existingProjects: projects?.map(p => p.name) || [],
+        documentUrls: uploadedFiles.length ? uploadedFiles : undefined,
       });
     }
 
