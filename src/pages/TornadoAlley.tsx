@@ -146,34 +146,42 @@ export default function TornadoAlley() {
             </Card>
           </motion.div>
 
-          {/* Brain Dump Section */}
+          {/* Brain Dump Section - Image forward, text below */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
             <Card 
-              className="cursor-pointer border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-glow group"
+              className="cursor-pointer border-2 border-primary/20 hover:border-primary/40 transition-all hover:shadow-glow group overflow-hidden"
               onClick={() => setActiveSection("brain-dump")}
             >
-              <CardHeader>
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <Brain className="w-8 h-8 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl">Brain Dump</CardTitle>
-                    <CardDescription className="text-base">
-                      Get everything out of your head — voice, text, or files
-                    </CardDescription>
-                  </div>
-                  <Sparkles className="w-6 h-6 text-primary/50 group-hover:text-primary transition-colors" />
+              {/* Large hero image - prominent and clear */}
+              <div className="relative h-48 sm:h-56 overflow-hidden">
+                <img 
+                  src={tornadoAlleyImg} 
+                  alt="Tornado Alley - Brain Dump" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {/* Subtle gradient overlay at bottom for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                
+                {/* Sparkle indicator */}
+                <div className="absolute top-4 right-4">
+                  <Sparkles className="w-6 h-6 text-amber-400 group-hover:text-amber-300 transition-colors" />
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Let it all out. We'll help you organize the chaos into actionable projects and tasks.
-                </p>
+              </div>
+
+              {/* Text content below the image */}
+              <CardContent className="pt-4 pb-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Brain className="w-6 h-6 text-primary" />
+                  <CardTitle className="text-2xl">Brain Dump</CardTitle>
+                </div>
+                <CardDescription className="text-base">
+                  Get everything out of your head — voice, text, or files. 
+                  We'll help you organize the chaos into actionable projects.
+                </CardDescription>
               </CardContent>
             </Card>
           </motion.div>
