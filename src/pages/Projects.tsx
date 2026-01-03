@@ -33,6 +33,8 @@ import { StickyNotesInbox } from "@/components/StickyNotesInbox";
 import { ThemeToggle } from "@/components/neuro/ThemeToggle";
 import { SensorAdaptiveBanner } from "@/components/neuro/SensorAdaptiveBanner";
 import { NeuroProfileSelector } from "@/components/neuro/NeuroProfileSelector";
+import { LearnDrawer } from "@/components/learn/LearnDrawer";
+import { ModeIndicatorPill } from "@/components/learn/ModeIndicatorPill";
 
 const defaultFilters: ProjectFilters = {
   search: "",
@@ -218,6 +220,9 @@ export default function Projects() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                {/* Learn Drawer - Contextual Help */}
+                <LearnDrawer currentView={cognitiveMode} />
+                
                 {/* Cognitive Mode Switcher - The Neuro State Engine */}
                 <CognitiveModeSwitcher
                   mode={cognitiveMode}
@@ -399,6 +404,7 @@ export default function Projects() {
               </Button>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
+              <LearnDrawer />
               <NeuroProfileSelector />
               <ThemeToggle />
               <EnvironmentSelector value={environment} onChange={setEnvironment} />

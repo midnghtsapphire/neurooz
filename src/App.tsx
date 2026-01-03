@@ -31,6 +31,7 @@ import ERSettings from "./pages/ERSettings";
 import CompanyWizard from "./pages/CompanyWizard";
 import TaxWizardPro from "./pages/TaxWizardPro";
 import TornadoAlley from "./pages/TornadoAlley";
+import Learn from "./pages/Learn";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,8 @@ const App = () => (
             <Route path="/company-wizard" element={<CompanyWizard />} />
             <Route path="/tax-wizard" element={<TaxWizardPro />} />
             <Route path="/tornado-alley" element={<TornadoAlley />} />
+            <Route path="/learn" element={<Learn />} />
+            <Route path="/learn/*" element={<Learn />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
