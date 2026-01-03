@@ -96,6 +96,54 @@ export type Database = {
           },
         ]
       }
+      awareness_observations: {
+        Row: {
+          average_visits_to_notice: number | null
+          created_at: string
+          current_image_index: number
+          fastest_notice: number | null
+          id: string
+          image_changed_at: string
+          location: string
+          noticed_at: string | null
+          slowest_notice: number | null
+          total_observations: number
+          updated_at: string
+          user_id: string
+          visits_since_change: number
+        }
+        Insert: {
+          average_visits_to_notice?: number | null
+          created_at?: string
+          current_image_index?: number
+          fastest_notice?: number | null
+          id?: string
+          image_changed_at?: string
+          location: string
+          noticed_at?: string | null
+          slowest_notice?: number | null
+          total_observations?: number
+          updated_at?: string
+          user_id: string
+          visits_since_change?: number
+        }
+        Update: {
+          average_visits_to_notice?: number | null
+          created_at?: string
+          current_image_index?: number
+          fastest_notice?: number | null
+          id?: string
+          image_changed_at?: string
+          location?: string
+          noticed_at?: string | null
+          slowest_notice?: number | null
+          total_observations?: number
+          updated_at?: string
+          user_id?: string
+          visits_since_change?: number
+        }
+        Relationships: []
+      }
       brain_dumps: {
         Row: {
           ai_action_items: Json | null

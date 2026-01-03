@@ -40,8 +40,8 @@ import {
   Sparkles
 } from "lucide-react";
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
+import { AwarenessImage } from "@/components/TornadoAlley/AwarenessImage";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
-import witchLandingImg from "@/assets/witch-landing.png";
 
 /**
  * Eye of the Tornado Tools
@@ -194,20 +194,11 @@ export default function TornadoAlley() {
             transition={{ delay: 0.2 }}
           >
             <Card className="border-2 border-sky-500/20 overflow-hidden">
-              {/* Surreal Dalí-style hero image */}
-              <div className="relative h-56 sm:h-64 overflow-hidden">
-                <img 
-                  src={witchLandingImg} 
-                  alt="The Landing - Find your calm" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-sm text-muted-foreground italic">
-                    Sometimes we're so overwhelmed we don't notice what's right in front of us...
-                  </p>
-                </div>
-              </div>
+              {/* Awareness Image - rotates subtly, tracks if user notices */}
+              <AwarenessImage 
+                location="tornado_alley_eye"
+                caption="Sometimes we're so overwhelmed we don't notice what's right in front of us..."
+              />
               
               <CardHeader className="pt-4">
                 <div className="flex items-center gap-4">
