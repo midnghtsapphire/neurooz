@@ -584,3 +584,127 @@
 .skip-to-content:focus {
   top: 1rem;
 }
+
+/* ============================================ */
+/* 🦇 VAMPIRE MODE - Neuro-Nocturnal UI Class  */
+/* ============================================ */
+/* For: nocturnal, light-sensitive, migraine,  */
+/* TBI, post-chemo, autistic, chronic fatigue, */
+/* trauma survivors, night-shift workers       */
+/* ============================================ */
+
+.vampire-mode {
+  /* True OLED Black - complete darkness */
+  --background: 0 0% 0%;
+  --foreground: 15 15% 75%;
+  
+  /* Deep charcoal cards - barely visible separation */
+  --card: 0 0% 4%;
+  --card-foreground: 15 10% 70%;
+  
+  --popover: 0 0% 3%;
+  --popover-foreground: 15 10% 72%;
+  
+  /* Ember Red/Orange Primary - preserves night vision */
+  --primary: 15 70% 40%;
+  --primary-foreground: 0 0% 95%;
+  
+  /* Deep ember secondary */
+  --secondary: 10 30% 8%;
+  --secondary-foreground: 15 15% 65%;
+  
+  /* Near-invisible muted */
+  --muted: 0 0% 6%;
+  --muted-foreground: 0 0% 45%;
+  
+  /* Soft amber accent */
+  --accent: 25 60% 35%;
+  --accent-foreground: 0 0% 92%;
+  
+  /* Muted warning - no harsh red */
+  --destructive: 25 50% 35%;
+  --destructive-foreground: 0 0% 90%;
+  
+  /* Ultra-low contrast borders */
+  --border: 0 0% 10%;
+  --input: 0 0% 6%;
+  --ring: 15 50% 30%;
+  
+  /* Vampire-specific tokens */
+  --vampire-ember: 15 70% 40%;
+  --vampire-glow: 25 60% 45%;
+  --vampire-shadow: 0 0% 2%;
+  --vampire-moon: 45 20% 50%;
+}
+
+/* Kill ALL animations in Vampire Mode */
+.vampire-mode *,
+.vampire-mode *::before,
+.vampire-mode *::after,
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Soft glow borders for spatial anchoring */
+.vampire-mode .border,
+.vampire-mode [class*="border"] {
+  border-color: hsl(15 30% 15% / 0.5);
+}
+
+/* Remove all shadows - pure flat */
+.vampire-mode *,
+.vampire-mode [class*="shadow"] {
+  box-shadow: none !important;
+}
+
+/* Large text, high spacing for night cognition */
+.vampire-mode {
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  line-height: 1.7;
+}
+
+/* Soft ember glow on focus - no harsh white */
+.vampire-mode *:focus-visible {
+  outline: 2px solid hsl(15 50% 35%);
+  outline-offset: 2px;
+}
+
+/* Time anchors for grounding */
+.night-anchors .time-anchor {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: hsl(0 0% 5%);
+  border: 1px solid hsl(15 30% 20%);
+  border-radius: 0.5rem;
+  color: hsl(15 40% 55%);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  z-index: 50;
+}
+
+.night-anchors .time-anchor::before {
+  content: "🌙 ";
+}
+
+/* Simplified UI - reduce visual noise */
+.simplified-ui .decorative,
+.simplified-ui [class*="gradient"],
+.simplified-ui .ornamental {
+  display: none;
+}
+
+.simplified-ui .card {
+  border-radius: 0.25rem;
+}
+
+/* Focus indicators - bold visible focus rings */
+.focus-indicators *:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 3px;
+}
