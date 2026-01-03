@@ -17,7 +17,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import brainMeleeImg from "@/assets/brain-melee.png";
+import tornadoAlleyImg from "@/assets/tornado-alley.png";
 
 interface SprintSession {
   duration: number; // minutes
@@ -39,11 +39,11 @@ const FEELING_OPTIONS = [
   { emoji: "🔥", label: "Motivated", value: "motivated" },
 ];
 
-interface BrainMeleeReviewCardProps {
-  onStartMelee?: () => void;
+interface BrainDumpReviewCardProps {
+  onStartBrainDump?: () => void;
 }
 
-export function BrainMeleeReviewCard({ onStartMelee }: BrainMeleeReviewCardProps) {
+export function BrainDumpReviewCard({ onStartBrainDump }: BrainDumpReviewCardProps) {
   const [currentFeeling, setCurrentFeeling] = useState<string | null>(null);
   const [selectedSprint, setSelectedSprint] = useState<SprintSession | null>(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
@@ -87,21 +87,21 @@ export function BrainMeleeReviewCard({ onStartMelee }: BrainMeleeReviewCardProps
       <Card className="overflow-hidden border-2 border-primary/20 shadow-glow hover:shadow-medium transition-all">
         <div className="relative h-32 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20">
           <img 
-            src={brainMeleeImg} 
-            alt="Brain Melee" 
+            src={tornadoAlleyImg} 
+            alt="Tornado Alley" 
             className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40"
           />
           <div className="absolute inset-0 flex items-center justify-between px-6">
             <div>
               <h3 className="text-xl font-display font-bold text-foreground flex items-center gap-2">
                 <Brain className="w-6 h-6 text-primary" />
-                Brain Melee
+                Tornado Alley
               </h3>
-              <p className="text-sm text-muted-foreground">Review feelings & sprint sessions</p>
+              <p className="text-sm text-muted-foreground">Brain Dump & focus sessions</p>
             </div>
-            <Button onClick={onStartMelee} variant="secondary" size="sm" className="gap-1">
+            <Button onClick={onStartBrainDump} variant="secondary" size="sm" className="gap-1">
               <Sparkles className="w-4 h-4" />
-              New Melee
+              New Dump
             </Button>
           </div>
         </div>
@@ -216,4 +216,4 @@ export function BrainMeleeReviewCard({ onStartMelee }: BrainMeleeReviewCardProps
   );
 }
 
-export default BrainMeleeReviewCard;
+export default BrainDumpReviewCard;

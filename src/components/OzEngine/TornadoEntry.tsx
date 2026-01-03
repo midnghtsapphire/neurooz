@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles } from "lucide-react";
-import brainMeleeIcon from "@/assets/brain-melee.png";
+import tornadoAlleyIcon from "@/assets/tornado-alley.png";
 
 interface TornadoEntryProps {
   isOpen: boolean;
@@ -183,9 +183,9 @@ export function TornadoEntry({ isOpen, onComplete, onSkip }: TornadoEntryProps) 
                   animate={{ scale: [1, 1.05, 1] }}
                   transition={{ duration: 3, repeat: Infinity }}
                 >
-                  <img src={brainMeleeIcon} alt="Brain Melee" className="h-14 w-14" />
+                  <img src={tornadoAlleyIcon} alt="Tornado Alley" className="h-14 w-14" />
                 </motion.div>
-                <h2 className="text-2xl font-bold text-emerald-100 mb-2">Brain Melee</h2>
+                <h2 className="text-2xl font-bold text-emerald-100 mb-2">Brain Dump</h2>
                 <p className="text-emerald-300/70">
                   Ideas, stress, fears, dreams, random chaos — no structure, no judgment. Just purge.
                 </p>

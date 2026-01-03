@@ -111,7 +111,7 @@ export function TotoQuickCapture() {
     }
   };
 
-  // Send unprocessed notes to Brain Melee AI for organization
+  // Send unprocessed notes to Brain Dump AI for organization
   const organizeWithAI = async () => {
     const unprocessedNotes = notes.filter(n => !n.is_processed);
     if (unprocessedNotes.length === 0) {

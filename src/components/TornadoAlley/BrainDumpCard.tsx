@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import brainMeleeImg from "@/assets/brain-melee.png";
+import tornadoAlleyImg from "@/assets/tornado-alley.png";
 
 interface Message {
   role: "user" | "assistant";
@@ -38,11 +38,11 @@ interface OrganizedItem {
   description?: string;
 }
 
-interface BrainMeleeCardProps {
+interface BrainDumpCardProps {
   onComplete?: (items: OrganizedItem[]) => void;
 }
 
-export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
+export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
   const [phase, setPhase] = useState<"intro" | "chat" | "organizing" | "review">("intro");
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -330,7 +330,7 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
   const completeReview = () => {
     const selectedItems = organizedItems.filter(item => item.checked);
     onComplete?.(selectedItems);
-    toast.success(`Created ${selectedItems.length} items from your Brain Melee!`);
+    toast.success(`Created ${selectedItems.length} items from your Brain Dump!`);
   };
 
   const getTypeIcon = (type: string) => {
@@ -364,14 +364,14 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
         <Card className="overflow-hidden border-2 border-primary/20 shadow-glow">
           <div className="relative h-48 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20">
             <img 
-              src={brainMeleeImg} 
-              alt="Brain Melee" 
+              src={tornadoAlleyImg} 
+              alt="Tornado Alley" 
               className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60"
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <Brain className="w-16 h-16 text-primary mx-auto mb-2 animate-pulse" />
-                <h2 className="text-3xl font-display font-bold text-foreground">Brain Melee</h2>
+                <h2 className="text-3xl font-display font-bold text-foreground">Brain Dump</h2>
               </div>
             </div>
           </div>
@@ -399,7 +399,7 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
               onClick={() => setPhase("chat")}
             >
               <Zap className="w-5 h-5" />
-              Start Brain Melee
+              Start Brain Dump
             </Button>
           </CardContent>
         </Card>
@@ -420,7 +420,7 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Brain className="w-5 h-5 text-primary" />
-                Brain Melee
+                Brain Dump
               </CardTitle>
               {messages.length > 2 && (
                 <Button 
@@ -630,4 +630,4 @@ export function BrainMeleeCard({ onComplete }: BrainMeleeCardProps) {
   );
 }
 
-export default BrainMeleeCard;
+export default BrainDumpCard;

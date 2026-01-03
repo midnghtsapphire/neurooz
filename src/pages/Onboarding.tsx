@@ -8,7 +8,7 @@ import { useTravelerProfile } from '@/hooks/use-traveler-profile';
 import { TravelerState, Pace, TRAVELER_STATES } from '@/types/emerald-road';
 import { Map, ChevronRight, ChevronLeft, User, Compass, Gauge, Brain, SkipForward } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import BrainMeleeCard from '@/components/BrainMeleeCard';
+import BrainDumpCard from '@/components/TornadoAlley/BrainDumpCard';
 import { useCreateProject, useCreateActionItem } from '@/hooks/use-projects';
 import { toast } from 'sonner';
 
@@ -23,8 +23,8 @@ export default function Onboarding() {
   const [currentState, setCurrentState] = useState<TravelerState>('foggy');
   const [pace, setPace] = useState<Pace>('standard');
 
-  const handleBrainMeleeComplete = async (items: any[]) => {
-    // Create projects and tasks from brain melee results
+  const handleBrainDumpComplete = async (items: any[]) => {
+    // Create projects and tasks from brain dump results
     const projects = items.filter(i => i.type === 'project');
     const tasks = items.filter(i => i.type === 'task' || i.type === 'idea' || i.type === 'concern');
     
@@ -252,12 +252,12 @@ export default function Onboarding() {
               <Brain className="w-8 h-8 text-emerald-gold" />
             </div>
             <h1 className="text-2xl font-bold text-clean-white text-center mb-2">
-              Brain Melee
+              Tornado Alley
             </h1>
             <p className="text-moon-silver/80 text-center mb-8">
               Let's get everything out of your head and organized into projects.
             </p>
-            <BrainMeleeCard onComplete={handleBrainMeleeComplete} />
+            <BrainDumpCard onComplete={handleBrainDumpComplete} />
           </div>
         )}
       </main>
@@ -292,7 +292,7 @@ export default function Onboarding() {
                   onClick={() => setStep(4)}
                   className="flex-1 bg-emerald-gold hover:bg-emerald-gold/90 text-night-emerald font-semibold"
                 >
-                  Brain Melee
+                  Brain Dump
                   <Brain className="w-4 h-4 ml-1" />
                 </Button>
               )}
@@ -304,7 +304,7 @@ export default function Onboarding() {
                 className="w-full mt-2 text-moon-silver/70 hover:text-moon-silver"
               >
                 <SkipForward className="w-4 h-4 mr-1" />
-                Skip Brain Melee
+                Skip Brain Dump
               </Button>
             )}
           </div>
