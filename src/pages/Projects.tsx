@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useProjects, useActionItems, useDeleteProject, Project } from "@/hooks/use-projects";
 import { useProjectItems } from "@/hooks/use-project-items";
 import { useTodayCheckin } from "@/hooks/use-focus-system";
+import { useCognitiveMode } from "@/hooks/use-cognitive-mode";
 import { ProjectCard } from "@/components/ProjectCard";
 import { ActionItemRow } from "@/components/ActionItemRow";
 import { ProjectItemRow } from "@/components/ProjectItemRow";
@@ -19,10 +20,13 @@ import { YellowBrickRoad } from "@/components/YellowBrickRoad";
 import { SetbackMatrix } from "@/components/SetbackMatrix";
 import { DailyOzRitual } from "@/components/DailyOzRitual";
 import { ScoreProjectDialog } from "@/components/ProjectCompletionScorer";
+import { CognitiveModeSwitcher, CognitiveModeIndicator } from "@/components/neuro/CognitiveModeSwitcher";
+import { PowerModeConsentDialog } from "@/components/neuro/PowerModeConsentDialog";
+import { RecoveryModeView } from "@/components/neuro/RecoveryModeView";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns, StickyNote, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns, StickyNote, Eye, EyeOff, Brain, Zap, Heart } from "lucide-react";
 import { KanbanBoard } from "@/components/KanbanBoard";
 import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { StickyNotesInbox } from "@/components/StickyNotesInbox";
@@ -43,7 +47,16 @@ export default function Projects() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [environment, setEnvironment] = useState<Environment>("sandbox");
   const [filters, setFilters] = useState<ProjectFilters>(defaultFilters);
-  const [focusMode, setFocusMode] = useState(false); // ADHD focus mode - hides project grid
+  const [focusMode, setFocusMode] = useState(false);
+  const [showPowerModeConsent, setShowPowerModeConsent] = useState(false);
+  
+  // Neuro-adaptive cognitive mode system
+  const { 
+    mode: cognitiveMode, 
+    setMode: setCognitiveMode, 
+    needsConsentForPowerMode,
+    grantPowerModeConsent 
+  } = useCognitiveMode();
   
   const { data: projects = [], isLoading: projectsLoading } = useProjects();
   const { data: allActionItems = [] } = useActionItems();
@@ -166,6 +179,17 @@ export default function Projects() {
 
     return (
       <div className="min-h-screen bg-background">
+        {/* Power Mode Consent Dialog */}
+        <PowerModeConsentDialog
+          open={showPowerModeConsent}
+          onConfirm={() => {
+            grantPowerModeConsent();
+            setCognitiveMode("power");
+            setShowPowerModeConsent(false);
+          }}
+          onCancel={() => setShowPowerModeConsent(false)}
+        />
+
         <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
@@ -191,8 +215,20 @@ export default function Projects() {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                {/* Cognitive Mode Switcher - The Neuro State Engine */}
+                <CognitiveModeSwitcher
+                  mode={cognitiveMode}
+                  onChange={setCognitiveMode}
+                  onPowerModeRequest={() => {
+                    if (needsConsentForPowerMode) {
+                      setShowPowerModeConsent(true);
+                    } else {
+                      setCognitiveMode("power");
+                    }
+                  }}
+                />
                 {todayCheckin && (
-                  <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 gap-1">
+                  <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 gap-1 hidden sm:flex">
                     <Sparkles className="h-3 w-3" />
                     Ritual Complete
                   </Badge>
@@ -204,101 +240,130 @@ export default function Projects() {
         </header>
 
         <main className="container mx-auto px-4 py-6">
-          {/* Project Items Section (Bulk Uploaded) */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Package className="h-5 w-5" />
-                Project Items
-              </h2>
-              <BulkUploadDialog projectId={selectedProject.id} />
-            </div>
-
-            {projectItems.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground bg-muted/30 rounded-lg border border-dashed">
-                <Package className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">No items yet</p>
-                <p className="text-xs">Use "Bulk Add" to add multiple items at once</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {projectItems.map((item) => (
-                  <ProjectItemRow 
-                    key={item.id} 
-                    item={item} 
-                    projectId={selectedProject.id}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Action Items - Vertical Flow Default (Brain-Safe) */}
-          <Tabs defaultValue="road" className="w-full">
-            <div className="flex items-center justify-between mb-4">
-              <TabsList>
-                <TabsTrigger value="road" className="gap-2" title="Brain-safe vertical flow">
-                  <MapPin className="h-4 w-4" />
-                  <span className="hidden sm:inline">Yellow Brick Road</span>
-                  <span className="sm:hidden">Road</span>
-                </TabsTrigger>
-                <TabsTrigger value="list" className="gap-2" title="Simple list view">
-                  <ListTodo className="h-4 w-4" />
-                  <span className="hidden sm:inline">List View</span>
-                  <span className="sm:hidden">List</span>
-                </TabsTrigger>
-                <TabsTrigger value="kanban" className="gap-2 text-muted-foreground" title="Power mode: horizontal columns (high cognitive load)">
-                  <Columns className="h-4 w-4" />
-                  <span className="hidden sm:inline">Kanban</span>
-                  <span className="sm:hidden">Grid</span>
-                </TabsTrigger>
-              </TabsList>
-              <div className="flex items-center gap-2">
-                <SetbackMatrix actionItems={projectActionItems} />
-                <CreateActionItemDialog projectId={selectedProject.id} />
-              </div>
-            </div>
-
-            <TabsContent value="road">
-              <YellowBrickRoad 
-                actionItems={projectActionItems} 
-                allActionItems={allActionItems}
-              />
-            </TabsContent>
-
-            <TabsContent value="list">
-              {projectActionItems.length === 0 ? (
-                <div className="text-center py-12 text-muted-foreground">
-                  <ListTodo className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>No action items yet</p>
-                  <p className="text-sm">Add your first action item to get started</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {projectActionItems.map((item) => (
-                    <ActionItemRow key={item.id} item={item} />
-                  ))}
+          {/* Recovery Mode - Ultra Simple, One Task Only */}
+          {cognitiveMode === "recovery" ? (
+            <RecoveryModeView actionItems={projectActionItems} />
+          ) : (
+            <>
+              {/* Project Items Section - Hidden in Flow mode for less noise */}
+              {cognitiveMode === "power" && projectItems.length > 0 && (
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      Project Items
+                    </h2>
+                    <BulkUploadDialog projectId={selectedProject.id} />
+                  </div>
+                  <div className="space-y-2">
+                    {projectItems.map((item) => (
+                      <ProjectItemRow 
+                        key={item.id} 
+                        item={item} 
+                        projectId={selectedProject.id}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
-            </TabsContent>
 
-            <TabsContent value="kanban">
-              {/* Cognitive load warning for Kanban */}
-              <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-                <p className="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
-                  <Columns className="h-4 w-4" />
-                  <span><strong>Power Mode:</strong> Horizontal layout uses more working memory. Switch to Road view if feeling overwhelmed.</span>
-                </p>
+              {/* Flow Mode - Brain-safe vertical flow */}
+              {cognitiveMode === "flow" && (
+                <div className="space-y-6">
+                  {/* Mode explanation - gentle, not preachy */}
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Brain className="h-4 w-4 text-emerald-500" />
+                    <span>Flow Mode — vertical focus, gentle pacing</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <SetbackMatrix actionItems={projectActionItems} />
+                    </div>
+                    <CreateActionItemDialog projectId={selectedProject.id} />
+                  </div>
+
+                  <YellowBrickRoad 
+                    actionItems={projectActionItems} 
+                    allActionItems={allActionItems}
+                  />
+
+                  {/* Bulk upload tucked away but accessible */}
+                  {projectItems.length === 0 && (
+                    <div className="pt-6 border-t">
+                      <BulkUploadDialog projectId={selectedProject.id} />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Power Mode - Full Kanban + Dense Data */}
+              {cognitiveMode === "power" && (
+                <div className="space-y-4">
+                  {/* Mode indicator */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
+                      <Zap className="h-4 w-4" />
+                      <span>Power Mode — high-capacity planning</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <SetbackMatrix actionItems={projectActionItems} />
+                      <CreateActionItemDialog projectId={selectedProject.id} />
+                    </div>
+                  </div>
+
+                  {/* Tabs for Power Mode users who want options */}
+                  <Tabs defaultValue="kanban" className="w-full">
+                    <TabsList>
+                      <TabsTrigger value="kanban" className="gap-2">
+                        <Columns className="h-4 w-4" />
+                        Kanban
+                      </TabsTrigger>
+                      <TabsTrigger value="road" className="gap-2">
+                        <MapPin className="h-4 w-4" />
+                        Road
+                      </TabsTrigger>
+                      <TabsTrigger value="list" className="gap-2">
+                        <ListTodo className="h-4 w-4" />
+                        List
+                      </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="kanban" className="mt-4">
+                      <KanbanBoard actionItems={projectActionItems} />
+                    </TabsContent>
+
+                    <TabsContent value="road" className="mt-4">
+                      <YellowBrickRoad 
+                        actionItems={projectActionItems} 
+                        allActionItems={allActionItems}
+                      />
+                    </TabsContent>
+
+                    <TabsContent value="list" className="mt-4">
+                      {projectActionItems.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                          <ListTodo className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>No action items yet</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {projectActionItems.map((item) => (
+                            <ActionItemRow key={item.id} item={item} />
+                          ))}
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              )}
+
+              {/* Project Garden - shows in Flow and Power modes */}
+              <div className="mt-10 pt-6 border-t">
+                <GardenRewards actionItems={projectActionItems} />
               </div>
-              <KanbanBoard actionItems={projectActionItems} />
-            </TabsContent>
-
-          </Tabs>
-
-          {/* Project Garden */}
-          <div className="mt-10 pt-6 border-t">
-            <GardenRewards actionItems={projectActionItems} />
-          </div>
+            </>
+          )}
         </main>
       </div>
     );
