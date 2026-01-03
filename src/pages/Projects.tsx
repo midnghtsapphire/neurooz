@@ -22,7 +22,9 @@ import { ScoreProjectDialog } from "@/components/ProjectCompletionScorer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles } from "lucide-react";
+import { ArrowLeft, FolderKanban, ListTodo, Leaf, Package, MapPin, Trophy, Sparkles, Columns } from "lucide-react";
+import { KanbanBoard } from "@/components/KanbanBoard";
+import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 
 const defaultFilters: ProjectFilters = {
   search: "",
@@ -237,6 +239,10 @@ export default function Projects() {
                   <MapPin className="h-4 w-4" />
                   Yellow Brick Road
                 </TabsTrigger>
+                <TabsTrigger value="kanban" className="gap-2">
+                  <Columns className="h-4 w-4" />
+                  Kanban
+                </TabsTrigger>
                 <TabsTrigger value="list" className="gap-2">
                   <ListTodo className="h-4 w-4" />
                   List View
@@ -253,6 +259,10 @@ export default function Projects() {
                 actionItems={projectActionItems} 
                 allActionItems={allActionItems}
               />
+            </TabsContent>
+
+            <TabsContent value="kanban">
+              <KanbanBoard actionItems={projectActionItems} />
             </TabsContent>
 
             <TabsContent value="list">
@@ -284,6 +294,9 @@ export default function Projects() {
   // Projects list view
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Toto Quick Capture - Always available */}
+      <TotoQuickCapture />
+      
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between flex-wrap gap-3">

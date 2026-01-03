@@ -30,6 +30,10 @@ export interface ActionItem {
   setback_reason: string | null;
   priority_score: number;
   task_type: "scarecrow" | "tinman" | "lion";
+  // New fields for kanban and follow-up tracking
+  parent_id: string | null;
+  waiting_on: string | null;
+  kanban_status: "backlog" | "todo" | "in_progress" | "waiting" | "done";
 }
 
 export function useProjects() {
