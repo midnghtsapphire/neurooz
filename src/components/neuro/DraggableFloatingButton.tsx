@@ -8,36 +8,36 @@ interface Position {
 
 interface DraggableFloatingButtonProps {
   children: ReactNode;
-  defaultPosition: Position;
+  defaultPosition?: Position;
   storageKey: string;
 }
 
 export function DraggableFloatingButton({ 
   children, 
-  defaultPosition, 
   storageKey 
 }: DraggableFloatingButtonProps) {
-  const [position, setPosition] = useState<Position>(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch {
-        return defaultPosition;
-      }
-    }
-    return defaultPosition;
-  });
-  
+  const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const constraintsRef = useRef<HTMLDivElement>(null);
 
-  // Save position to localStorage
+  // Load saved offset from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      try {
+        setOffset(JSON.parse(saved));
+      } catch {
+        // Keep default offset
+      }
+    }
+  }, [storageKey]);
+
+  // Save offset to localStorage
   useEffect(() => {
     if (!isDragging) {
-      localStorage.setItem(storageKey, JSON.stringify(position));
+      localStorage.setItem(storageKey, JSON.stringify(offset));
     }
-  }, [position, isDragging, storageKey]);
+  }, [offset, isDragging, storageKey]);
 
   return (
     <>
@@ -56,19 +56,16 @@ export function DraggableFloatingButton({
         onDragStart={() => setIsDragging(true)}
         onDragEnd={(_, info) => {
           setIsDragging(false);
-          setPosition(prev => ({
+          setOffset(prev => ({
             x: prev.x + info.offset.x,
             y: prev.y + info.offset.y,
           }));
         }}
         style={{ 
-          position: "fixed",
-          top: defaultPosition.y,
-          left: defaultPosition.x,
-          x: position.x,
-          y: position.y,
+          x: offset.x,
+          y: offset.y,
         }}
-        className="z-50 cursor-grab active:cursor-grabbing"
+        className="fixed bottom-24 right-6 z-50 cursor-grab active:cursor-grabbing"
         whileDrag={{ scale: 1.05 }}
       >
         {children}
