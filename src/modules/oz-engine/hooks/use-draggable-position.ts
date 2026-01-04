@@ -11,6 +11,22 @@ export interface UseDraggablePositionReturn {
   isDragging: boolean;
   onDragStart: () => void;
   onDragEnd: (offsetX: number, offsetY: number) => void;
+  resetPosition: () => void;
+}
+
+/**
+ * Clamp offset to keep element visible on screen
+ */
+function clampToViewport(offset: Position): Position {
+  if (typeof window === "undefined") return offset;
+  
+  const maxX = window.innerWidth - 100;
+  const maxY = window.innerHeight - 100;
+  
+  return {
+    x: Math.max(-maxX, Math.min(maxX, offset.x)),
+    y: Math.max(-maxY, Math.min(maxY, offset.y)),
+  };
 }
 
 export function useDraggablePosition(
@@ -20,12 +36,13 @@ export function useDraggablePosition(
   const [offset, setOffset] = useState<Position>(defaultOffset);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Load saved offset from localStorage
+  // Load saved offset from localStorage (clamped to viewport)
   useEffect(() => {
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
-        setOffset(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        setOffset(clampToViewport(parsed));
       } catch {
         // Keep default offset
       }
@@ -45,16 +62,22 @@ export function useDraggablePosition(
 
   const onDragEnd = useCallback((offsetX: number, offsetY: number) => {
     setIsDragging(false);
-    setOffset((prev) => ({
+    setOffset((prev) => clampToViewport({
       x: prev.x + offsetX,
       y: prev.y + offsetY,
     }));
   }, []);
+
+  const resetPosition = useCallback(() => {
+    setOffset(defaultOffset);
+    localStorage.removeItem(storageKey);
+  }, [defaultOffset, storageKey]);
 
   return {
     offset,
     isDragging,
     onDragStart,
     onDragEnd,
+    resetPosition,
   };
 }

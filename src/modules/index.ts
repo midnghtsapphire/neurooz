@@ -10,3 +10,6 @@ export * from "./oz-engine";
 
 // Learn - Educational content and help system
 export * from "./learn";
+
+// Quick Capture - Voice/text note capture system
+export * from "./quick-capture";
