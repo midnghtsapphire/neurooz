@@ -1,43 +1,25 @@
-import { useState, useRef, useEffect, ReactNode } from "react";
-import { motion } from "framer-motion";
+/**
+ * Draggable Floating Button
+ * Modular component using the oz-engine hooks
+ */
 
-interface Position {
-  x: number;
-  y: number;
-}
+import { useRef, ReactNode } from "react";
+import { motion } from "framer-motion";
+import { useDraggablePosition } from "@/modules/oz-engine";
 
 interface DraggableFloatingButtonProps {
   children: ReactNode;
-  defaultPosition?: Position;
   storageKey: string;
+  className?: string;
 }
 
 export function DraggableFloatingButton({ 
   children, 
-  storageKey 
+  storageKey,
+  className = "fixed bottom-24 right-6",
 }: DraggableFloatingButtonProps) {
-  const [offset, setOffset] = useState<Position>({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
   const constraintsRef = useRef<HTMLDivElement>(null);
-
-  // Load saved offset from localStorage
-  useEffect(() => {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      try {
-        setOffset(JSON.parse(saved));
-      } catch {
-        // Keep default offset
-      }
-    }
-  }, [storageKey]);
-
-  // Save offset to localStorage
-  useEffect(() => {
-    if (!isDragging) {
-      localStorage.setItem(storageKey, JSON.stringify(offset));
-    }
-  }, [offset, isDragging, storageKey]);
+  const { offset, onDragStart, onDragEnd } = useDraggablePosition(storageKey);
 
   return (
     <>
@@ -53,19 +35,10 @@ export function DraggableFloatingButton({
         dragConstraints={constraintsRef}
         dragElastic={0.1}
         dragMomentum={false}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={(_, info) => {
-          setIsDragging(false);
-          setOffset(prev => ({
-            x: prev.x + info.offset.x,
-            y: prev.y + info.offset.y,
-          }));
-        }}
-        style={{ 
-          x: offset.x,
-          y: offset.y,
-        }}
-        className="fixed bottom-24 right-6 z-50 cursor-grab active:cursor-grabbing"
+        onDragStart={onDragStart}
+        onDragEnd={(_, info) => onDragEnd(info.offset.x, info.offset.y)}
+        style={{ x: offset.x, y: offset.y }}
+        className={`${className} z-50 cursor-grab active:cursor-grabbing`}
         whileDrag={{ scale: 1.05 }}
       >
         {children}

@@ -1,3 +1,8 @@
+/**
+ * Learn Drawer Component
+ * Uses the modular learn data system
+ */
+
 import { useState, useMemo } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BookOpen, Search, Brain, AlertTriangle, ExternalLink, Sparkles } from "lucide-react";
-import { learnData, searchDictionary, getViewHelp } from "@/lib/learn-data";
+import { learnData, searchDictionary, getViewHelp } from "@/modules/learn";
 import { Link } from "react-router-dom";
 
 interface LearnDrawerProps {
@@ -76,7 +81,7 @@ export function LearnDrawer({ currentView = "flow", trigger }: LearnDrawerProps)
                     </div>
                   </div>
 
-                  {"warning" in viewHelp && viewHelp.warning && (
+                  {viewHelp.warning && (
                     <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
                       <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
                       <p className="text-sm text-amber-700 dark:text-amber-300">{viewHelp.warning}</p>
@@ -106,7 +111,7 @@ export function LearnDrawer({ currentView = "flow", trigger }: LearnDrawerProps)
                   )}
                 </div>
               ) : (
-                <p className="text-muted-foreground text-sm">No context help available for this view.</p>
+                <p className="text-muted-foreground text-sm">No context help available.</p>
               )}
 
               <div className="pt-4 border-t">

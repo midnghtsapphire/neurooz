@@ -289,27 +289,27 @@ export default function Learn() {
             <div className="flex items-center gap-3">
               <Accessibility className="h-8 w-8 text-blue-500" />
               <div>
-                <h2 className="text-2xl font-bold">{learnData.accessibilitySupport.title}</h2>
-                <p className="text-muted-foreground">{learnData.accessibilitySupport.subtitle}</p>
+                <h2 className="text-2xl font-bold">{learnData.accessibility.title}</h2>
+                <p className="text-muted-foreground">{learnData.accessibility.subtitle}</p>
               </div>
             </div>
             
             <div className="space-y-4">
-              {learnData.accessibilitySupport.sections.map((section, i) => (
+              {learnData.accessibility.sections.map((section, i) => (
                 <Card key={i}>
                   <CardHeader>
                     <CardTitle className="text-lg">{section.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {"content" in section && section.content && (
-                      <p className="text-muted-foreground">{section.content}</p>
-                    )}
-                    {"bullets" in section && section.bullets && (
-                      <ul className="space-y-2">
-                        {section.bullets.map((bullet, j) => (
-                          <li key={j} className="flex items-center gap-2 text-sm">
-                            <Sparkles className="h-3 w-3 text-blue-500" />
-                            {bullet}
+                    {section.tools && (
+                      <ul className="space-y-3">
+                        {section.tools.map((tool, j) => (
+                          <li key={j} className="flex items-start gap-2 text-sm">
+                            <Sparkles className="h-3 w-3 text-blue-500 mt-1" />
+                            <div>
+                              <span className="font-medium">{tool.name}</span>
+                              <p className="text-muted-foreground">{tool.description}</p>
+                            </div>
                           </li>
                         ))}
                       </ul>

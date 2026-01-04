@@ -32,8 +32,8 @@ export function FloatingTornadoButton() {
 
   return (
     <DraggableFloatingButton
-      defaultPosition={{ x: window.innerWidth - 100, y: 80 }}
       storageKey="tornado-button-position"
+      className="fixed top-20 right-6"
     >
       <motion.button
         onClick={() => navigate("/tornado-alley")}

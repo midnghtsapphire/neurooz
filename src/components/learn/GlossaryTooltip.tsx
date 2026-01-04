@@ -5,7 +5,10 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { Badge } from "@/components/ui/badge";
-import { getTermDefinition } from "@/lib/learn-data";
+import { getDefinition } from "@/lib/learn-data";
+
+// Alias for backward compatibility
+const getTermDefinition = getDefinition;
 import { HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
