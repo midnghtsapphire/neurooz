@@ -165,10 +165,7 @@ export function TotoQuickCapture() {
   return (
     <>
       {/* Floating Toto Button - Draggable */}
-      <DraggableFloatingButton
-        defaultPosition={{ x: window.innerWidth - 100, y: window.innerHeight - 180 }}
-        storageKey="toto-button-position"
-      >
+      <DraggableFloatingButton storageKey="toto-button-position">
         <div className="relative">
           <Button
             size="lg"
