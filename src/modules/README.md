@@ -123,6 +123,48 @@ src/modules/
     └── data.ts                # Learn data & utilities
 ```
 
+### 3. Quick Capture Module (`@/modules/quick-capture`)
+
+Voice/text note capture system.
+
+**Features:**
+- Floating draggable capture button
+- Voice recording with browser MediaRecorder API
+- Note history with delete
+- AI organization hook
+- Fully customizable styling
+
+**Usage:**
+
+```tsx
+import { 
+  QuickCaptureButton, 
+  QuickCapturePanel,
+  useVoiceRecording 
+} from "@/modules/quick-capture";
+
+// Use voice recording
+const { isRecording, startRecording, stopRecording } = useVoiceRecording({
+  onAudioReady: (base64Audio) => {
+    // Send to speech-to-text API
+  },
+});
+
+// Render the button
+<QuickCaptureButton
+  isOpen={isOpen}
+  onToggle={() => setIsOpen(!isOpen)}
+  buttonImage="/my-icon.png"
+/>
+```
+
+**Exports:**
+- `QuickCaptureButton` - Floating button component
+- `QuickCapturePanel` - Capture input panel
+- `NoteItem` - Note display component
+- `useVoiceRecording` - Voice recording hook
+- `QuickCaptureConfig` - Configuration type
+
 ## Extracting for Other Projects
 
 1. Copy the `src/modules` folder to your new project
