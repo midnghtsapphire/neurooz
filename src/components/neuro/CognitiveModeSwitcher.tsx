@@ -1,13 +1,20 @@
+/**
+ * Cognitive Mode Switcher
+ * Modular component using the oz-engine types
+ */
+
 import { Brain, Zap, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { CognitiveMode } from "@/modules/oz-engine";
 
-export type CognitiveMode = "flow" | "power" | "recovery";
+// Re-export for backward compatibility
+export type { CognitiveMode } from "@/modules/oz-engine";
 
 interface CognitiveModeSwitcherProps {
   mode: CognitiveMode;
   onChange: (mode: CognitiveMode) => void;
-  onPowerModeRequest?: () => void; // For consent flow
+  onPowerModeRequest?: () => void;
 }
 
 const MODE_CONFIG = {
