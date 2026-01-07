@@ -25,12 +25,14 @@ import {
   DollarSign,
   Clipboard,
   Link as LinkIcon,
-  Star
+  Star,
+  Gift
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useProjects } from "@/hooks/use-projects";
+import { VineInventoryImport } from "@/components/vine-income/VineInventoryImport";
 
 interface VineProduct {
   id: string;
