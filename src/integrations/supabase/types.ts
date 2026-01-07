@@ -1759,15 +1759,20 @@ export type Database = {
           category: string | null
           created_at: string
           created_by: string | null
+          depreciation_method: string | null
           disposition: string | null
           donated_to: string | null
+          donation_eligible_date: string | null
           donation_receipt_number: string | null
           etv: number
+          first_year_depreciation: number | null
           id: string
           is_brand: boolean
+          is_cancelled: boolean | null
           manager_hours_spent: number | null
           notes: string | null
           order_date: string
+          order_number: string | null
           photos: string[] | null
           pricing_notes: string | null
           product_name: string
@@ -1776,6 +1781,7 @@ export type Database = {
           review_published: boolean | null
           review_url: string | null
           sale_price_to_rmr: number | null
+          shipped_date: string | null
           testing_complete_date: string | null
           testing_start_date: string | null
           transfer_date: string | null
@@ -1787,15 +1793,20 @@ export type Database = {
           category?: string | null
           created_at?: string
           created_by?: string | null
+          depreciation_method?: string | null
           disposition?: string | null
           donated_to?: string | null
+          donation_eligible_date?: string | null
           donation_receipt_number?: string | null
           etv?: number
+          first_year_depreciation?: number | null
           id?: string
           is_brand?: boolean
+          is_cancelled?: boolean | null
           manager_hours_spent?: number | null
           notes?: string | null
           order_date: string
+          order_number?: string | null
           photos?: string[] | null
           pricing_notes?: string | null
           product_name: string
@@ -1804,6 +1815,7 @@ export type Database = {
           review_published?: boolean | null
           review_url?: string | null
           sale_price_to_rmr?: number | null
+          shipped_date?: string | null
           testing_complete_date?: string | null
           testing_start_date?: string | null
           transfer_date?: string | null
@@ -1815,15 +1827,20 @@ export type Database = {
           category?: string | null
           created_at?: string
           created_by?: string | null
+          depreciation_method?: string | null
           disposition?: string | null
           donated_to?: string | null
+          donation_eligible_date?: string | null
           donation_receipt_number?: string | null
           etv?: number
+          first_year_depreciation?: number | null
           id?: string
           is_brand?: boolean
+          is_cancelled?: boolean | null
           manager_hours_spent?: number | null
           notes?: string | null
           order_date?: string
+          order_number?: string | null
           photos?: string[] | null
           pricing_notes?: string | null
           product_name?: string
@@ -1832,6 +1849,7 @@ export type Database = {
           review_published?: boolean | null
           review_url?: string | null
           sale_price_to_rmr?: number | null
+          shipped_date?: string | null
           testing_complete_date?: string | null
           testing_start_date?: string | null
           transfer_date?: string | null
