@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import OzStoryIntro from "@/components/oz-intro/OzStoryIntro";
+import OzCharacterSplash from "@/components/oz-intro/OzCharacterSplash";
 import OzFocusHome from "@/components/oz-intro/OzFocusHome";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasSeenIntro, setHasSeenIntro] = useState(false); // Always start fresh for testing
+  const [hasSeenSplash, setHasSeenSplash] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +28,10 @@ const Index = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const handleSplashComplete = () => {
+    setHasSeenSplash(true);
+  };
 
   const handleIntroComplete = () => {
     localStorage.setItem("oz-intro-seen", "true");
@@ -50,7 +56,12 @@ const Index = () => {
     return <OzFocusHome userEmail={user.email} />;
   }
 
-  // New visitors get the story intro
+  // New visitors get the character splash first
+  if (!hasSeenSplash) {
+    return <OzCharacterSplash onComplete={handleSplashComplete} />;
+  }
+
+  // Then the story intro
   if (!hasSeenIntro) {
     return (
       <OzStoryIntro 
