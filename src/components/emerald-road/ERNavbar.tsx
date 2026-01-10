@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Map, LayoutDashboard, Settings, ChevronLeft, Pill, ShieldAlert } from 'lucide-react';
+import { Map, LayoutDashboard, Settings, ChevronLeft, Pill, ShieldAlert, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +14,7 @@ export function ERNavbar({ showBack, backTo = '/dashboard', backLabel = 'Back' }
   
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/rewards', label: 'Rewards', icon: Trophy },
     { path: '/medication-tracker', label: 'Medication', icon: Pill },
     { path: '/impulse-control', label: 'Impulse Control', icon: ShieldAlert },
     { path: '/er-settings', label: 'Settings', icon: Settings },
