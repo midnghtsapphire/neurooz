@@ -35,6 +35,9 @@ import Learn from "./pages/Learn";
 import ImpulseControl from "./pages/ImpulseControl";
 import MedicationTracker from "./pages/MedicationTracker";
 import RewardsDashboard from "./pages/RewardsDashboard";
+import TaskDashboard from "./pages/TaskDashboard";
+import ShortList from "./pages/ShortList";
+import LongList from "./pages/LongList";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -85,6 +88,11 @@ const App = () => (
             <Route path="/impulse-control" element={<ImpulseControl />} />
             <Route path="/medication-tracker" element={<MedicationTracker />} />
             <Route path="/rewards" element={<RewardsDashboard />} />
+            <Route path="/tasks" element={<TaskDashboard />} />
+            <Route path="/tasks/today" element={<ShortList />} />
+            <Route path="/tasks/someday" element={<LongList />} />
+            <Route path="/tasks/calendar" element={<TaskDashboard />} />
+            <Route path="/tasks/routines" element={<TaskDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
