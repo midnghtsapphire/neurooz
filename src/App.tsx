@@ -38,6 +38,12 @@ import RewardsDashboard from "./pages/RewardsDashboard";
 import TaskDashboard from "./pages/TaskDashboard";
 import ShortList from "./pages/ShortList";
 import LongList from "./pages/LongList";
+import Overview from "./pages/Overview";
+import Implementation from "./pages/Implementation";
+import Database from "./pages/Database";
+import CodeExamples from "./pages/CodeExamples";
+import Deployment from "./pages/Deployment";
+import Research from "./pages/Research";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -93,6 +99,13 @@ const App = () => (
             <Route path="/tasks/someday" element={<LongList />} />
             <Route path="/tasks/calendar" element={<TaskDashboard />} />
             <Route path="/tasks/routines" element={<TaskDashboard />} />
+            <Route path="/admin/docs" element={<Overview />} />
+            <Route path="/admin/docs/overview" element={<Overview />} />
+            <Route path="/admin/docs/implementation" element={<Implementation />} />
+            <Route path="/admin/docs/database" element={<Database />} />
+            <Route path="/admin/docs/code" element={<CodeExamples />} />
+            <Route path="/admin/docs/deployment" element={<Deployment />} />
+            <Route path="/admin/docs/research" element={<Research />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
