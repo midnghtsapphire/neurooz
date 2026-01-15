@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Coffee, DollarSign, Users, Sparkles, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { syncPreLoginBrainDumps, hasPreLoginBrainDumps } from "@/utils/syncPreLoginBrainDumps";
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Please enter a valid email" }),
@@ -24,8 +25,20 @@ const Auth = () => {
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session?.user) {
+      async (event, session) => {
+        if (session?.user && event === 'SIGNED_IN') {
+          // Sync pre-login brain dumps if any exist
+          if (hasPreLoginBrainDumps()) {
+            const result = await syncPreLoginBrainDumps();
+            if (result.synced > 0) {
+              toast.success(`Synced ${result.synced} brain dump${result.synced > 1 ? 's' : ''} to your account!`);
+            }
+            if (result.failed > 0) {
+              console.error('Failed to sync some brain dumps:', result.errors);
+            }
+          }
+          navigate("/");
+        } else if (session?.user) {
           navigate("/");
         }
       }
@@ -58,6 +71,7 @@ const Auth = () => {
           password,
         });
         if (error) throw error;
+        // Sync happens in onAuthStateChange
         toast.success("Welcome back!");
       } else {
         const redirectUrl = `${window.location.origin}/`;
@@ -72,6 +86,7 @@ const Auth = () => {
           },
         });
         if (error) throw error;
+        // Sync happens in onAuthStateChange
         toast.success("Account created! You're all set.");
       }
     } catch (error: any) {

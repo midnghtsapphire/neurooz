@@ -5,12 +5,14 @@ import { User } from "@supabase/supabase-js";
 import OzStoryIntro from "@/components/oz-intro/OzStoryIntro";
 import OzCharacterSplash from "@/components/oz-intro/OzCharacterSplash";
 import OzFocusHome from "@/components/oz-intro/OzFocusHome";
+import PreLoginBrainDump from "@/components/PreLoginBrainDump";
 
 const Index = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasSeenIntro, setHasSeenIntro] = useState(false); // Always start fresh for testing
   const [hasSeenSplash, setHasSeenSplash] = useState(false);
+  const [hasSeenBrainDump, setHasSeenBrainDump] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +38,11 @@ const Index = () => {
   const handleIntroComplete = () => {
     localStorage.setItem("oz-intro-seen", "true");
     setHasSeenIntro(true);
+  };
+
+  const handleBrainDumpComplete = () => {
+    localStorage.setItem("oz-brain-dump-seen", "true");
+    setHasSeenBrainDump(true);
     navigate("/auth");
   };
 
@@ -69,6 +76,11 @@ const Index = () => {
         onSignIn={handleSignIn}
       />
     );
+  }
+
+  // Then Brain Dump (NEW STEP!)
+  if (!hasSeenBrainDump) {
+    return <PreLoginBrainDump onContinue={handleBrainDumpComplete} />;
   }
 
   // Returning visitors who've seen intro but aren't logged in
