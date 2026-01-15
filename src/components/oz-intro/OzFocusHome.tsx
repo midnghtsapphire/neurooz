@@ -121,6 +121,8 @@ export function OzFocusHome({ userEmail }: OzFocusHomeProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => navigate("/pricing")}>
               💳 Pricing
+            </DropdownMenuItem> <DropdownMenuItem onClick={() => navigate("/admin/test-script")}>
+              ✅ Test Script
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut} className="text-red-400">

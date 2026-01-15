@@ -45,6 +45,7 @@ import CodeExamples from "./pages/CodeExamples";
 import Deployment from "./pages/Deployment";
 import Research from "./pages/Research";
 import Changelog from "./pages/Changelog";
+import TestScript from "./pages/TestScript";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -108,6 +109,7 @@ const App = () => (
             <Route path="/admin/docs/deployment" element={<Deployment />} />
             <Route path="/admin/docs/research" element={<Research />} />
             <Route path="/admin/docs/changelog" element={<Changelog />} />
+            <Route path="/admin/test-script" element={<TestScript />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
