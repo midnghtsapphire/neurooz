@@ -45,8 +45,13 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="text-6xl opacity-70">🐕</div>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <img 
+          src="/neurooz-logo.png" 
+          alt="Neurooz" 
+          className="w-32 h-32 animate-pulse mb-4"
+        />
+        <div className="text-white/60 text-lg font-display">Loading your journey...</div>
       </div>
     );
   }

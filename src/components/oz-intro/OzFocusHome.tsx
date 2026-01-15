@@ -82,8 +82,15 @@ export function OzFocusHome({ userEmail }: OzFocusHomeProps) {
 
       {/* Minimal header */}
       <header className="relative z-10 flex items-center justify-between p-4">
-        <div className="text-white/60 text-sm">
-          {userEmail}
+        <div className="flex items-center gap-3">
+          <img 
+            src="/neurooz-logo.png" 
+            alt="Neurooz" 
+            className="w-12 h-12 rounded-full border-2 border-white/20 shadow-lg"
+          />
+          <div className="text-white/60 text-sm">
+            {userEmail}
+          </div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
