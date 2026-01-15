@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { CheckCircle2, Circle } from "lucide-react";
 
 export default function Overview() {
@@ -10,7 +12,12 @@ export default function Overview() {
           <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
             📋 Complete Overview
           </Badge>
-          <h1 className="text-5xl font-bold mb-4">What Was Built</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-5xl font-bold">What Was Built</h1>
+            <Link to="/admin/docs/changelog">
+              <Button variant="outline">View Changelog</Button>
+            </Link>
+          </div>
           <p className="text-xl text-muted-foreground">
             A comprehensive summary of all features, implementation status, and what's ready to deploy.
           </p>

@@ -1,0 +1,440 @@
+From aaaa4d4e112c9d9c890dc2c6eca8c8dd11d156d4 Mon Sep 17 00:00:00 2001
+From: midnghtsapphire <4635833+midnghtsapphire@users.noreply.github.com>
+Date: Wed, 14 Jan 2026 22:53:29 -0500
+Subject: [PATCH] feat: Add documentation pages to admin dashboard - Overview,
+ Implementation, Database, CodeExamples, Deployment, Research
+
+---
+ src/App.tsx                              |  13 +++
+ src/components/emerald-road/ERNavbar.tsx |   3 +-
+ src/pages/CodeExamples.tsx               |  24 +++++
+ src/pages/Database.tsx                   |  24 +++++
+ src/pages/Deployment.tsx                 |  45 ++++++++++
+ src/pages/Implementation.tsx             | 107 +++++++++++++++++++++++
+ src/pages/Overview.tsx                   |  90 +++++++++++++++++++
+ src/pages/Research.tsx                   |  38 ++++++++
+ 8 files changed, 343 insertions(+), 1 deletion(-)
+ create mode 100644 src/pages/CodeExamples.tsx
+ create mode 100644 src/pages/Database.tsx
+ create mode 100644 src/pages/Deployment.tsx
+ create mode 100644 src/pages/Implementation.tsx
+ create mode 100644 src/pages/Overview.tsx
+ create mode 100644 src/pages/Research.tsx
+
+diff --git a/src/App.tsx b/src/App.tsx
+index daeec39..79996ce 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -38,6 +38,12 @@ import RewardsDashboard from "./pages/RewardsDashboard";
+ import TaskDashboard from "./pages/TaskDashboard";
+ import ShortList from "./pages/ShortList";
+ import LongList from "./pages/LongList";
++import Overview from "./pages/Overview";
++import Implementation from "./pages/Implementation";
++import Database from "./pages/Database";
++import CodeExamples from "./pages/CodeExamples";
++import Deployment from "./pages/Deployment";
++import Research from "./pages/Research";
+ import NotFound from "./pages/NotFound";
+ 
+ const queryClient = new QueryClient();
+@@ -93,6 +99,13 @@ const App = () => (
+             <Route path="/tasks/someday" element={<LongList />} />
+             <Route path="/tasks/calendar" element={<TaskDashboard />} />
+             <Route path="/tasks/routines" element={<TaskDashboard />} />
++            <Route path="/admin/docs" element={<Overview />} />
++            <Route path="/admin/docs/overview" element={<Overview />} />
++            <Route path="/admin/docs/implementation" element={<Implementation />} />
++            <Route path="/admin/docs/database" element={<Database />} />
++            <Route path="/admin/docs/code" element={<CodeExamples />} />
++            <Route path="/admin/docs/deployment" element={<Deployment />} />
++            <Route path="/admin/docs/research" element={<Research />} />
+             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+             <Route path="*" element={<NotFound />} />
+           </Routes>
+diff --git a/src/components/emerald-road/ERNavbar.tsx b/src/components/emerald-road/ERNavbar.tsx
+index 62249f7..20435d2 100644
+--- a/src/components/emerald-road/ERNavbar.tsx
++++ b/src/components/emerald-road/ERNavbar.tsx
+@@ -1,5 +1,5 @@
+ import { Link, useLocation } from 'react-router-dom';
+-import { Map, LayoutDashboard, Settings, ChevronLeft, Pill, ShieldAlert, Trophy } from 'lucide-react';
++import { Map, LayoutDashboard, Settings, ChevronLeft, Pill, ShieldAlert, Trophy, BookOpen } from 'lucide-react';
+ import { cn } from '@/lib/utils';
+ import { Button } from '@/components/ui/button';
+ 
+@@ -17,6 +17,7 @@ export function ERNavbar({ showBack, backTo = '/dashboard', backLabel = 'Back' }
+     { path: '/rewards', label: 'Rewards', icon: Trophy },
+     { path: '/medication-tracker', label: 'Medication', icon: Pill },
+     { path: '/impulse-control', label: 'Impulse Control', icon: ShieldAlert },
++    { path: '/admin/docs', label: 'Docs', icon: BookOpen },
+     { path: '/er-settings', label: 'Settings', icon: Settings },
+   ];
+ 
+diff --git a/src/pages/CodeExamples.tsx b/src/pages/CodeExamples.tsx
+new file mode 100644
+index 0000000..b2691b5
+--- /dev/null
++++ b/src/pages/CodeExamples.tsx
+@@ -0,0 +1,24 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++
++export default function CodeExamples() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++          💻 Code Examples
++        </Badge>
++        <h1 className="text-5xl font-bold mb-4">Code Reference</h1>
++        <p className="text-xl text-muted-foreground mb-12">
++          React components, hooks, utilities, and TypeScript types
++        </p>
++        <Card className="p-6">
++          <h2 className="text-2xl font-bold mb-4">Task Management Hooks</h2>
++          <p className="text-muted-foreground">
++            Custom React hooks for CRUD operations, gamification calculator, and Oz messages.
++          </p>
++        </Card>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/pages/Database.tsx b/src/pages/Database.tsx
+new file mode 100644
+index 0000000..6b7c598
+--- /dev/null
++++ b/src/pages/Database.tsx
+@@ -0,0 +1,24 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++
++export default function Database() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++          🗄️ Database Schema
++        </Badge>
++        <h1 className="text-5xl font-bold mb-4">Database Architecture</h1>
++        <p className="text-xl text-muted-foreground mb-12">
++          9 tables with RLS policies, indexes, and relationships
++        </p>
++        <Card className="p-6">
++          <h2 className="text-2xl font-bold mb-4">Core Tables</h2>
++          <p className="text-muted-foreground">
++            Complete database schema with tasks, brain_dumps, projects, user_stats, and achievements tables.
++          </p>
++        </Card>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/pages/Deployment.tsx b/src/pages/Deployment.tsx
+new file mode 100644
+index 0000000..645e0de
+--- /dev/null
++++ b/src/pages/Deployment.tsx
+@@ -0,0 +1,45 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++import { CheckCircle2 } from "lucide-react";
++
++export default function Deployment() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++          🚀 Deployment Guide
++        </Badge>
++        <h1 className="text-5xl font-bold mb-4">Deploy to Production</h1>
++        <p className="text-xl text-muted-foreground mb-12">
++          Complete deployment checklist and troubleshooting
++        </p>
++        <Card className="p-6">
++          <h2 className="text-2xl font-bold mb-4">Quick Deploy (5 Minutes)</h2>
++          <div className="space-y-4">
++            <div className="flex items-start gap-3">
++              <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
++              <div>
++                <p className="font-medium">1. Apply Patch</p>
++                <p className="text-sm text-muted-foreground">git apply patch-file.patch</p>
++              </div>
++            </div>
++            <div className="flex items-start gap-3">
++              <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
++              <div>
++                <p className="font-medium">2. Run Migration</p>
++                <p className="text-sm text-muted-foreground">Copy SQL to Supabase</p>
++              </div>
++            </div>
++            <div className="flex items-start gap-3">
++              <CheckCircle2 className="h-5 w-5 text-primary mt-1" />
++              <div>
++                <p className="font-medium">3. Test & Deploy</p>
++                <p className="text-sm text-muted-foreground">npm run build && npm run deploy</p>
++              </div>
++            </div>
++          </div>
++        </Card>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/pages/Implementation.tsx b/src/pages/Implementation.tsx
+new file mode 100644
+index 0000000..095e2f6
+--- /dev/null
++++ b/src/pages/Implementation.tsx
+@@ -0,0 +1,107 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++import { Terminal, GitBranch, Database, TestTube } from "lucide-react";
++
++export default function Implementation() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++          🔧 Implementation Guide
++        </Badge>
++        <h1 className="text-5xl font-bold mb-4">How to Deploy</h1>
++        <p className="text-xl text-muted-foreground mb-12">
++          Step-by-step instructions for deploying the task management system
++        </p>
++
++        <div className="space-y-8">
++          <Card className="p-6">
++            <div className="flex items-start gap-4">
++              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
++                <GitBranch className="h-6 w-6 text-primary" />
++              </div>
++              <div className="flex-1">
++                <h2 className="text-2xl font-bold mb-3">Step 1: Apply the Patch</h2>
++                <p className="text-muted-foreground mb-4">
++                  The patch file contains all 1,679 lines of code for the task management system.
++                </p>
++                <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
++{`cd /path/to/neurooz
++git checkout -b feature/brain-dump-task-management
++git apply 0001-feat-Add-complete-task-management-system-4-List-adhd.patch
++git add -A
++git commit -m "feat: Add task management system"
++git push origin feature/brain-dump-task-management`}
++                </pre>
++              </div>
++            </div>
++          </Card>
++
++          <Card className="p-6">
++            <div className="flex items-start gap-4">
++              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
++                <Database className="h-6 w-6 text-primary" />
++              </div>
++              <div className="flex-1">
++                <h2 className="text-2xl font-bold mb-3">Step 2: Run Database Migration</h2>
++                <p className="text-muted-foreground mb-4">
++                  Copy the SQL from the migration file into your Supabase SQL Editor and execute.
++                </p>
++                <div className="bg-muted/50 p-4 rounded-lg">
++                  <p className="text-sm font-medium mb-2">Migration creates:</p>
++                  <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
++                    <li>9 database tables with RLS policies</li>
++                    <li>Indexes for performance</li>
++                    <li>Foreign key relationships</li>
++                    <li>Gamification triggers</li>
++                  </ul>
++                </div>
++              </div>
++            </div>
++          </Card>
++
++          <Card className="p-6">
++            <div className="flex items-start gap-4">
++              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
++                <TestTube className="h-6 w-6 text-primary" />
++              </div>
++              <div className="flex-1">
++                <h2 className="text-2xl font-bold mb-3">Step 3: Test Locally</h2>
++                <p className="text-muted-foreground mb-4">
++                  Run the development server and test all features before deploying.
++                </p>
++                <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
++{`npm run dev
++# Test these pages:
++# - /tasks (Task Dashboard)
++# - /tasks/today (Short List)
++# - /tasks/someday (Long List)`}
++                </pre>
++              </div>
++            </div>
++          </Card>
++
++          <Card className="p-6">
++            <div className="flex items-start gap-4">
++              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
++                <Terminal className="h-6 w-6 text-primary" />
++              </div>
++              <div className="flex-1">
++                <h2 className="text-2xl font-bold mb-3">Step 4: Deploy to Production</h2>
++                <p className="text-muted-foreground mb-4">
++                  Merge to main and deploy to neurooz.com
++                </p>
++                <pre className="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
++{`git checkout main
++git merge feature/brain-dump-task-management
++npm run build
++npm run deploy`}
++                </pre>
++              </div>
++            </div>
++          </Card>
++        </div>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/pages/Overview.tsx b/src/pages/Overview.tsx
+new file mode 100644
+index 0000000..c3d8c1f
+--- /dev/null
++++ b/src/pages/Overview.tsx
+@@ -0,0 +1,90 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++import { CheckCircle2, Circle } from "lucide-react";
++
++export default function Overview() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <div className="mb-12">
++          <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++            📋 Complete Overview
++          </Badge>
++          <h1 className="text-5xl font-bold mb-4">What Was Built</h1>
++          <p className="text-xl text-muted-foreground">
++            A comprehensive summary of all features, implementation status, and what's ready to deploy.
++          </p>
++        </div>
++
++        <Card className="p-8 mb-12 bg-gradient-to-br from-primary/5 to-accent/5">
++          <div className="grid md:grid-cols-4 gap-6">
++            <div>
++              <div className="text-3xl font-bold text-primary mb-1">1,679</div>
++              <div className="text-sm text-muted-foreground">Lines of Code</div>
++            </div>
++            <div>
++              <div className="text-3xl font-bold text-primary mb-1">10</div>
++              <div className="text-sm text-muted-foreground">New Files</div>
++            </div>
++            <div>
++              <div className="text-3xl font-bold text-primary mb-1">9</div>
++              <div className="text-sm text-muted-foreground">Database Tables</div>
++            </div>
++            <div>
++              <div className="text-3xl font-bold text-primary mb-1">3</div>
++              <div className="text-sm text-muted-foreground">New Pages</div>
++            </div>
++          </div>
++        </Card>
++
++        <section className="mb-12">
++          <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
++            <CheckCircle2 className="h-8 w-8 text-primary" />
++            Deployed to neurooz.com
++          </h2>
++          <div className="space-y-4">
++            <Card className="p-6">
++              <h3 className="text-xl font-bold mb-2">Navigation Performance Optimization</h3>
++              <p className="text-muted-foreground mb-3">
++                Fixed menu lag with React.memo(), hardware acceleration, and performance utilities
++              </p>
++            </Card>
++            <Card className="p-6">
++              <h3 className="text-xl font-bold mb-2">Reviews System (406 Amazon Vine Monetization)</h3>
++              <p className="text-muted-foreground mb-3">
++                Complete CRUD admin interface, public display pages, bulk import, affiliate tracking
++              </p>
++            </Card>
++          </div>
++        </section>
++
++        <section className="mb-12">
++          <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
++            <Circle className="h-8 w-8 text-muted-foreground" />
++            Ready to Deploy (in patch file)
++          </h2>
++          <div className="space-y-4">
++            <Card className="p-6 border-accent/50">
++              <h3 className="text-xl font-bold mb-2">Task Dashboard</h3>
++              <p className="text-muted-foreground">
++                Hub page with overview of all 4 lists, quick stats, and Brain Dump CTA
++              </p>
++            </Card>
++            <Card className="p-6 border-accent/50">
++              <h3 className="text-xl font-bold mb-2">Short List (Today's 1-5 Tasks)</h3>
++              <p className="text-muted-foreground">
++                Maximum 5 tasks enforced with visual capacity indicator
++              </p>
++            </Card>
++            <Card className="p-6 border-accent/50">
++              <h3 className="text-xl font-bold mb-2">Long List (Someday/Maybe)</h3>
++              <p className="text-muted-foreground">
++                Unlimited tasks with search and grid layout
++              </p>
++            </Card>
++          </div>
++        </section>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/pages/Research.tsx b/src/pages/Research.tsx
+new file mode 100644
+index 0000000..c344adb
+--- /dev/null
++++ b/src/pages/Research.tsx
+@@ -0,0 +1,38 @@
++import { Card } from "@/components/ui/card";
++import { Badge } from "@/components/ui/badge";
++
++export default function Research() {
++  return (
++    <div className="min-h-screen py-12">
++      <div className="container max-w-5xl">
++        <Badge className="mb-4 yellow-brick-gradient text-foreground border-0">
++          🧠 ADHD Research
++        </Badge>
++        <h1 className="text-5xl font-bold mb-4">Evidence-Based Design</h1>
++        <p className="text-xl text-muted-foreground mb-12">
++          Research findings from CHADD, ADDitude Magazine, and Tiimo
++        </p>
++        <div className="space-y-6">
++          <Card className="p-6">
++            <h2 className="text-2xl font-bold mb-4">CHADD: Time Management for ADHD</h2>
++            <p className="text-muted-foreground">
++              Keep lists short (3-5 items), external brain dump, and visual cues for quick recognition.
++            </p>
++          </Card>
++          <Card className="p-6">
++            <h2 className="text-2xl font-bold mb-4">ADDitude: The 4-List System</h2>
++            <p className="text-muted-foreground">
++              Short List (1-5 tasks), Calendar (time-specific), Long List (someday/maybe), Routines (checklists).
++            </p>
++          </Card>
++          <Card className="p-6">
++            <h2 className="text-2xl font-bold mb-4">Tiimo: Gamification for ADHD</h2>
++            <p className="text-muted-foreground">
++              Instant feedback, progress visualization, grace periods, and surprise rewards for dopamine hits.
++            </p>
++          </Card>
++        </div>
++      </div>
++    </div>
++  );
++}
+-- 
+2.34.1
+

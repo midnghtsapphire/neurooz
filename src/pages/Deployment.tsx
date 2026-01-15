@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, Download } from "lucide-react";
 
 export default function Deployment() {
   return (
@@ -13,6 +14,27 @@ export default function Deployment() {
         <p className="text-xl text-muted-foreground mb-12">
           Complete deployment checklist and troubleshooting
         </p>
+        <Card className="p-6 mb-8">
+          <h2 className="text-2xl font-bold mb-4">📦 Download Patch Files</h2>
+          <p className="text-muted-foreground mb-6">
+            Click to download the implementation patches. Apply them to your local repository.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a href="/patches/0001-feat-Add-complete-task-management-system-4-List-ADHD.patch" download>
+              <Button className="gap-2">
+                <Download className="h-4 w-4" />
+                Task Management System
+              </Button>
+            </a>
+            <a href="/patches/0001-feat-Add-documentation-pages-to-admin-dashboard-Over.patch" download>
+              <Button variant="outline" className="gap-2">
+                <Download className="h-4 w-4" />
+                Documentation Pages
+              </Button>
+            </a>
+          </div>
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-2xl font-bold mb-4">Quick Deploy (5 Minutes)</h2>
           <div className="space-y-4">
