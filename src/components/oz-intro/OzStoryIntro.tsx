@@ -139,7 +139,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.4 }}
-          className="text-center max-w-lg mx-auto relative z-10"
+          className="text-center max-w-lg mx-auto relative z-20"
         >
           {/* Character */}
           <motion.div 
