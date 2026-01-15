@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import emeraldRoadHero from "@/assets/emerald-road-hero.jpg";
@@ -88,22 +87,17 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br ${slide.bgClass} flex flex-col items-center justify-center p-6 transition-all duration-700 relative overflow-hidden`}>
+    <div className={`min-h-screen bg-gradient-to-br ${slide.bgClass} flex flex-col items-center justify-center p-6 relative overflow-hidden`}>
       {/* Background image for the road slide */}
       {slide.isImageSlide && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.3 }}
-          exit={{ opacity: 0 }}
-          className="absolute inset-0 z-0"
-        >
+        <div className="absolute inset-0 z-0 opacity-30">
           <img 
             src={emeraldRoadHero} 
             alt="Yellow brick road to Emerald City" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
-        </motion.div>
+        </div>
       )}
 
       {/* Progress dots */}
@@ -119,6 +113,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
                   ? "bg-white/60" 
                   : "bg-white/30"
             }`}
+            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
@@ -126,44 +121,30 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
       {/* Skip button */}
       <button
         onClick={onComplete}
-        className="fixed top-6 right-6 text-white/50 hover:text-white text-sm transition-colors z-50"
+        className="fixed top-6 right-6 text-white/70 hover:text-white text-sm transition-colors z-50 font-medium"
       >
         Skip intro
       </button>
 
-      {/* Main content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentSlide}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.4 }}
-          className="text-center max-w-lg mx-auto relative z-20"
-        >
-          {/* Character */}
-          <motion.div 
-            className="text-7xl md:text-8xl mb-8"
-            initial={{ scale: 0.8, rotate: -5 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          >
-            {slide.character}
-          </motion.div>
+      {/* Main content - NO ANIMATION */}
+      <div className="text-center max-w-lg mx-auto relative z-20 px-4">
+        {/* Character emoji */}
+        <div className="text-7xl md:text-8xl mb-8 leading-none">
+          {slide.character}
+        </div>
 
-          {/* Title - styled like a quote for the feeling slides */}
-          <h1 className={`text-2xl md:text-3xl font-display font-bold text-white mb-4 ${
-            slide.title.startsWith('"') ? 'italic' : ''
-          }`}>
-            {slide.title}
-          </h1>
+        {/* Title */}
+        <h1 className={`text-2xl md:text-3xl font-bold text-white mb-4 leading-tight ${
+          slide.title.startsWith('"') ? 'italic' : ''
+        }`}>
+          {slide.title}
+        </h1>
 
-          {/* Description */}
-          <p className="text-lg text-white/80 leading-relaxed mb-12">
-            {slide.description}
-          </p>
-        </motion.div>
-      </AnimatePresence>
+        {/* Description */}
+        <p className="text-lg text-white/90 leading-relaxed mb-12">
+          {slide.description}
+        </p>
+      </div>
 
       {/* Navigation */}
       <div className="fixed bottom-8 left-0 right-0 flex items-center justify-center gap-4 px-6 z-50">
@@ -173,6 +154,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
           onClick={prevSlide}
           disabled={currentSlide === 0}
           className="text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-0"
+          aria-label="Previous slide"
         >
           <ChevronLeft className="w-6 h-6" />
         </Button>
@@ -180,7 +162,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
         <Button
           onClick={nextSlide}
           size="lg"
-          className="bg-white/20 hover:bg-white/30 text-white border border-white/30 min-w-40"
+          className="bg-white/20 hover:bg-white/30 text-white border border-white/30 min-w-40 font-semibold"
         >
           {isLastSlide ? "Let's Go!" : "Continue"}
           {!isLastSlide && <ChevronRight className="w-5 h-5 ml-2" />}
@@ -191,6 +173,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
           size="icon"
           onClick={nextSlide}
           className="text-white/50 hover:text-white hover:bg-white/10"
+          aria-label="Next slide"
         >
           <ChevronRight className="w-6 h-6" />
         </Button>
@@ -199,7 +182,7 @@ export function OzStoryIntro({ onComplete, onSignIn }: OzStoryIntroProps) {
       {/* Sign in link */}
       <button
         onClick={onSignIn}
-        className="fixed bottom-8 right-6 text-white/40 hover:text-white text-sm transition-colors z-50"
+        className="fixed bottom-8 right-6 text-white/50 hover:text-white text-sm transition-colors z-50"
       >
         Already have an account? Sign in
       </button>
