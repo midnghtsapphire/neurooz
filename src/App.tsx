@@ -47,6 +47,7 @@ import Research from "./pages/Research";
 import Changelog from "./pages/Changelog";
 import TestScript from "./pages/TestScript";
 import NotFound from "./pages/NotFound";
+import Epstein from "./pages/Epstein";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ const App = () => (
             <Route path="/rewards" element={<RewardsDashboard />} />
             <Route path="/tasks" element={<TaskDashboard />} />
             <Route path="/tasks/today" element={<ShortList />} />
+            <Route path="/epstein" element={<Epstein />} />
             <Route path="/tasks/someday" element={<LongList />} />
             <Route path="/tasks/calendar" element={<TaskDashboard />} />
             <Route path="/tasks/routines" element={<TaskDashboard />} />
