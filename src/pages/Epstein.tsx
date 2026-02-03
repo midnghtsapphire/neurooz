@@ -20,7 +20,8 @@ const Epstein = () => {
       views: "2.4M",
       timeAgo: "2 hours ago",
       trending: true,
-      excerpt: "Newly unsealed documents reveal disturbing connections to world leaders and celebrities. The truth is finally coming out..."
+      excerpt: "Newly unsealed documents reveal disturbing connections to world leaders and celebrities. The truth is finally coming out...",
+      link: "/articles/epstein_island_files_exposed.md"
     },
     {
       id: 2,
@@ -30,7 +31,8 @@ const Epstein = () => {
       views: "3.8M",
       timeAgo: "5 hours ago",
       trending: true,
-      excerpt: "Court documents finally unsealed. See the full list of names that were kept hidden for years..."
+      excerpt: "Court documents finally unsealed. See the full list of names that were kept hidden for years...",
+      link: "/articles/177_names_revealed.md"
     },
     {
       id: 3,
@@ -40,7 +42,8 @@ const Epstein = () => {
       views: "1.9M",
       timeAgo: "8 hours ago",
       trending: true,
-      excerpt: "Leaked prison recordings suggest more revelations are coming. What is she hiding?"
+      excerpt: "Leaked prison recordings suggest more revelations are coming. What is she hiding?",
+      link: "/articles/ghislaine_maxwell_confession.md"
     },
     {
       id: 4,
@@ -50,7 +53,8 @@ const Epstein = () => {
       views: "2.1M",
       timeAgo: "12 hours ago",
       trending: false,
-      excerpt: "Detailed analysis of Epstein's private jet travel reveals shocking frequency of trips to Little St. James..."
+      excerpt: "Detailed analysis of Epstein's private jet travel reveals shocking frequency of trips to Little St. James...",
+      link: "https://www.documentcloud.org/documents/21165424-epstein-flight-logs-released-in-usa-vs-maxwell"
     },
     {
       id: 5,
@@ -60,7 +64,8 @@ const Epstein = () => {
       views: "4.2M",
       timeAgo: "1 day ago",
       trending: true,
-      excerpt: "Complete database of Epstein's contacts. Search by name, see the connections they tried to hide..."
+      excerpt: "Complete database of Epstein's contacts. Search by name, see the connections they tried to hide...",
+      link: "/epstein_black_book_names.txt"
     },
     {
       id: 6,
@@ -70,7 +75,8 @@ const Epstein = () => {
       views: "3.3M",
       timeAgo: "1 day ago",
       trending: false,
-      excerpt: "Former guard speaks out about the night Jeffrey Epstein died. 'Nothing about that night made sense...'"
+      excerpt: "Former guard speaks out about the night Jeffrey Epstein died. 'Nothing about that night made sense...'",
+      link: "https://abcnews.go.com/US/epstein-files-doj-thousand-documents-mistakenly-identified-victims/story?id=129787942"
     }
   ];
 
@@ -235,10 +241,10 @@ const Epstein = () => {
                   </div>
                 </div>
                 <div className="article-actions">
-                  <button className="btn-primary">
+                  <a href={article.link} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     READ FULL STORY
                     <ChevronRight size={18} />
-                  </button>
+                  </a>
                   <button className="btn-icon">
                     <Share2 size={20} />
                   </button>
@@ -444,6 +450,149 @@ const Epstein = () => {
               <span className="share-hashtag">#meetaudreyevans #EpsteinFiles #JusticeForRichardHalliday</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Evidence Gallery */}
+      <div className="content-section evidence-section">
+        <div className="section-header">
+          <h2>
+            <FileText size={28} />
+            EVIDENCE GALLERY: FBI DOCUMENTS & PHOTOS
+          </h2>
+          <p className="section-subtitle">Actual FBI emails, court documents, and photographic evidence from the Epstein files</p>
+        </div>
+
+        <div className="evidence-grid">
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">🔥 BOMBSHELL</div>
+            <img src="/evidence/mamdani_epstein_photo.jpg" alt="Zohran Mamdani with Epstein, Clinton, Bezos" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>NYC Mayor Mamdani's Mother with Epstein & Clinton</h4>
+              <p>Photo shows Zohran Mamdani (circled) and his mother Mira Mamdani, a filmmaker and close Epstein associate, with Jeffrey Epstein, Ghislaine Maxwell, Bill Clinton, and Jeff Bezos. Mira produced "Children of a Desired Sex" (1987) documentary.</p>
+              <span className="evidence-tag">POLITICAL CONNECTION</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">FBI EMAIL</div>
+            <img src="/evidence/1000079784.jpg" alt="FBI Email EFTA00164984" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Kenneth Turner Email to DOJ (EFTA00164984)</h4>
+              <p>Email from Kenneth Turner to DOJ officials about Juárez consulate party. Mentions Ambassador Earl Anthony Wayne arrested, 4 armed attacks on investigators (2 killed, 5 wounded), US Embassy CIA vans stalking investigators.</p>
+              <span className="evidence-tag">JUÁREZ CONNECTION</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">COURT DOCUMENT</div>
+            <img src="/evidence/Screenshot_20260202_184035_Facebook.jpg" alt="Richard Halliday Whistleblower Case" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Richard Halliday Whistleblower Case</h4>
+              <p>Fort Bliss soldier Richard Halliday exposed criminal trafficking network. Murdered July 2020. U.S. Army ruled death "In the Line of Duty" January 2025. Connection to Epstein trafficking route through Fort Bliss.</p>
+              <span className="evidence-tag">WHISTLEBLOWER MURDER</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">VIRAL VIDEO</div>
+            <div className="video-embed">
+              <a href="https://www.facebook.com/share/r/1G11fhTaFj/" target="_blank" rel="noopener noreferrer" className="video-link">
+                <div className="video-thumbnail">
+                  <span className="play-icon">▶</span>
+                  <img src="/evidence/Screenshot_20260202_183858_Facebook.jpg" alt="Gabriela Rico Jimenez" />
+                </div>
+              </a>
+            </div>
+            <div className="evidence-info">
+              <h4>Gabriela Rico Jiménez: "They Ate Human Flesh"</h4>
+              <p>2009 video of Mexican model Gabriela Rico Jiménez arrested after claiming elites were engaging in cannibalism at Monterrey party. She disappeared shortly after. FBI FD-302 reports mention unverified cannibalism allegations in Epstein case.</p>
+              <span className="evidence-tag">CANNIBALISM CLAIMS</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">FBI EMAIL</div>
+            <img src="/evidence/1000079811.jpg" alt="Additional FBI Correspondence" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Additional FBI Email Evidence</h4>
+              <p>More correspondence detailing the Juárez investigation, cover-up attempts, and threats against investigators. Trial judge shot by American in Mexico. Marine taking the fall for Ambassador Wayne's crime (DNA 100% match to victim).</p>
+              <span className="evidence-tag">COVER-UP</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">SOCIAL PROOF</div>
+            <img src="/evidence/Screenshot_20260202_184228_Facebook.jpg" alt="Viral Facebook Post" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Viral Social Media Coverage</h4>
+              <p>Facebook post about Nicholas Tartaglione (Epstein's cellmate) claiming prosecutors offered Epstein deal to implicate Trump. 14K reactions, 2.6K comments, 9.4K shares. Public demanding answers.</p>
+              <span className="evidence-tag">VIRAL (14K+ REACTIONS)</span>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="download-section">
+          <h3>Download Complete Evidence Package</h3>
+          <a href="/epstein_black_book_names.txt" download className="download-btn">
+            <FileText size={24} />
+            DOWNLOAD COMPLETE LIST OF 2,260 NAMES
+            <ChevronRight size={20} />
+          </a>
+          <p className="download-note">Plain text file with all names from Epstein's Black Book, flight logs, and court documents</p>
+        </div>
+      </div>
+
+      {/* Bombshell Revelations */}
+      <div className="content-section bombshell-section">
+        <div className="section-header">
+          <h2>
+            <Flame size={28} />
+            BOMBSHELL REVELATIONS
+          </h2>
+          <p className="section-subtitle">Breaking developments that mainstream media won't cover</p>
+        </div>
+
+        <div className="bombshell-grid">
+          <motion.div className="bombshell-card" whileHover={{ y: -5 }}>
+            <div className="bombshell-icon">💣</div>
+            <h3>NYC Mayor's Epstein Connection</h3>
+            <p>Zohran Mamdani, current NYC Mayor, photographed as a child with his mother Mira Mamdani (Epstein associate and filmmaker), Jeffrey Epstein, Ghislaine Maxwell, Bill Clinton, and Jeff Bezos. Mira produced "Children of a Desired Sex" documentary in 1987. <strong>Mamdani was groomed by this network.</strong></p>
+            <div className="bombshell-meta">
+              <span className="viral-badge">🔥 VIRAL</span>
+              <span className="share-count">Shared 9.4K times</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="bombshell-card" whileHover={{ y: -5 }}>
+            <div className="bombshell-icon">⚠️</div>
+            <h3>Ambassador Wayne Arrested in Juárez</h3>
+            <p>FBI emails reveal former U.S. Ambassador to Mexico Earl Anthony Wayne was allegedly arrested by Mexican Federal Police at Epstein's 2014 Juárez consulate party. A Marine was forced to take the fall with DNA evidence proving the crime. <strong>State Department deal to cover it up.</strong></p>
+            <div className="bombshell-meta">
+              <span className="viral-badge">📄 FBI DOCS</span>
+              <span className="doc-ref">EFTA00164984</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="bombshell-card" whileHover={{ y: -5 }}>
+            <div className="bombshell-icon">🎯</div>
+            <h3>Whistleblower Murdered at Fort Bliss</h3>
+            <p>SPC Richard Halliday exposed the Epstein trafficking network operating through Fort Bliss, Texas. He was murdered in July 2020. The U.S. Army finally ruled his death "In the Line of Duty" in January 2025. <strong>Institutions meant to protect him were the perpetrators.</strong></p>
+            <div className="bombshell-meta">
+              <span className="viral-badge">⚔️ HERO</span>
+              <span className="hashtag">#JusticeForRichardHalliday</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="bombshell-card" whileHover={{ y: -5 }}>
+            <div className="bombshell-icon">🩸</div>
+            <h3>Gabriela's Cannibalism Claims</h3>
+            <p>In 2009, Mexican model Gabriela Rico Jiménez was arrested after screaming "they ate human flesh" at an elite party in Monterrey. She disappeared shortly after. FBI FD-302 reports in the Epstein files mention <strong>unverified allegations of cannibalism and dismemberment of infants.</strong></p>
+            <div className="bombshell-meta">
+              <span className="viral-badge">📹 VIDEO</span>
+              <a href="https://www.facebook.com/share/r/1G11fhTaFj/" target="_blank" rel="noopener noreferrer">WATCH NOW</a>
+            </div>
+          </motion.div>
         </div>
       </div>
 
