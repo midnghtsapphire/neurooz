@@ -530,6 +530,66 @@ const Epstein = () => {
               <span className="evidence-tag">VIRAL (14K+ REACTIONS)</span>
             </div>
           </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">🚨 REMOVED FROM FILES</div>
+            <img src="/evidence/Screenshot_20260202_205118_Instagram.jpg" alt="Trump Photo Removed from Epstein Files" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Trump Photo REMOVED from Epstein Files</h4>
+              <p>This photo of Trump with a young girl was removed from the official Epstein files release. Already viral on TikTok with 56.8K likes. Connects to Trump's documented inappropriate comments about his daughter Ivanka ("I would date her if she wasn't my daughter").</p>
+              <span className="evidence-tag">VIRAL (56.8K LIKES)</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">💰 FINANCIAL EVIDENCE</div>
+            <img src="/evidence/Screenshot_20260202_212135_Instagram.jpg" alt="Trump $1.1 Billion Wire Transfers to Epstein" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Trump Made 4,725 Wire Transfers to Epstein ($1.1 BILLION)</h4>
+              <p>Treasury Department Epstein file details revealed in Washington DC Congressional testimony (July 17, 2025): Trump made 4,725 wire transfers to Epstein totaling over $1.1 BILLION. Financial proof of their relationship.</p>
+              <span className="evidence-tag">VIRAL (477K LIKES)</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">💔 WITNESS MURDERED</div>
+            <img src="/evidence/Screenshot_20260202_205957_Instagram.jpg" alt="Virginia Giuffre Beaten Before Death" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Virginia Giuffre: The Witness They Silenced</h4>
+              <p>Key Epstein victim/witness Virginia Giuffre was brutally beaten (official story: "she fell"), then died by "suicide" two days after beating video surfaced. Deadman switch video released posthumously. She knew they were coming for her.</p>
+              <span className="evidence-tag">VIRAL (199K LIKES, 6.5M VIEWS)</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">⚠️ COURT DOCUMENTS</div>
+            <img src="/evidence/Screenshot_20260202_213035_Instagram.jpg" alt="Court Complaint Summary" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Official Court Complaint Summary</h4>
+              <p>Multiple witness testimonies: 13-14 year old forced to perform oral sex on Trump; sex trafficking ring at Trump Golf Course CA (1995-1996) with Ghislaine Maxwell as madam; girls reported missing, rumored murdered and buried at facility; Trump's head of security threatened witnesses.</p>
+              <span className="evidence-tag">VIRAL (201K LIKES)</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">💀 MURDER EVIDENCE</div>
+            <img src="/evidence/Screenshot_20260202_213015_Instagram.jpg" alt="Robin Leach Murder Allegation" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Robin Leach Strangled Girl to Death at Party</h4>
+              <p>Court complaint claims witness has VIDEO EVIDENCE of high-profile sex parties, dealings with cartels, and Robin Leach ("Lifestyles of the Rich and Famous" host) strangling a young girl to death at a party. Multiple witnesses named Trump, Epstein, Ghislaine Maxwell.</p>
+              <span className="evidence-tag">VIDEO EVIDENCE CLAIMED</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">VIRAL MEME</div>
+            <img src="/evidence/Screenshot_20260202_203234_LinkedIn.jpg" alt="Hooker and Con Man Running America" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>"A Hooker and a Con Man Are Running America"</h4>
+              <p>Viral social media post showing Trump with Melania (before marriage), implying she was an escort when they met. Connects to broader pattern of Trump's relationships with sex workers and trafficking networks.</p>
+              <span className="evidence-tag">VIRAL (98.4K LIKES)</span>
+            </div>
+          </motion.div>
         </div>
 
         <div className="download-section">
