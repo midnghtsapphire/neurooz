@@ -590,6 +590,26 @@ const Epstein = () => {
               <span className="evidence-tag">VIRAL (98.4K LIKES)</span>
             </div>
           </motion.div>
+
+          <motion.div className="evidence-card bombshell" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">📖 VICTIM TESTIMONY</div>
+            <img src="/evidence/FB_IMG_1770121307330.jpg" alt="Victim Trauma Journal 2012" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Victim's Trauma Journal: "Jeffrey is Around Every Corner"</h4>
+              <p>Court-sealed trauma journal from Epstein victim documenting terror between May-July 2012. Victim writes: "From 16-18 - Mary, Eddie, Jeffrey, Ghislaine. Trio sent to many in DC, NY, FL, island." Multiple entries describe fear of Jeffrey and Ghislaine, being transported on private planes, and trauma from abuse. Document marked "CONFIDENTIAL FOR EFTA DO NOT COPY."</p>
+              <span className="evidence-tag">PRIMARY SOURCE EVIDENCE</span>
+            </div>
+          </motion.div>
+
+          <motion.div className="evidence-card" whileHover={{ scale: 1.02 }}>
+            <div className="evidence-badge">🏛️ BLUEPRINTS</div>
+            <img src="/evidence/FB_IMG_1770121335596.jpg" alt="Facility Architectural Plans" className="evidence-image" />
+            <div className="evidence-info">
+              <h4>Facility Architectural Plans with Child Bedrooms</h4>
+              <p>Detailed architectural floor plans showing facility layout with multiple child bedrooms, master bedroom, and designated "child area." Plans include measurements and room designations. Proposal document titled "VIEW FROM THE LOBBY" shows luxury entrance with palm trees and swimming pool. Connection to Epstein properties under investigation.</p>
+              <span className="evidence-tag">STRUCTURAL EVIDENCE</span>
+            </div>
+          </motion.div>
         </div>
 
         <div className="download-section">
