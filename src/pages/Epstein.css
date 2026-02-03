@@ -832,3 +832,116 @@
     flex-wrap: wrap;
   }
 }
+
+/* ============================================================================
+   LIVE SOCIAL MEDIA FEEDS
+   ============================================================================ */
+
+.social-feeds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feed-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.feed-card:hover {
+  border-color: #dc2626;
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(220, 38, 38, 0.3);
+}
+
+.feed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: rgba(220, 38, 38, 0.1);
+  border-bottom: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.feed-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(220, 38, 38, 0.2);
+  color: #fca5a5;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.feed-embed {
+  padding: 1rem;
+  min-height: 600px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.feed-embed iframe {
+  border-radius: 0.75rem;
+}
+
+.instagram-feed-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  border-radius: 0.75rem;
+}
+
+.feed-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feed-link:hover {
+  transform: scale(1.05);
+}
+
+.feed-link svg {
+  color: #ffffff;
+}
+
+/* Twitter Timeline Styling */
+.twitter-timeline {
+  color: #ffffff !important;
+}
+
+@media (max-width: 768px) {
+  .social-feeds-grid {
+    grid-template-columns: 1fr;
+  }
+}

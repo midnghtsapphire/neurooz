@@ -328,6 +328,76 @@ const Epstein = () => {
         </div>
       </div>
 
+      {/* Live Social Media Feeds */}
+      <div className="content-section">
+        <div className="section-header">
+          <h2>
+            <TrendingUp size={28} />
+            LIVE SOCIAL MEDIA BUZZ
+          </h2>
+          <p className="section-subtitle">Real-time posts and discussions about the Epstein case from across social media</p>
+        </div>
+
+        <div className="social-feeds-grid">
+          {/* Twitter/X Feed */}
+          <div className="feed-card">
+            <div className="feed-header">
+              <h3>𝕏 (Twitter)</h3>
+              <span className="live-indicator">🔴 LIVE</span>
+            </div>
+            <div className="feed-embed">
+              <a 
+                className="twitter-timeline" 
+                data-theme="dark" 
+                data-height="600" 
+                href="https://twitter.com/search?q=epstein%20OR%20%22epstein%20files%22%20OR%20%22ghislaine%20maxwell%22&src=typed_query&f=live"
+              >
+                Loading latest posts about Epstein...
+              </a>
+            </div>
+          </div>
+
+          {/* TikTok Feed */}
+          <div className="feed-card">
+            <div className="feed-header">
+              <h3>TikTok</h3>
+              <span className="live-indicator">🔴 LIVE</span>
+            </div>
+            <div className="feed-embed">
+              <iframe
+                src="https://www.tiktok.com/embed/tag/epstein"
+                width="100%"
+                height="600"
+                frameBorder="0"
+                allow="encrypted-media"
+                title="TikTok Epstein Feed"
+              ></iframe>
+            </div>
+          </div>
+
+          {/* Instagram Feed */}
+          <div className="feed-card">
+            <div className="feed-header">
+              <h3>Instagram</h3>
+              <span className="live-indicator">🔴 LIVE</span>
+            </div>
+            <div className="feed-embed">
+              <div className="instagram-feed-placeholder">
+                <a 
+                  href="https://www.instagram.com/explore/tags/epstein/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="feed-link"
+                >
+                  <span>View Latest #Epstein Posts on Instagram</span>
+                  <ExternalLink size={20} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Call to Action */}
       <div className="cta-section">
         <h2>Stay Updated on Breaking Developments</h2>
