@@ -398,6 +398,55 @@ const Epstein = () => {
         </div>
       </div>
 
+      {/* Investigative Report Article */}
+      <div className="article-section">
+        <div className="article-container">
+          <div className="article-badge">EXCLUSIVE INVESTIGATION</div>
+          <h2 className="article-title">The Juárez Connection: Unraveling the Deep State Ties Between Epstein, Fort Bliss, and the Cartel</h2>
+          <div className="article-meta">
+            <span className="author">By Audrey Evans</span>
+            <span className="date">February 2, 2026</span>
+            <span className="hashtag">#meetaudreyevans</span>
+          </div>
+          
+          <div className="article-content">
+            <h3>Executive Summary</h3>
+            <p>This report uncovers a deeply entrenched criminal conspiracy connecting Jeffrey Epstein's sex trafficking network to high-level officials within the U.S. government, cartel operations in Mexico, and a series of violent events and cover-ups spanning over a decade. The investigation reveals a trafficking route originating from Epstein's Zorro Ranch in New Mexico, passing through Fort Bliss in El Paso, Texas, and culminating in depraved activities at a U.S. Consulate-controlled facility in Juárez, Mexico.</p>
+            
+            <h3>Key Findings</h3>
+            <ul>
+              <li><strong>The Juárez Consulate Parties:</strong> Newly unearthed emails from the Epstein files allege that Jeffrey Epstein organized "depraved sex parties" at a U.S. Consulate-controlled housing facility in Juárez, Mexico, in 2014.</li>
+              <li><strong>The Fort Bliss Whistleblower:</strong> SPC Richard Halliday exposed cartel-linked trafficking at Fort Bliss and was murdered in July 2020. The U.S. Army officially ruled his death "In the Line of Duty" in January 2025.</li>
+              <li><strong>The Trafficking Route:</strong> Zorro Ranch (NM) → Fort Bliss (TX) → Juárez Consulate (Mexico) → Little St. James Island</li>
+              <li><strong>High-Level Complicity:</strong> Former Ambassador Earl Anthony Wayne is accused in FBI documents of attending these parties and being arrested by Mexican Federal Police.</li>
+              <li><strong>The Gabriela Rico Jiménez Case:</strong> In 2009, model Gabriela Rico Jiménez claimed elites were engaging in cannibalism at a private party in Monterrey. She disappeared shortly after.</li>
+            </ul>
+            
+            <h3>Timeline of Key Events</h3>
+            <table className="timeline-table">
+              <tbody>
+                <tr><td><strong>2009</strong></td><td>Gabriela Rico Jiménez arrested in Monterrey after making cannibalism claims</td></tr>
+                <tr><td><strong>2011-2015</strong></td><td>Earl Anthony Wayne serves as U.S. Ambassador to Mexico</td></tr>
+                <tr><td><strong>2014</strong></td><td>Alleged Epstein party at Juárez consulate facility; Ambassador Wayne allegedly arrested</td></tr>
+                <tr><td><strong>2019 (Aug)</strong></td><td>El Paso Walmart mass shooting</td></tr>
+                <tr><td><strong>2020 (July)</strong></td><td>SPC Richard Halliday murdered at Fort Bliss</td></tr>
+                <tr><td><strong>2025 (Jan)</strong></td><td>U.S. Army rules Halliday's death "In the Line of Duty"</td></tr>
+                <tr><td><strong>2026 (Jan)</strong></td><td>Whistleblower Kenneth Darrell Turner dies</td></tr>
+                <tr><td><strong>2026 (Feb)</strong></td><td>Release of Epstein files containing Juárez consulate allegations</td></tr>
+              </tbody>
+            </table>
+            
+            <h3>Conclusion</h3>
+            <p>The evidence paints a horrifying picture of a criminal enterprise operating with impunity at the highest levels of power, protected by a deep state network that silences those who dare to expose the truth. The murder of a decorated American soldier, the disappearance of a young model, and the deeply disturbing allegations against a former U.S. Ambassador all point to a conspiracy that demands immediate and thorough investigation.</p>
+            
+            <div className="article-cta">
+              <a href="https://epsteinfilez.com" target="_blank" rel="noopener noreferrer" className="search-files-btn">SEARCH THE FILES</a>
+              <span className="share-hashtag">#meetaudreyevans #EpsteinFiles #JusticeForRichardHalliday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Call to Action */}
       <div className="cta-section">
         <h2>Stay Updated on Breaking Developments</h2>
