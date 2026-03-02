@@ -38,6 +38,8 @@ import RewardsDashboard from "./pages/RewardsDashboard";
 import TaskDashboard from "./pages/TaskDashboard";
 import ShortList from "./pages/ShortList";
 import LongList from "./pages/LongList";
+import CalendarPage from "./pages/Calendar";
+import Routines from "./pages/Routines";
 import Overview from "./pages/Overview";
 import Implementation from "./pages/Implementation";
 import Database from "./pages/Database";
@@ -101,8 +103,8 @@ const App = () => (
             <Route path="/tasks/today" element={<ShortList />} />
             <Route path="/epstein" element={<Epstein />} />
             <Route path="/tasks/someday" element={<LongList />} />
-            <Route path="/tasks/calendar" element={<TaskDashboard />} />
-            <Route path="/tasks/routines" element={<TaskDashboard />} />
+            <Route path="/tasks/calendar" element={<CalendarPage />} />
+            <Route path="/tasks/routines" element={<Routines />} />
             <Route path="/admin/docs" element={<Overview />} />
             <Route path="/admin/docs/overview" element={<Overview />} />
             <Route path="/admin/docs/implementation" element={<Implementation />} />
