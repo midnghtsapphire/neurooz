@@ -151,3 +151,24 @@ export function useDeleteTask() {
     },
   });
 }
+
+export function useReorderTasks() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (orderedIds: string[]) => {
+      const updates = orderedIds.map((id, index) =>
+        supabase.from('tasks').update({ priority: index + 1 }).eq('id', id)
+      );
+      const results = await Promise.all(updates);
+      const failed = results.find((r) => r.error);
+      if (failed?.error) throw failed.error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Failed to reorder tasks", description: error.message, variant: "destructive" });
+    },
+  });
+}

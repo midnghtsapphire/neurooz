@@ -1,17 +1,52 @@
 import { Link } from "react-router-dom";
 import { useTasks } from "@/hooks/use-tasks";
+import { useRoutines } from "@/hooks/use-routines";
+import { useRoutineCompletionsToday } from "@/hooks/use-routines";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, ListTodo, Calendar, Repeat, ArrowRight, Loader2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { CheckCircle2, ListTodo, Calendar, Repeat, ArrowRight, Loader2, Star, Zap, Trophy } from "lucide-react";
 import { BrainDumpDialog } from "@/components/BrainDumpDialog";
+import { Gamification } from "@/types/brainDump.types";
+import { calculateLevel, levelProgress } from "@/utils/gamificationCalculator";
+
+function useGamification() {
+  return useQuery({
+    queryKey: ["gamification"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data } = await supabase
+        .from("gamification")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      return data as unknown as Gamification | null;
+    },
+  });
+}
 
 export default function TaskDashboard() {
   const { data: shortListTasks } = useTasks('short_list');
   const { data: longListTasks } = useTasks('long_list');
   const { data: calendarTasks } = useTasks('calendar');
+  const { data: routines } = useRoutines();
+  const { data: completionsToday } = useRoutineCompletionsToday();
+  const { data: gamification } = useGamification();
 
   const shortListPending = shortListTasks?.filter(t => t.status !== 'completed').length || 0;
   const shortListCompleted = shortListTasks?.filter(t => t.status === 'completed').length || 0;
+
+  const totalRoutines = routines?.length ?? 0;
+  const completedRoutinesCount = completionsToday
+    ? new Set(completionsToday.map(c => c.routine_id)).size
+    : 0;
+
+  const totalPoints = gamification?.total_points ?? 0;
+  const currentStreak = gamification?.current_streak ?? 0;
+  const { currentLevel, progressPercentage, pointsNeededForNext } = levelProgress(totalPoints);
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">
@@ -32,6 +67,47 @@ export default function TaskDashboard() {
             </p>
           </div>
           <BrainDumpDialog />
+        </div>
+      </Card>
+
+      {/* Gamification Stats */}
+      <Card className="p-5 mb-8 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950">
+        <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
+          <Trophy className="h-5 w-5 text-yellow-500" />
+          Your Progress
+        </h3>
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Star className="h-4 w-4 text-yellow-500" />
+            </div>
+            <p className="text-2xl font-bold">{totalPoints}</p>
+            <p className="text-xs text-muted-foreground">Points</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Trophy className="h-4 w-4 text-purple-500" />
+            </div>
+            <p className="text-2xl font-bold">Lvl {currentLevel}</p>
+            <p className="text-xs text-muted-foreground">Level</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <Zap className="h-4 w-4 text-orange-500" />
+            </div>
+            <p className="text-2xl font-bold">{currentStreak}</p>
+            <p className="text-xs text-muted-foreground">Day Streak</p>
+          </div>
+        </div>
+        <div>
+          <div className="flex justify-between text-xs text-muted-foreground mb-1">
+            <span>Level {currentLevel}</span>
+            <span>Level {currentLevel + 1}</span>
+          </div>
+          <Progress value={progressPercentage} className="h-2" />
+          <p className="text-xs text-muted-foreground mt-1 text-right">
+            {Math.round(progressPercentage)}% to next level
+          </p>
         </div>
       </Card>
 
@@ -134,8 +210,8 @@ export default function TaskDashboard() {
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-3xl font-bold text-orange-600">2</p>
-              <p className="text-xs text-muted-foreground">Active</p>
+              <p className="text-3xl font-bold text-orange-600">{completedRoutinesCount}/{totalRoutines}</p>
+              <p className="text-xs text-muted-foreground">Done Today</p>
             </div>
             <p className="text-sm text-muted-foreground mt-4">
               Morning & evening checklists for consistency.
