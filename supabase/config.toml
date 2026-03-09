@@ -1,5 +1,19 @@
 project_id = "mahtiidzvwzqeteljvip"
 
+[auth]
+# Production site URL — must match the domain where the app is deployed.
+# Supabase uses this as the base for email confirmation and OAuth redirect links.
+site_url = "https://growlingeyes.com"
+# All URLs that Supabase is allowed to redirect to after auth.
+additional_redirect_urls = [
+  "https://growlingeyes.com",
+  "https://growlingeyes.com/",
+  "https://www.growlingeyes.com",
+  "https://www.growlingeyes.com/",
+  "http://localhost:8080",
+  "http://localhost:8080/"
+]
+
 [functions.create-checkout]
 verify_jwt = false
 
