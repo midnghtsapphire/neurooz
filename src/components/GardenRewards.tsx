@@ -531,7 +531,7 @@ export function GardenRewards({ actionItems, className }: GardenRewardsProps) {
         <div className={cn("h-6", `bg-gradient-to-t ${theme.groundColor}`)} />
         
         {/* Fence at bottom */}
-        <div className="relative -mb-4">
+        <div className="relative z-10">
           <PicketFence className="h-20" showFlowers={selectedSeason === "spring" || selectedSeason === "summer"} />
         </div>
       </div>
