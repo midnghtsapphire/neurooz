@@ -67,7 +67,27 @@ export function BreathingExercise() {
   const [currentPhase, setCurrentPhase] = useState<BreathingPhase>("inhale");
   const [phaseProgress, setPhaseProgress] = useState(0);
   const [completedCycles, setCompletedCycles] = useState(0);
-  const [totalSeconds, setTotalSeconds] = useState(0);
+
+  const moveToNextPhase = () => {
+    const phases: BreathingPhase[] = ["inhale", "hold", "exhale", "rest"];
+    const currentIndex = phases.indexOf(currentPhase);
+    
+    if (currentIndex === phases.length - 1) {
+      // Completed one cycle
+      setCompletedCycles((prev) => {
+        const newCount = prev + 1;
+        if (newCount >= selectedPattern.cycles) {
+          // Exercise complete
+          setIsActive(false);
+          return newCount;
+        }
+        return newCount;
+      });
+      setCurrentPhase("inhale");
+    } else {
+      setCurrentPhase(phases[currentIndex + 1]);
+    }
+  };
 
   useEffect(() => {
     if (!isActive) return;
@@ -93,32 +113,10 @@ export function BreathingExercise() {
         }
         return prev + 0.1;
       });
-      setTotalSeconds((prev) => prev + 0.1);
     }, 100);
 
     return () => clearInterval(interval);
   }, [isActive, currentPhase, selectedPattern]);
-
-  const moveToNextPhase = () => {
-    const phases: BreathingPhase[] = ["inhale", "hold", "exhale", "rest"];
-    const currentIndex = phases.indexOf(currentPhase);
-    
-    if (currentIndex === phases.length - 1) {
-      // Completed one cycle
-      setCompletedCycles((prev) => {
-        const newCount = prev + 1;
-        if (newCount >= selectedPattern.cycles) {
-          // Exercise complete
-          setIsActive(false);
-          return newCount;
-        }
-        return newCount;
-      });
-      setCurrentPhase("inhale");
-    } else {
-      setCurrentPhase(phases[currentIndex + 1]);
-    }
-  };
 
   const handleStart = () => {
     setIsActive(true);
@@ -133,7 +131,6 @@ export function BreathingExercise() {
     setCurrentPhase("inhale");
     setPhaseProgress(0);
     setCompletedCycles(0);
-    setTotalSeconds(0);
   };
 
   const getCircleSize = () => {
