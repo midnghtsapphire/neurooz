@@ -13,5 +13,9 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
+    // Detect OAuth tokens and email-confirmation tokens in the URL hash/query
+    // when the user is redirected back from Supabase (required on custom domains).
+    detectSessionInUrl: true,
+    flowType: 'pkce',
   }
 });
