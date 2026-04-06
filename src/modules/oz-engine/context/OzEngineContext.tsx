@@ -47,7 +47,7 @@ export function OzEngineProvider({ children, cognitiveLoadPercent }: OzEnginePro
     needsConsentForPowerMode,
   } = useCognitiveMode();
 
-  const detectedMode = useCognitiveModeDetection({ cognitiveLoadPercent });
+  const detectedMode = useCognitiveModeDetection(cognitiveLoadPercent);
 
   const { history: modeHistory, summary: modeSummary, clearHistory: clearModeHistory } =
     useModeHistory(cognitiveMode);

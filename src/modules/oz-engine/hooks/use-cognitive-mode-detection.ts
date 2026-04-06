@@ -7,10 +7,7 @@
 
 import { useState, useEffect } from "react";
 import { detectCognitiveMode } from "../detection";
-import type {
-  CognitiveModeDetectionInput,
-  CognitiveModeDetectionResult,
-} from "../types";
+import type { CognitiveModeDetectionResult } from "../types";
 
 const REFRESH_INTERVAL_MS = 60_000; // re-evaluate every minute
 
@@ -18,7 +15,7 @@ const REFRESH_INTERVAL_MS = 60_000; // re-evaluate every minute
  * Returns the auto-detected cognitive mode recommendation.
  * Updates automatically as the hour changes.
  *
- * @param input - Optional overrides (e.g. pass current cognitiveLoadPercent)
+ * @param cognitiveLoadPercent - Optional cognitive load (0–100) to override time-based detection
  *
  * @example
  * const { mode, reason, confidence } = useCognitiveModeDetection();
@@ -27,27 +24,24 @@ const REFRESH_INTERVAL_MS = 60_000; // re-evaluate every minute
  * @example
  * // Pass cognitive load for load-aware detection
  * const { ramUsage } = useCognitiveLoad();
- * const { mode } = useCognitiveModeDetection({ cognitiveLoadPercent: ramUsage });
+ * const { mode } = useCognitiveModeDetection(ramUsage);
  */
 export function useCognitiveModeDetection(
-  input: Omit<CognitiveModeDetectionInput, "hourOfDay"> = {}
+  cognitiveLoadPercent?: number
 ): CognitiveModeDetectionResult {
   const [result, setResult] = useState<CognitiveModeDetectionResult>(() =>
-    detectCognitiveMode(input)
+    detectCognitiveMode({ cognitiveLoadPercent })
   );
 
   useEffect(() => {
-    // Refresh on input change
-    setResult(detectCognitiveMode(input));
+    setResult(detectCognitiveMode({ cognitiveLoadPercent }));
 
-    // Also refresh every minute in case the hour changes
     const timer = setInterval(() => {
-      setResult(detectCognitiveMode(input));
+      setResult(detectCognitiveMode({ cognitiveLoadPercent }));
     }, REFRESH_INTERVAL_MS);
 
     return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input.cognitiveLoadPercent]);
+  }, [cognitiveLoadPercent]);
 
   return result;
 }
