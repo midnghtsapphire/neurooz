@@ -708,3 +708,79 @@
   outline: 3px solid hsl(var(--primary));
   outline-offset: 3px;
 }
+
+/* ==========================================================================
+   Oz Engine™ — Cognitive Mode CSS Variables
+   Maps to data-mode attribute applied by CognitiveModeWrapper.
+   Source: docs/design/NEUROOZ_URBAN_OZ_THEME_SPEC.md
+   ========================================================================== */
+
+/* Shared mode transition — respects prefers-reduced-motion */
+[data-mode] {
+  transition:
+    background-color 0.4s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.4s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-mode] { transition: none !important; }
+}
+
+/* Flow Mode (internal: "flow") — Deep focus, minimal distraction */
+[data-mode="focus"] {
+  --mode-bg: #0A2E36;
+  --mode-accent: #2E8B57;
+  --mode-accent-rgb: 46, 139, 87;
+  --mode-text: #E2E8F0;
+  --mode-glow: rgba(46, 139, 87, 0.3);
+  --mode-secondary: #34D399;
+  --mode-muted: rgba(46, 139, 87, 0.15);
+  --mode-label: "Flow · Focus";
+}
+
+/* Creative Mode (internal: "creative") — Warm, inspiring, lateral */
+[data-mode="creative"] {
+  --mode-bg: #1A1033;
+  --mode-accent: #A78BFA;
+  --mode-accent-rgb: 167, 139, 250;
+  --mode-text: #F1F5F9;
+  --mode-glow: rgba(167, 139, 250, 0.3);
+  --mode-secondary: #FBBF24;
+  --mode-muted: rgba(167, 139, 250, 0.15);
+  --mode-label: "Creative";
+}
+
+/* Executive / Power Mode (internal: "power") — Clean, structured */
+[data-mode="executive"] {
+  --mode-bg: #0F172A;
+  --mode-accent: #60A5FA;
+  --mode-accent-rgb: 96, 165, 250;
+  --mode-text: #F1F5F9;
+  --mode-glow: rgba(96, 165, 250, 0.3);
+  --mode-secondary: #38BDF8;
+  --mode-muted: rgba(96, 165, 250, 0.15);
+  --mode-label: "Executive · Power";
+}
+
+/* Rest / Recovery Mode (internal: "recovery") — Soft, calming */
+[data-mode="rest"] {
+  --mode-bg: #1A1520;
+  --mode-accent: #C4B5FD;
+  --mode-accent-rgb: 196, 181, 253;
+  --mode-text: #E2E8F0;
+  --mode-glow: rgba(196, 181, 253, 0.2);
+  --mode-secondary: #DDD6FE;
+  --mode-muted: rgba(196, 181, 253, 0.12);
+  --mode-label: "Rest · Recovery";
+}
+
+/* Utility classes that consume mode CSS vars */
+.mode-surface {
+  background-color: var(--mode-bg);
+  color: var(--mode-text);
+}
+.mode-accent-text  { color: var(--mode-accent); }
+.mode-accent-border { border-color: var(--mode-accent); }
+.mode-glow-shadow  { box-shadow: 0 0 20px var(--mode-glow); }
+.mode-muted-bg     { background-color: var(--mode-muted); }

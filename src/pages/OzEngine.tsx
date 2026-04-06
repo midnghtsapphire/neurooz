@@ -30,7 +30,8 @@ import {
   Zap,
   RotateCcw,
   Flame,
-  Settings
+  Settings,
+  TrendingUp,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -247,6 +248,17 @@ export default function OzEngine() {
               <Flame className="h-4 w-4 mr-1" />
               Burn Mode
             </Button>
+            <Link to="/cognitive-growth">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-950/50"
+                title="Cognitive Growth Dashboard"
+              >
+                <TrendingUp className="h-4 w-4 mr-1" />
+                Growth
+              </Button>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
