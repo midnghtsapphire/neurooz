@@ -43,6 +43,7 @@ import {
 import { BrainDumpCard } from "@/components/TornadoAlley/BrainDumpCard";
 import { TotoQuickCapture } from "@/components/TotoQuickCapture";
 import { CognitiveTestsHub } from "@/components/cognitive-tests/CognitiveTestsHub";
+import { BreathingExercise } from "@/components/TornadoAlley/BreathingExercise";
 import tornadoAlleyImg from "@/assets/tornado-alley.png";
 import witchLandingImg from "@/assets/witch-landing.png";
 
@@ -59,8 +60,7 @@ const eyeOfStormTools = [
     icon: Wind,
     color: "text-sky-400",
     bgColor: "bg-sky-500/10",
-    // TODO: Implement breathing exercise component
-    implemented: false
+    implemented: true
   },
   {
     id: "asmr",
@@ -96,7 +96,7 @@ const eyeOfStormTools = [
 
 export default function TornadoAlley() {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<"hub" | "brain-dump" | "eye" | "cognitive-gym">("hub");
+  const [activeSection, setActiveSection] = useState<"hub" | "brain-dump" | "eye" | "cognitive-gym" | "breathing">("hub");
 
   // Handle completion of brain dump
   const handleBrainDumpComplete = (items: any[]) => {
@@ -256,6 +256,7 @@ export default function TornadoAlley() {
                   {eyeOfStormTools.map((tool) => (
                     <div 
                       key={tool.id}
+                      onClick={() => tool.implemented && tool.id === "breathing" && setActiveSection("breathing")}
                       className={`p-4 rounded-xl border ${tool.bgColor} border-white/5 ${
                         tool.implemented 
                           ? "cursor-pointer hover:border-white/20 transition-all" 
@@ -334,6 +335,33 @@ export default function TornadoAlley() {
 
         <main className="max-w-4xl mx-auto p-6">
           <CognitiveTestsHub />
+        </main>
+      </div>
+    );
+  }
+
+  // Breathing Exercise view
+  if (activeSection === "breathing") {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+        <header className="p-4 border-b border-border/30">
+          <div className="max-w-4xl mx-auto flex items-center gap-4">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setActiveSection("hub")}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <div className="flex items-center gap-3">
+              <Wind className="w-6 h-6 text-sky-400" />
+              <h1 className="text-lg font-semibold">Breathing Pacer</h1>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-4xl mx-auto p-6">
+          <BreathingExercise />
         </main>
       </div>
     );

@@ -134,14 +134,14 @@ export const PicketFence = ({ className = "", showFlowers = true, showGate = fal
   const gatePosition = Math.floor(picketCount / 2);
   
   return (
-    <div className={`relative w-full overflow-hidden ${className}`}>
-      {/* Horizontal rails */}
-      <div className="absolute bottom-6 left-0 right-0 h-2 bg-gradient-to-b from-white to-gray-100 shadow-sm" />
-      <div className="absolute bottom-12 left-0 right-0 h-2 bg-gradient-to-b from-white to-gray-100 shadow-sm" />
+    <div className={`relative w-full ${className}`}>
+      {/* Horizontal rails with z-index */}
+      <div className="absolute bottom-6 left-0 right-0 h-2 bg-gradient-to-b from-white to-gray-100 shadow-sm z-20" />
+      <div className="absolute bottom-12 left-0 right-0 h-2 bg-gradient-to-b from-white to-gray-100 shadow-sm z-20" />
       
-      {/* Ground flowers/grass */}
+      {/* Ground flowers/grass with z-index */}
       {showFlowers && (
-        <div className="absolute bottom-0 left-0 right-0 h-4 flex items-end justify-around px-8">
+        <div className="absolute bottom-0 left-0 right-0 h-4 flex items-end justify-around px-8 z-10">
           {Array.from({ length: 12 }).map((_, i) => (
             <div key={`ground-${i}`} className="relative">
               <div className="w-1 h-3 bg-gradient-to-t from-green-600 to-green-400 rounded-t-full" />
@@ -153,9 +153,9 @@ export const PicketFence = ({ className = "", showFlowers = true, showGate = fal
         </div>
       )}
       
-      {/* Pickets with flowers */}
-      <div className="flex justify-center">
-        <div className="flex gap-3 items-end">
+      {/* Pickets with flowers with z-index */}
+      <div className="flex justify-center z-30">
+        <div className="flex gap-3 items-end sm:gap-2">
           {Array.from({ length: picketCount }).map((_, i) => {
             // Insert gate in the middle
             if (showGate && i === gatePosition) {
