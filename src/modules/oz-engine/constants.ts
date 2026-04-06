@@ -34,6 +34,15 @@ export const COGNITIVE_MODES: Record<CognitiveMode, CognitiveModeConfig> = {
     bgClass: "bg-rose-100 dark:bg-rose-900/30",
     ringClass: "ring-rose-500",
   },
+  creative: {
+    id: "creative",
+    icon: "✨",
+    label: "Creative",
+    description: "Lateral thinking, exploration, ideas",
+    color: "violet",
+    bgClass: "bg-violet-100 dark:bg-violet-900/30",
+    ringClass: "ring-violet-500",
+  },
 };
 
 // ============= Storage Keys =============

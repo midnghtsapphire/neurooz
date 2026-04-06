@@ -1,5 +1,7 @@
 # Neurooz Task Management System - Implementation Audit
 
+_Last updated: 2026-04-06 — Sprint 1 Oz Engine Core iteration_
+
 ## ✅ What's Already Implemented
 
 ### Brain Dump System
@@ -21,6 +23,38 @@
 - ✅ **MedicationTracker page** - Medication correlation
 - ✅ **RewardsDashboard** - Gamification started
 - ✅ **Oz Engine** - Character system foundation
+
+### Oz Engine™ — Cognitive Mode System (Sprint 1 — SHIPPED 2026-04-06)
+- ✅ **CognitiveMode type extended** — "flow" | "power" | "recovery" | **"creative"** (new)
+- ✅ **Rule-based mode detection** — `detectCognitiveMode()` pure function in `src/modules/oz-engine/detection.ts`
+  - Detects from 7 time windows (5am–8am, 9am–11am, 12pm–1pm, 2pm–5pm, 6pm–9pm, 10pm–4am)
+  - Cognitive load overrides: ≥85% → recovery, ≤15% → power
+  - Returns `{ mode, reason, confidence }` typed result
+- ✅ **`getCognitiveModeDataAttr()`** — Maps internal modes to Urban Oz CSS `data-mode` attributes
+- ✅ **`useCognitiveModeDetection()` hook** — React wrapper, refreshes every minute
+- ✅ **CognitiveModeSwitcher updated** — Added Creative mode with ✨ icon and violet theme
+- ✅ **Urban Oz cognitive mode CSS variables** — `[data-mode="focus|creative|executive|rest"]` rules in `index.css` (S1-004 base)
+- ✅ **`CognitiveModeWrapper` component** (S1-004) — `src/modules/oz-engine/components/CognitiveModeWrapper.tsx`
+  - Applies `data-mode` attribute to any DOM element, enabling Urban Oz CSS vars
+  - Reads from `OzEngineContext` if no `mode` prop supplied
+  - Density class per mode (`oz-density-flow/power/recovery/creative`)
+- ✅ **`useModeHistory` hook** — tracks all mode transitions in localStorage; caps at 200 entries
+- ✅ **`computeModeTimeSummary()`** — pure function: time-in-mode, session count, % of total time
+- ✅ **`OzEngineProvider` wired into `App.tsx`** — global cognitive mode state + auto-detection
+- ✅ **Cognitive Growth Dashboard page** (S1-005) — `/cognitive-growth` route
+  - Current mode card with auto-detection reason + confidence
+  - Manual mode switcher (4-button grid)
+  - Time-in-mode chart with progress bars
+  - Pattern insights (ADHD-relevant observations)
+  - Recent sessions list
+  - "Growth" button added to Oz Engine header
+- ✅ **Vitest configured** — `npm test` runs all tests; 27 tests pass
+- ✅ **Unit tests** — 19 detection tests + 8 mode history tests
+
+### Documentation (Sprint 0 — SHIPPED 2026-04-06)
+- ✅ **10 docs ported from revvel-standards PR #2** → `docs/` directory
+- ✅ **`docs/README.md`** — Full documentation index
+- ✅ **README.md updated** — Links to all docs
 
 ---
 

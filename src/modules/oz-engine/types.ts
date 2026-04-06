@@ -4,7 +4,45 @@
  */
 
 // ============= Cognitive Modes =============
-export type CognitiveMode = "flow" | "power" | "recovery";
+/**
+ * Core Oz Engine cognitive modes.
+ * - flow: deep, single-task vertical focus (maps to Focus in Urban Oz spec)
+ * - power: high-capacity structured planning (maps to Executive in Urban Oz spec)
+ * - recovery: ultra-simple, one thing only (maps to Rest in Urban Oz spec)
+ * - creative: warm, energetic lateral thinking (Urban Oz spec Creative mode)
+ */
+export type CognitiveMode = "flow" | "power" | "recovery" | "creative";
+
+/**
+ * Human-readable names from the Urban Oz design spec.
+ * Maps directly to UI CSS data-mode attributes.
+ */
+export type CognitiveModeLabel = "Focus" | "Executive" | "Rest" | "Creative";
+
+/** Reason why a mode was auto-detected */
+export type DetectionReason =
+  | "time_morning_peak"
+  | "time_afternoon_creative"
+  | "time_midday_rest"
+  | "time_evening_executive"
+  | "time_late_night_recovery"
+  | "time_early_morning_focus"
+  | "high_cognitive_load"
+  | "low_cognitive_load"
+  | "manual";
+
+export interface CognitiveModeDetectionInput {
+  /** Current hour in local time (0–23). Defaults to new Date().getHours() */
+  hourOfDay?: number;
+  /** Current RAM/cognitive load percentage (0–100). Optional. */
+  cognitiveLoadPercent?: number;
+}
+
+export interface CognitiveModeDetectionResult {
+  mode: CognitiveMode;
+  reason: DetectionReason;
+  confidence: number; // 0–1
+}
 
 export interface CognitiveModeConfig {
   id: CognitiveMode;

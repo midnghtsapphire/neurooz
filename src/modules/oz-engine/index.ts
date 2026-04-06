@@ -29,8 +29,14 @@ export * from "./types";
 // Constants
 export * from "./constants";
 
+// Detection (pure functions — no side effects, safe for server/test contexts)
+export { detectCognitiveMode, getCognitiveModeDataAttr } from "./detection";
+
 // Hooks
 export * from "./hooks";
+
+// Components
+export * from "./components";
 
 // Context
 export * from "./context";

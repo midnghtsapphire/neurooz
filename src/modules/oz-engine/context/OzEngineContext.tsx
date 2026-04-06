@@ -1,29 +1,43 @@
 /**
  * Oz Engine™ - Context Provider
- * Standalone module - provides centralized state management
+ * Standalone module - provides centralized state management.
+ * Now includes auto-detection recommendation and mode history tracking.
  */
 
 import { createContext, useContext, ReactNode } from "react";
 import { useCognitiveMode } from "../hooks/use-cognitive-mode";
-import type { CognitiveMode } from "../types";
+import { useCognitiveModeDetection } from "../hooks/use-cognitive-mode-detection";
+import { useModeHistory } from "../hooks/use-mode-history";
+import type { CognitiveMode, CognitiveModeDetectionResult } from "../types";
+import type { ModeHistoryEntry, ModeTimeSummary } from "../hooks/use-mode-history";
 
 interface OzEngineContextValue {
-  // Cognitive Mode
+  // Cognitive Mode (manual selection)
   cognitiveMode: CognitiveMode;
   setCognitiveMode: (mode: CognitiveMode) => void;
   hasConsentedToPowerMode: boolean;
   grantPowerModeConsent: () => void;
   revokePowerModeConsent: () => void;
   needsConsentForPowerMode: boolean;
+
+  // Auto-detection suggestion
+  detectedMode: CognitiveModeDetectionResult;
+
+  // Mode history + summary (for Cognitive Growth Dashboard)
+  modeHistory: ModeHistoryEntry[];
+  modeSummary: ModeTimeSummary[];
+  clearModeHistory: () => void;
 }
 
 const OzEngineContext = createContext<OzEngineContextValue | null>(null);
 
 export interface OzEngineProviderProps {
   children: ReactNode;
+  /** Cognitive load percent (0–100) to feed into auto-detection */
+  cognitiveLoadPercent?: number;
 }
 
-export function OzEngineProvider({ children }: OzEngineProviderProps) {
+export function OzEngineProvider({ children, cognitiveLoadPercent }: OzEngineProviderProps) {
   const {
     mode: cognitiveMode,
     setMode: setCognitiveMode,
@@ -33,6 +47,11 @@ export function OzEngineProvider({ children }: OzEngineProviderProps) {
     needsConsentForPowerMode,
   } = useCognitiveMode();
 
+  const detectedMode = useCognitiveModeDetection(cognitiveLoadPercent);
+
+  const { history: modeHistory, summary: modeSummary, clearHistory: clearModeHistory } =
+    useModeHistory(cognitiveMode);
+
   const value: OzEngineContextValue = {
     cognitiveMode,
     setCognitiveMode,
@@ -40,6 +59,10 @@ export function OzEngineProvider({ children }: OzEngineProviderProps) {
     grantPowerModeConsent,
     revokePowerModeConsent,
     needsConsentForPowerMode,
+    detectedMode,
+    modeHistory,
+    modeSummary,
+    clearModeHistory,
   };
 
   return (

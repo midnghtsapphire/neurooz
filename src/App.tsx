@@ -52,13 +52,16 @@ import Changelog from "./pages/Changelog";
 import TestScript from "./pages/TestScript";
 import NotFound from "./pages/NotFound";
 import Epstein from "./pages/Epstein";
+import CognitiveGrowth from "./pages/CognitiveGrowth";
+import { OzEngineProvider } from "@/modules/oz-engine";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AccessibilityProvider>
-      <TooltipProvider>
+    <OzEngineProvider>
+      <AccessibilityProvider>
+        <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -116,12 +119,14 @@ const App = () => (
             <Route path="/admin/docs/research" element={<Research />} />
             <Route path="/admin/docs/changelog" element={<Changelog />} />
             <Route path="/admin/test-script" element={<TestScript />} />
+            <Route path="/cognitive-growth" element={<CognitiveGrowth />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </AccessibilityProvider>
+  </OzEngineProvider>
   </QueryClientProvider>
 );
 

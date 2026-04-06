@@ -3,7 +3,8 @@
  * Modular component using the oz-engine types
  */
 
-import { Brain, Zap, Heart } from "lucide-react";
+import { Brain, Zap, Heart, Sparkles } from "lucide-react";
+import type React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { CognitiveMode } from "@/modules/oz-engine";
@@ -42,7 +43,23 @@ const MODE_CONFIG = {
     bg: "bg-rose-100 dark:bg-rose-900/30",
     ring: "ring-rose-500",
   },
-};
+  creative: {
+    icon: Sparkles,
+    label: "Creative",
+    description: "Lateral thinking, exploration, ideas",
+    color: "text-violet-600 dark:text-violet-400",
+    bg: "bg-violet-100 dark:bg-violet-900/30",
+    ring: "ring-violet-500",
+  },
+} as const satisfies Record<CognitiveMode, {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  description: string;
+  color: string;
+  bg: string;
+  ring: string;
+}>;
+
 
 export function CognitiveModeSwitcher({ 
   mode, 
