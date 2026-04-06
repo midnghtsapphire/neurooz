@@ -4,6 +4,10 @@
 
 **URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
+## Audit & improvement plan
+
+See `NEUROOZ_AUDIT_PLAN.md` for the current compliance and implementation roadmap.
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
