@@ -1,5 +1,7 @@
 # Neurooz Task Management System - Implementation Audit
 
+_Last updated: 2026-04-06 — Sprint 1 Oz Engine Core iteration_
+
 ## ✅ What's Already Implemented
 
 ### Brain Dump System
@@ -21,6 +23,23 @@
 - ✅ **MedicationTracker page** - Medication correlation
 - ✅ **RewardsDashboard** - Gamification started
 - ✅ **Oz Engine** - Character system foundation
+
+### Oz Engine™ — Cognitive Mode System (Sprint 1 — SHIPPED 2026-04-06)
+- ✅ **CognitiveMode type extended** — "flow" | "power" | "recovery" | **"creative"** (new)
+- ✅ **Rule-based mode detection** — `detectCognitiveMode()` pure function in `src/modules/oz-engine/detection.ts`
+  - Detects from 7 time windows (5am–8am, 9am–11am, 12pm–1pm, 2pm–5pm, 6pm–9pm, 10pm–4am)
+  - Cognitive load overrides: ≥85% → recovery, ≤15% → power
+  - Returns `{ mode, reason, confidence }` typed result
+- ✅ **`getCognitiveModeDataAttr()`** — Maps internal modes to Urban Oz CSS `data-mode` attributes
+- ✅ **`useCognitiveModeDetection()` hook** — React wrapper, refreshes every minute
+- ✅ **CognitiveModeSwitcher updated** — Added Creative mode with ✨ icon and violet theme
+- ✅ **Vitest configured** — `npm test` runs all tests; 19 tests pass
+- ✅ **Unit tests** — `src/modules/oz-engine/__tests__/detection.test.ts` — 19 tests, all time windows and overrides covered
+
+### Documentation (Sprint 0 — SHIPPED 2026-04-06)
+- ✅ **10 docs ported from revvel-standards PR #2** → `docs/` directory
+- ✅ **`docs/README.md`** — Full documentation index
+- ✅ **README.md updated** — Links to all docs
 
 ---
 

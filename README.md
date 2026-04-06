@@ -1,4 +1,22 @@
-# Welcome to your Lovable project
+# Neurooz
+
+**ADHD-specific productivity and financial guardian platform** powered by the Oz Engine™ — real-time cognitive mode adaptation meets Financial Guardian protection.
+
+> Built with Vite + TypeScript + React + shadcn-ui + Tailwind + Supabase.
+
+## Documentation
+
+| Resource | Description |
+|----------|-------------|
+| [📚 docs/](./docs/README.md) | Full documentation index |
+| [🎨 Design System](./docs/design/NEUROOZ_URBAN_OZ_THEME_SPEC.md) | Urban Oz theme spec, cognitive mode CSS, accessibility modes |
+| [🗂️ Product Backlog](./docs/planning/NEUROOZ_SCRUM_BACKLOG.md) | Sprint plans and acceptance criteria |
+| [🗃️ Kanban Cards](./docs/planning/NEUROOZ_KANBAN_CARDS.md) | Work breakdown with story points |
+| [🏗️ Architecture](./docs/architecture/NEUROOZ_DARE_LOG.md) | Decision log (DARE) and risk log (RAID) |
+| [🔬 Blue Ocean Research](./docs/NEUROOZ_BLUE_OCEAN_RESEARCH.md) | Competitive differentiation strategy |
+| [🛠️ Implementation Audit](./IMPLEMENTATION_AUDIT.md) | What's built vs. what's still needed |
+
+---
 
 ## Project info
 
