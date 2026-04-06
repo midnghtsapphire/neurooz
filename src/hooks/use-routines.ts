@@ -1,23 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Routine, RoutineStep, RoutineCompletion } from "@/types/brainDump.types";
-import { toast } from "@/hooks/use-toast";
-
-export function useRoutines(routineType?: Routine['routine_type']) {
-  return useQuery({
-    queryKey: ['routines', routineType],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      let query = supabase
-        .from('routines')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: true });
-
-      if (routineType) {
-        query = query.eq('routine_type', routineType);
 import { Routine, RoutineCompletion, RoutineStep } from "@/types/brainDump.types";
 import { toast } from "@/hooks/use-toast";
 
@@ -42,8 +24,7 @@ export function useRoutines(routineType?: Routine["routine_type"]) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as Routine[];
-      return data as unknown as Routine[];
+      return (data ?? []) as Routine[];
     },
   });
 }
@@ -52,13 +33,6 @@ export function useCreateRoutine() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (routine: { name: string; routine_type: Routine['routine_type']; steps: RoutineStep[] }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      const { data, error } = await supabase
-        .from('routines')
-        .insert({ ...routine, user_id: user.id, is_template: false })
     mutationFn: async (
       routine: Pick<Routine, "name" | "routine_type"> & { steps?: RoutineStep[] }
     ) => {
@@ -85,14 +59,6 @@ export function useCreateRoutine() {
       return data as Routine;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routines'] });
-      toast({ title: "Routine created!" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Failed to create routine", description: error.message, variant: "destructive" });
-      return data as unknown as Routine;
-    },
-    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["routines"] });
       toast({ title: "Routine created!" });
     },
@@ -110,11 +76,6 @@ export function useUpdateRoutine() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, updates }: { id: string; updates: Partial<Routine> }) => {
-      const { data, error } = await supabase
-        .from('routines')
-        .update(updates)
-        .eq('id', id)
     mutationFn: async ({
       id,
       updates,
@@ -131,13 +92,6 @@ export function useUpdateRoutine() {
 
       if (error) throw error;
       return data as Routine;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routines'] });
-    },
-    onError: (error: any) => {
-      toast({ title: "Failed to update routine", description: error.message, variant: "destructive" });
-      return data as unknown as Routine;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["routines"] });
@@ -157,22 +111,10 @@ export function useDeleteRoutine() {
 
   return useMutation({
     mutationFn: async (routineId: string) => {
-      const { error } = await supabase
-        .from('routines')
-        .delete()
-        .eq('id', routineId);
-        .from("routines")
-        .delete()
-        .eq("id", routineId);
-
+      const { error } = await supabase.from("routines").delete().eq("id", routineId);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routines'] });
-      toast({ title: "Routine deleted" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Failed to delete routine", description: error.message, variant: "destructive" });
       queryClient.invalidateQueries({ queryKey: ["routines"] });
       toast({ title: "Routine deleted" });
     },
@@ -190,16 +132,6 @@ export function useCompleteRoutine() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ routineId, stepsCompleted, timeTaken }: { routineId: string; stepsCompleted: string[]; timeTaken?: number }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      const { data, error } = await supabase
-        .from('routine_completions')
-        .insert({
-          routine_id: routineId,
-          user_id: user.id,
-          steps_completed: stepsCompleted,
     mutationFn: async ({
       routineId,
       stepsCompleted,
@@ -229,43 +161,13 @@ export function useCompleteRoutine() {
       return data as RoutineCompletion;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routine_completions'] });
-      queryClient.invalidateQueries({ queryKey: ['gamification'] });
-      toast({ title: "🌟 Routine completed!", description: "Amazing consistency!" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Failed to log completion", description: error.message, variant: "destructive" });
-    },
-  });
-}
-
-export function useRoutineCompletions(routineId?: string) {
-  return useQuery({
-    queryKey: ['routine_completions', routineId],
-    queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
-
-      let query = supabase
-        .from('routine_completions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('completed_at', { ascending: false })
-        .limit(30);
-
-      if (routineId) {
-        query = query.eq('routine_id', routineId);
-      return data as unknown as RoutineCompletion;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["routines"] });
       queryClient.invalidateQueries({ queryKey: ["routine_completions"] });
       queryClient.invalidateQueries({ queryKey: ["gamification"] });
-      toast({ title: "🎯 Routine complete!", description: "Great consistency!" });
+      toast({ title: "🌟 Routine completed!", description: "Amazing consistency!" });
     },
     onError: (error: Error) => {
       toast({
-        title: "Failed to complete routine",
+        title: "Failed to log completion",
         description: error.message,
         variant: "destructive",
       });
@@ -273,7 +175,33 @@ export function useRoutineCompletions(routineId?: string) {
   });
 }
 
-// Fetch today's completions for a routine
+export function useRoutineCompletions(routineId?: string) {
+  return useQuery({
+    queryKey: ["routine_completions", routineId],
+    queryFn: async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
+
+      let query = supabase
+        .from("routine_completions")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("completed_at", { ascending: false })
+        .limit(30);
+
+      if (routineId) {
+        query = query.eq("routine_id", routineId);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return (data ?? []) as RoutineCompletion[];
+    },
+  });
+}
+
 export function useRoutineCompletionsToday(routineId?: string) {
   return useQuery({
     queryKey: ["routine_completions", "today", routineId],
@@ -298,8 +226,7 @@ export function useRoutineCompletionsToday(routineId?: string) {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data as RoutineCompletion[];
-      return data as unknown as RoutineCompletion[];
+      return (data ?? []) as RoutineCompletion[];
     },
   });
 }
