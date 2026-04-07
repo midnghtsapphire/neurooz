@@ -40,8 +40,6 @@ import ShortList from "./pages/ShortList";
 import LongList from "./pages/LongList";
 import CalendarPage from "./pages/Calendar";
 import Routines from "./pages/Routines";
-import Routines from "./pages/Routines";
-import CalendarPage from "./pages/Calendar";
 import Overview from "./pages/Overview";
 import Implementation from "./pages/Implementation";
 import Database from "./pages/Database";

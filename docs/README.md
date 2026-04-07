@@ -34,6 +34,11 @@ This directory contains design, architecture, and planning documentation for the
 | [NEUROOZ_IMPROVEMENT_PLAN.md](./planning/NEUROOZ_IMPROVEMENT_PLAN.md) | Codebase analysis, 85 compliance gaps, and modular refactoring plan |
 | [NEUROOZ_COMPLIANCE_CHECKLIST.md](./planning/NEUROOZ_COMPLIANCE_CHECKLIST.md) | EXRUP lifecycle compliance matrix, repo artifacts checklist, security and legal requirements |
 
+### `/docs/standards/`
+| File | Description |
+|------|-------------|
+| [README.md](./standards/README.md) | Index linking to all applicable revvel-standards with Neurooz-specific notes |
+
 ---
 
 ## 🗺️ Quick Navigation
