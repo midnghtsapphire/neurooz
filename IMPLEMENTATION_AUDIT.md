@@ -140,24 +140,22 @@ _Last updated: 2026-04-06 — Sprint 1 Oz Engine Core iteration_
 
 ## 🎯 Recommended Next Steps
 
-**For MVP (Minimum Viable Product):**
-Focus on Phase 1 only - get the core task management working first. Users can:
-- Dump thoughts → AI extracts action items
-- Manually create tasks from action items
-- Organize into Short List (today), Long List (someday), Calendar (scheduled)
-- Track routines
-- See basic gamification (points/level)
+**Sprint 2 — Financial Guardian (NEXT):**
+- S2-001: Create `/src/modules/financial/` module structure
+- S2-002: Implement Plaid Link integration (or stub with local bank data if Plaid keys unavailable)
+- S2-003: Build transaction sync and categorization
+- S2-004: Implement impulse spending detection algorithm
+- S2-005: Build "Tin Man" financial health dashboard at `/financial`
+- S2-006–010: Alerts, savings goals, bill reminders, Plaid token encryption, tests
 
-**Later Enhancements:**
-- Google Calendar sync
-- Push notifications
-- Advanced gamification
-- Weekly review flow
-
----
-
-## 🚀 Ready to Build?
-
-The foundation is solid. Brain Dump is working beautifully. Now we need to add the task management UI so users can actually DO the things they dumped!
-
-**Should I proceed with Phase 1 (Core Task Pages)?**
+**Sprint 0–1 Foundation — COMPLETED ✅:**
+- ✅ `.env.example` — full env contract, no real values
+- ✅ `CHANGELOG.md` — Keep a Changelog format, Sprint 0–1 history
+- ✅ `BLUEPRINT.md` — technical architecture, routing map, module boundaries
+- ✅ `HANDOFF.md` — agent continuity, Sprint 2 roadmap
+- ✅ `ROADMAP.md` — 12-month strategic timeline
+- ✅ `.github/workflows/ci.yml` — typecheck + lint + test + build gate
+- ✅ `.github/workflows/deploy.yml` — production deploy via SSH to DigitalOcean
+- ✅ `docs/standards/README.md` — revvel-standards index with Neurooz notes
+- ✅ `package.json` — `typecheck` and `check` scripts added
+- ✅ `src/App.tsx` — duplicate imports removed (build blocker fixed)
