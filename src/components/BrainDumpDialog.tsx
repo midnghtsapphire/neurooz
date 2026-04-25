@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useBrainDumps, useCreateBrainDump, useProcessBrainDump, useDeleteBrainDump } from "@/hooks/use-brain-dumps";
+import { useBrainDumps, useCreateBrainDump, useProcessBrainDump, useDeleteBrainDump, BrainDump } from "@/hooks/use-brain-dumps";
 import { useProjects } from "@/hooks/use-projects";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -95,8 +95,9 @@ export function BrainDumpDialog() {
 
       setUploadedFiles(prev => [...prev, ...urls]);
       toast({ title: `${validFiles.length} file(s) uploaded` });
-    } catch (error: any) {
-      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast({ title: "Upload failed", description: message, variant: "destructive" });
     } finally {
       setIsUploading(false);
     }
@@ -126,7 +127,7 @@ export function BrainDumpDialog() {
     setUploadedFiles([]);
   };
 
-  const handleProcess = async (dump: any) => {
+  const handleProcess = async (dump: BrainDump) => {
     await processBrainDump.mutateAsync({
       brainDumpId: dump.id,
       rawContent: dump.raw_content,
@@ -290,7 +291,7 @@ export function BrainDumpDialog() {
                         <div>
                           <p className="text-sm font-medium mb-2">Action Items:</p>
                           <div className="space-y-1">
-                            {dump.ai_action_items.map((item: any, i: number) => (
+                            {dump.ai_action_items.map((item: { title: string; priority: string; category: string }, i: number) => (
                               <div key={i} className="flex items-center gap-2 text-sm">
                                 <div className={`w-2 h-2 rounded-full ${priorityColors[item.priority] || 'bg-gray-500'}`} />
                                 <span>{item.title}</span>
@@ -305,7 +306,7 @@ export function BrainDumpDialog() {
 
                       {dump.ai_categories && dump.ai_categories.length > 0 && (
                         <div className="flex flex-wrap gap-1">
-                          {dump.ai_categories.map((cat: any, i: number) => (
+                          {dump.ai_categories.map((cat: { name: string; suggested_project?: string }, i: number) => (
                             <Badge key={i} variant="secondary" className="text-xs">
                               {cat.name}
                               {cat.suggested_project && (

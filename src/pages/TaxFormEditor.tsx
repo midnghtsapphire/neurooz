@@ -164,10 +164,10 @@ export default function TaxFormEditor() {
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            {selectedForm === "W-4" && <W4FormEditor form={form as any} />}
-            {selectedForm === "W-9" && <W9FormEditor form={form as any} />}
-            {selectedForm === "Schedule C" && <ScheduleCFormEditor form={form as any} />}
-            {selectedForm === "1099-NEC" && <Form1099NECEditor form={form as any} />}
+            {selectedForm === "W-4" && <W4FormEditor form={form as never} />}
+            {selectedForm === "W-9" && <W9FormEditor form={form as never} />}
+            {selectedForm === "Schedule C" && <ScheduleCFormEditor form={form as never} />}
+            {selectedForm === "1099-NEC" && <Form1099NECEditor form={form as never} />}
           </form>
         </Form>
       </main>

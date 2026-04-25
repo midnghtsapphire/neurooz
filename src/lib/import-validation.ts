@@ -378,7 +378,7 @@ export function parseVineContent(text: string): Partial<ParsedInventoryItem>[] {
     
     if (asinMatch || orderNumberMatch) {
       const isCancelled = orderTypeMatch?.[0] === 'CANCELLATION';
-      let etv = etvMatch ? parseFloat(etvMatch[1]) : 0;
+      const etv = etvMatch ? parseFloat(etvMatch[1]) : 0;
       
       if (isCancelled || etv <= 0) continue;
       
@@ -475,7 +475,7 @@ export function parseTabularContent(text: string): Partial<ParsedInventoryItem>[
       } else if (field === 'quantity') {
         item.quantity = parseInt(value) || 1;
       } else {
-        (item as any)[field] = value;
+        (item as Record<string, unknown>)[field] = value;
       }
     }
     

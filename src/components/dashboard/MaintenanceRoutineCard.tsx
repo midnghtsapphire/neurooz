@@ -37,6 +37,7 @@ import {
   Sun,
   Coffee
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -55,7 +56,7 @@ const DAYS_OF_WEEK = [
   { short: "S", full: "Sat", value: 6 },
 ];
 
-const CATEGORY_ICONS: Record<string, { icon: any; color: string; emoji: string }> = {
+const CATEGORY_ICONS: Record<string, { icon: LucideIcon; color: string; emoji: string }> = {
   wellness: { icon: Heart, color: "text-pink-500", emoji: "🧘" },
   fitness: { icon: Dumbbell, color: "text-emerald-500", emoji: "💪" },
   medication: { icon: Pill, color: "text-red-500", emoji: "💊" },
@@ -244,13 +245,13 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
     const task: RecurringTask = {
       id: `task-${Date.now()}`,
       title: newTask.title || "",
-      category: newTask.category as any || "personal",
-      frequency: newTask.frequency as any || "weekly",
+      category: (newTask.category || "personal") as RecurringTask["category"],
+      frequency: (newTask.frequency || "weekly") as RecurringTask["frequency"],
       daysOfWeek: newTask.daysOfWeek || [],
       time: newTask.time,
       icon: CATEGORY_ICONS[newTask.category || "personal"].emoji,
-      priority: newTask.priority as any || "medium",
-      energyLevel: newTask.energyLevel as any,
+      priority: (newTask.priority || "medium") as RecurringTask["priority"],
+      energyLevel: newTask.energyLevel as RecurringTask["energyLevel"],
     };
     setTasks(prev => [...prev, task]);
     setNewTask({ category: "personal", frequency: "weekly", daysOfWeek: [], priority: "medium" });
@@ -562,7 +563,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                         <Label>Category</Label>
                         <Select 
                           value={newTask.category} 
-                          onValueChange={(v) => setNewTask(prev => ({ ...prev, category: v as any }))}
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, category: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -580,7 +581,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                         <Label>Frequency</Label>
                         <Select 
                           value={newTask.frequency} 
-                          onValueChange={(v) => setNewTask(prev => ({ ...prev, frequency: v as any }))}
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, frequency: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -621,7 +622,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                         <Label>Priority</Label>
                         <Select 
                           value={newTask.priority || "medium"} 
-                          onValueChange={(v) => setNewTask(prev => ({ ...prev, priority: v as any }))}
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, priority: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -637,7 +638,7 @@ export function MaintenanceRoutineCard({ onOpenWizard }: MaintenanceRoutineCardP
                         <Label>Best Time</Label>
                         <Select 
                           value={newTask.energyLevel || ""} 
-                          onValueChange={(v) => setNewTask(prev => ({ ...prev, energyLevel: v as any }))}
+                          onValueChange={(v) => setNewTask(prev => ({ ...prev, energyLevel: v }))}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Any time" />

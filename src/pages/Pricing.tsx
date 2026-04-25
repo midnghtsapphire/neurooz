@@ -39,7 +39,7 @@ const Pricing = () => {
   const [vineIncome, setVineIncome] = useState([35000]);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
 
   useEffect(() => {
     // Check for success/cancel params

@@ -8,8 +8,8 @@ export interface BrainDump {
   title: string | null;
   raw_content: string;
   ai_summary: string | null;
-  ai_action_items: any[] | null;
-  ai_categories: any[] | null;
+  ai_action_items: { title: string; priority: string; category: string }[] | null;
+  ai_categories: { name: string; suggested_project?: string }[] | null;
   project_id: string | null;
   document_urls: string[] | null;
   created_at: string;

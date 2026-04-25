@@ -206,36 +206,49 @@ Before declaring work complete:
 ## Project-Specific Context
 
 ### What This Project Is
-Sessiono — session musician subscription platform. Users browse, book, and pay session musicians. Musicians list their services, set rates, and manage bookings.
+Neurooz — neurodivergent-focused life/work tracking app with Wizard of Oz theming. Designed for ADHD, autism, AuDHD, dyslexia, and other neurodivergent users. Combines task management, cognitive mode adaptation, impulse control, grounding exercises, and stress detection into a unified platform.
+
+### Wizard of Oz Theme Mapping
+- **Scarecrow** = Brain fog/confusion → Brain Dump, Task Management
+- **Tin Man** = Emotional dysregulation → Emotional Routing, Financial Guardian
+- **Cowardly Lion** = Anxiety/speaking up → Courage Exercises, Grounding, Stress Detection
+- **Dorothy** = Getting grounded → Routines, Daily Rituals
+- **Toto** = Guardian companion → Alerts, Fall Detection, Quick Capture
+- **Yellow Brick Road** = The journey → Kanban Board, Progress, Quests
+- **Emerald City** = Goals/achievements → Savings, Levels, Milestones
+- **Tornado** = Chaos/overwhelm → Brain Dumps, Overwhelm Recovery
 
 ### Architecture
 ```
-app/                    # Expo Router file-based routing
-  (tabs)/               # Bottom tab navigation
-    index.tsx           # Home — browse featured musicians
-    search.tsx          # Search by instrument/genre
-    bookings.tsx        # My bookings list
-    profile.tsx         # User profile + subscription
-  auth/login.tsx        # Login/signup modal
-  musician/[id].tsx     # Musician detail + booking
-components/             # Reusable UI components
-lib/supabase.ts         # Supabase client with SecureStore
-constants/              # Theme, config
+src/
+  components/           # UI components
+    TornadoAlley/       # Brain Dump + Breathing exercises
+    OzEngine/           # Cognitive mode detection (Oz Engine™)
+    neuro/              # Neuro-adaptive UI components
+    impulse/            # Impulse control dialogs/timers
+    dashboard/          # Dashboard cards (maintenance, vine, etc.)
+  hooks/                # React hooks (tasks, brain dumps, sensors, cognitive load)
+  modules/oz-engine/    # Core Oz Engine context and logic
+  pages/                # Route pages (Projects, TornadoAlley, ImpulseControl, etc.)
+  utils/                # Utilities (impulse detection, notifications, oz messages)
+  integrations/supabase/# Supabase client and types
 ```
 
 ### Key Commands
 ```bash
-npx expo start          # Dev server (scan QR with Expo Go)
-npx expo start --web    # Web dev server
-eas build --platform all  # Build for iOS + Android
-eas submit --platform ios  # Submit to App Store
+npm run dev             # Dev server at localhost:5173
+npm test                # Run tests (27 tests)
+npm run typecheck       # TypeScript check (0 errors expected)
+npm run lint            # ESLint check (0 errors expected)
+npm run build           # Production build to dist/
 ```
 
-### Current State
-- UI scaffolding complete with dark cinematic theme
-- Demo data in place — needs Supabase integration
-- Auth screen built — needs Supabase auth wiring
-- Stripe subscription integration not started
-- Musician profile photos not implemented (use expo-image)
-- Push notifications not implemented
-- Search is static — needs Supabase full-text search
+### Current State (Sprint 1 Complete)
+- Oz Engine™ cognitive mode detection working (Focus/Creative/Executive/Rest)
+- Brain Dump + Tornado Alley overwhelm recovery zone implemented
+- Kanban board with life/work categories
+- Impulse Control module for ADHD impulse spending
+- Breathing exercises and grounding tools
+- 27/27 tests passing, 0 typecheck errors, 0 lint errors
+- Supabase integration stubbed (needs credentials to connect)
+- Sprint 2 (Financial Guardian) is next

@@ -127,7 +127,7 @@ export function CreateActionItemDialog({ projectId, projects }: CreateActionItem
             </div>
             <div className="space-y-2">
               <Label>Priority</Label>
-              <Select value={priority} onValueChange={(v) => setPriority(v as any)}>
+              <Select value={priority} onValueChange={(v) => setPriority(v as "low" | "medium" | "high")}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

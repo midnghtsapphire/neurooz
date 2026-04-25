@@ -203,7 +203,7 @@ export function W2Generator() {
     }));
   };
 
-  const updateField = (field: keyof W2FormData, value: any) => {
+  const updateField = (field: keyof W2FormData, value: string | number | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -214,7 +214,7 @@ export function W2Generator() {
     }));
   };
 
-  const updateBox12Code = (index: number, field: "code" | "amount", value: any) => {
+  const updateBox12Code = (index: number, field: "code" | "amount", value: string | number) => {
     setFormData(prev => {
       const updated = [...prev.box12Codes];
       updated[index] = { ...updated[index], [field]: value };
@@ -236,7 +236,7 @@ export function W2Generator() {
     }));
   };
 
-  const updateBox14Entry = (index: number, field: "description" | "amount", value: any) => {
+  const updateBox14Entry = (index: number, field: "description" | "amount", value: string | number) => {
     setFormData(prev => {
       const updated = [...prev.box14Other];
       updated[index] = { ...updated[index], [field]: value };

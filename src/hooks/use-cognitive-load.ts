@@ -59,14 +59,14 @@ function getDriftState(): DriftState {
   try {
     const stored = sessionStorage.getItem(DRIFT_STORAGE_KEY);
     if (stored) return JSON.parse(stored);
-  } catch {}
+  } catch { /* ignore parse errors */ }
   return { lastQuestId: null, lastActiveTime: Date.now(), driftTriggeredAt: null };
 }
 
 function setDriftState(state: DriftState) {
   try {
     sessionStorage.setItem(DRIFT_STORAGE_KEY, JSON.stringify(state));
-  } catch {}
+  } catch { /* ignore storage errors */ }
 }
 
 export function useCognitiveLoad(): CognitiveLoad {
@@ -128,7 +128,7 @@ export function useCognitiveLoad(): CognitiveLoad {
     const dumpWeight = 10;
     const overdueWeight = 8;
     
-    let ramUsage = Math.min(100, 
+    const ramUsage = Math.min(100, 
       (openProjects * projectWeight) + 
       (openTasks * taskWeight) + 
       (unprocessedDumps * dumpWeight) +

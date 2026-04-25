@@ -84,8 +84,9 @@ const Auth = () => {
       });
       if (error) throw error;
       // Browser will redirect to Google — loading stays true intentionally
-    } catch (error: any) {
-      toast.error(error.message ?? "Google sign-in failed. Please try again.");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Google sign-in failed. Please try again.";
+      toast.error(message);
       setLoading(false);
     }
   };
@@ -126,13 +127,14 @@ const Auth = () => {
         // Sync happens in onAuthStateChange
         toast.success("Account created! You're all set.");
       }
-    } catch (error: any) {
-      if (error.message.includes("User already registered")) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "An unexpected error occurred";
+      if (message.includes("User already registered")) {
         toast.error("This email is already registered. Try logging in!");
-      } else if (error.message.includes("Invalid login credentials")) {
+      } else if (message.includes("Invalid login credentials")) {
         toast.error("Incorrect email or password. Please try again.");
       } else {
-        toast.error(error.message);
+        toast.error(message);
       }
     } finally {
       setLoading(false);

@@ -12,7 +12,7 @@ const US_STATES = [
 ];
 
 interface AddressFieldsProps {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<Record<string, unknown>>;
   prefix: string;
 }
 

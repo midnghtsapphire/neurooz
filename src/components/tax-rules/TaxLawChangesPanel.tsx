@@ -12,7 +12,7 @@ import {
   Minus, 
   Plus,
   Calendar,
-  Infinity,
+  Infinity as InfinityIcon,
   FileText
 } from "lucide-react";
 import { 
@@ -55,7 +55,7 @@ function StatusBadge({ change }: { change: TaxLawChange }) {
   if (change.is_permanent) {
     return (
       <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30">
-        <Infinity className="h-3 w-3 mr-1" />
+        <InfinityIcon className="h-3 w-3 mr-1" />
         Permanent
       </Badge>
     );

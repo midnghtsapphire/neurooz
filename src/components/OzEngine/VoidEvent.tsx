@@ -74,9 +74,6 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
   const [answer, setAnswer] = useState("");
   const [selectedDestination, setSelectedDestination] = useState<ReturnDestination | null>(null);
   
-  // Only show if drift level is critical
-  if (!load.isInVoid) return null;
-  
   useEffect(() => {
     const timer1 = setTimeout(() => setPhase('void'), 2000);
     const timer2 = setTimeout(() => setPhase('question'), 4000);
@@ -85,6 +82,9 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
       clearTimeout(timer2);
     };
   }, []);
+  
+  // Only show if drift level is critical
+  if (!load.isInVoid) return null;
   
   const handleReturn = () => {
     if (selectedDestination) {

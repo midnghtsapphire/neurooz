@@ -23,7 +23,7 @@ export default function Onboarding() {
   const [currentState, setCurrentState] = useState<TravelerState>('foggy');
   const [pace, setPace] = useState<Pace>('standard');
 
-  const handleBrainDumpComplete = async (items: any[]) => {
+  const handleBrainDumpComplete = async (items: { type: string; title: string; description?: string; priority?: string }[]) => {
     // Create projects and tasks from brain dump results
     const projects = items.filter(i => i.type === 'project');
     const tasks = items.filter(i => i.type === 'task' || i.type === 'idea' || i.type === 'concern');

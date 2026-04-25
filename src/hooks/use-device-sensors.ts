@@ -52,7 +52,7 @@ export function useDeviceSensors(): DeviceSensorState {
 
   // Motion detection via DeviceMotion API
   useEffect(() => {
-    let movementBuffer: number[] = [];
+    const movementBuffer: number[] = [];
     const BUFFER_SIZE = 10;
 
     const handleMotion = (event: DeviceMotionEvent) => {
@@ -81,7 +81,7 @@ export function useDeviceSensors(): DeviceSensorState {
     };
 
     if ("DeviceMotionEvent" in window) {
-      // @ts-ignore - requestPermission is iOS-specific
+      // @ts-expect-error - requestPermission is iOS-specific
       if (typeof DeviceMotionEvent.requestPermission === "function") {
         // iOS requires permission - will be requested on user interaction
       } else {
@@ -98,7 +98,7 @@ export function useDeviceSensors(): DeviceSensorState {
   useEffect(() => {
     const updateBattery = async () => {
       try {
-        // @ts-ignore - Battery API
+        // @ts-expect-error - Battery API not in standard typings
         const battery = await navigator.getBattery?.();
         if (battery) {
           const update = () => {
@@ -122,9 +122,9 @@ export function useDeviceSensors(): DeviceSensorState {
   // Ambient Light Sensor
   useEffect(() => {
     try {
-      // @ts-ignore - AmbientLightSensor API
+      // @ts-expect-error - AmbientLightSensor API not in standard typings
       if ("AmbientLightSensor" in window) {
-        // @ts-ignore
+        // @ts-expect-error - AmbientLightSensor constructor not typed
         const sensor = new AmbientLightSensor();
         sensor.addEventListener("reading", () => {
           const lux = sensor.illuminance;
@@ -165,7 +165,7 @@ export function useDeviceSensors(): DeviceSensorState {
   // Network status
   useEffect(() => {
     const updateNetwork = () => {
-      const connection = (navigator as any).connection;
+      const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
       setState((prev) => ({
         ...prev,
         isOnline: navigator.onLine,
@@ -229,10 +229,10 @@ export function useRequestMotionPermission() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
 
   const requestPermission = useCallback(async () => {
-    // @ts-ignore - iOS-specific
+    // @ts-expect-error - iOS-specific DeviceMotionEvent.requestPermission
     if (typeof DeviceMotionEvent.requestPermission === "function") {
       try {
-        // @ts-ignore
+        // @ts-expect-error - iOS-specific requestPermission
         const permission = await DeviceMotionEvent.requestPermission();
         setHasPermission(permission === "granted");
         return permission === "granted";

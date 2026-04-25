@@ -109,7 +109,7 @@ export default function LongList() {
                 <Label>Size</Label>
                 <Select
                   value={newTask.size}
-                  onValueChange={(value: any) => setNewTask({ ...newTask, size: value })}
+                  onValueChange={(value: "small" | "medium" | "big") => setNewTask({ ...newTask, size: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />

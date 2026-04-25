@@ -192,7 +192,7 @@ export default function ShortList() {
                 <Label>Size</Label>
                 <Select
                   value={newTaskDetails.size}
-                  onValueChange={(value: any) =>
+                  onValueChange={(value: "small" | "medium" | "big") =>
                     setNewTaskDetails({ ...newTaskDetails, size: value })
                   }
                 >

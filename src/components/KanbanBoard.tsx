@@ -31,15 +31,15 @@ export function KanbanBoard({ actionItems }: KanbanBoardProps) {
       // Map completed items to done
       if (item.is_completed) return status === "done";
       // Map waiting_on items to waiting
-      if ((item as any).waiting_on) return status === "waiting";
+      if (item.waiting_on) return status === "waiting";
       // Use kanban_status or default to backlog
-      const itemStatus = (item as any).kanban_status || "backlog";
+      const itemStatus = item.kanban_status || "backlog";
       return itemStatus === status;
     });
   };
 
   const handleDrop = (item: ActionItem, newStatus: KanbanStatus) => {
-    const updates: any = { id: item.id };
+    const updates: Partial<ActionItem> & { id: string } = { id: item.id };
     
     if (newStatus === "done") {
       updates.is_completed = true;
@@ -194,7 +194,7 @@ function KanbanCard({ item, isDragging, onDragStart, onDragEnd }: KanbanCardProp
                     id: item.id, 
                     is_completed: !!checked,
                     kanban_status: checked ? "done" : "todo"
-                  } as any)
+                  })
                 }
                 className="mt-0.5"
               />
@@ -224,7 +224,7 @@ function KanbanCard({ item, isDragging, onDragStart, onDragEnd }: KanbanCardProp
                 </Badge>
               )}
               
-              {(item as any).waiting_on && (
+              {item.waiting_on && (
                 <Badge variant="secondary" className="text-xs h-5">
                   <Clock className="h-3 w-3 mr-1" />
                   Waiting
