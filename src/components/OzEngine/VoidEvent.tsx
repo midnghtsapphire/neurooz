@@ -76,6 +76,7 @@ export function VoidEvent({ onReturn }: VoidEventProps) {
   
   useEffect(() => {
     if (!load.isInVoid) return;
+    setPhase('fade');
     const timer1 = setTimeout(() => setPhase('void'), 2000);
     const timer2 = setTimeout(() => setPhase('question'), 4000);
     return () => {
