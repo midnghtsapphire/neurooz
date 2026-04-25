@@ -99,7 +99,7 @@ export function ProjectCompletionScorer({ project, actionItems, onClose }: Proje
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-orange-600">0</p>
+            <p className="text-2xl font-bold text-orange-600">{project.scope_creep_count || 0}</p>
             <p className="text-xs text-muted-foreground">Scope Creep</p>
           </CardContent>
         </Card>
