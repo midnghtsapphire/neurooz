@@ -99,7 +99,7 @@ export default function TornadoAlley() {
   const [activeSection, setActiveSection] = useState<"hub" | "brain-dump" | "eye" | "cognitive-gym" | "breathing">("hub");
 
   // Handle completion of brain dump
-  const handleBrainDumpComplete = (items: any[]) => {
+  const handleBrainDumpComplete = (items: { type: string; title: string; description?: string; priority?: string }[]) => {
     console.log("Brain dump complete with items:", items);
     // TODO: Save items to database/projects
     setActiveSection("hub");

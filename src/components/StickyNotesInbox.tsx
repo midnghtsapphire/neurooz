@@ -53,19 +53,19 @@ export function StickyNotesInbox({ className }: StickyNotesInboxProps) {
   const createActionItem = useCreateActionItem();
 
   const filteredNotes = notes.filter(note => 
-    (note as any).category === activeCategory || 
+    (note as QuickNote & { category?: NoteCategory }).category === activeCategory || 
     (!('category' in note) && activeCategory === "inbox")
   );
 
   const getCategoryCount = (categoryId: NoteCategory) => {
     return notes.filter(note => 
-      (note as any).category === categoryId || 
+      (note as QuickNote & { category?: NoteCategory }).category === categoryId || 
       (!('category' in note) && categoryId === "inbox")
     ).length;
   };
 
   const handleMoveToCategory = (noteId: string, category: NoteCategory) => {
-    updateNote.mutate({ id: noteId, category } as any);
+    updateNote.mutate({ id: noteId, category });
     toast({ title: `Moved to ${CATEGORIES.find(c => c.id === category)?.label}` });
   };
 
@@ -157,7 +157,7 @@ function StickyNoteCard({
   onConvertToAction,
   onDelete 
 }: StickyNoteCardProps) {
-  const category = (note as any).category || "inbox";
+  const category = (note as QuickNote & { category?: NoteCategory }).category || "inbox";
   const categoryConfig = CATEGORIES.find(c => c.id === category);
   
   // Rotate sticky notes slightly for visual variety

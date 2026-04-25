@@ -34,7 +34,7 @@ function getStoredState(): StoredDriftState {
   try {
     const stored = sessionStorage.getItem(DRIFT_STORAGE_KEY);
     if (stored) return JSON.parse(stored);
-  } catch {}
+  } catch { /* ignore parse errors */ }
   return {
     lastQuestProgress: Date.now(),
     tabCount: 1,
@@ -47,7 +47,7 @@ function getStoredState(): StoredDriftState {
 function setStoredState(state: StoredDriftState) {
   try {
     sessionStorage.setItem(DRIFT_STORAGE_KEY, JSON.stringify(state));
-  } catch {}
+  } catch { /* ignore storage errors */ }
 }
 
 export function useDriftDetection(

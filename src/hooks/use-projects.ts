@@ -12,6 +12,9 @@ export interface Project {
   completed_at: string | null;
   created_at: string;
   updated_at: string;
+  focus_score: number | null;
+  lessons_learned: string | null;
+  scope_creep_count: number | null;
 }
 
 export interface ActionItem {

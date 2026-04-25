@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/select";
 import { ImpulseWarningDialog } from "@/components/impulse/ImpulseWarningDialog";
 import { ImpulseHoldTimer } from "@/components/impulse/ImpulseHoldTimer";
-import { analyzeImpulsePurchase, TransactionData } from "@/utils/impulseDetection";
+import { analyzeImpulsePurchase, TransactionData, ImpulseAnalysis } from "@/utils/impulseDetection";
 
 export default function ImpulseControl() {
   const [showWarning, setShowWarning] = useState(false);
-  const [activeHolds, setActiveHolds] = useState<any[]>([]);
-  const [currentAnalysis, setCurrentAnalysis] = useState<any>(null);
+  const [activeHolds, setActiveHolds] = useState<{ id: string; transaction: TransactionData; analysis: ImpulseAnalysis; holdUntil: Date; description: string }[]>([]);
+  const [currentAnalysis, setCurrentAnalysis] = useState<ImpulseAnalysis | null>(null);
   const [currentTransaction, setCurrentTransaction] = useState<TransactionData | null>(null);
 
   // Form state

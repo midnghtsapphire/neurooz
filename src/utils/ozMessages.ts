@@ -62,7 +62,7 @@ const messages = {
 export function getOzMessage(
   type: NotificationType,
   character: OzCharacter,
-  context?: any
+  context?: { taskName?: string; projectName?: string }
 ): string {
   const characterMessages = messages[character];
   if (!characterMessages) return "Let's get back on track!";

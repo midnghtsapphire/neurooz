@@ -129,8 +129,8 @@ export function VineProductCard() {
       const tabParts = line.split('\t');
       if (tabParts.length >= 2) {
         const name = tabParts[0]?.trim();
-        const etvMatch = tabParts.find(p => /\$?\d+\.?\d*/.test(p));
-        const dateMatch = tabParts.find(p => /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(p));
+        const etvMatch = tabParts.find(p => /\$?\d+\.?\d*/.test(p.trim()));
+        const dateMatch = tabParts.find(p => /\d{1,2}[/-]\d{1,2}[/-]\d{2,4}/.test(p));
         const asinMatch = tabParts.find(p => /^B0[A-Z0-9]{8}$/.test(p.trim()));
         
         if (name) {
@@ -148,7 +148,7 @@ export function VineProductCard() {
         if (dashParts.length >= 2) {
           const name = dashParts[0]?.trim();
           const etvMatch = line.match(/\$(\d+\.?\d*)/);
-          const dateMatch = line.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/);
+          const dateMatch = line.match(/(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})/);
           
           if (name) {
             products.push({
@@ -167,13 +167,13 @@ export function VineProductCard() {
 
   const formatDate = (dateStr: string): string => {
     try {
-      const parts = dateStr.split(/[\/\-]/);
+      const parts = dateStr.split(/[/-]/);
       if (parts.length === 3) {
         const [month, day, year] = parts;
         const fullYear = year.length === 2 ? `20${year}` : year;
         return `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
       }
-    } catch {}
+    } catch { /* ignore parse errors */ }
     return new Date().toISOString().split('T')[0];
   };
 

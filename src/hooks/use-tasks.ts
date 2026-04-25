@@ -71,7 +71,7 @@ export function useCreateTask() {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast({ title: "Task created!" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to create task", description: error.message, variant: "destructive" });
     },
   });
@@ -95,7 +95,7 @@ export function useUpdateTask() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to update task", description: error.message, variant: "destructive" });
     },
   });
@@ -122,9 +122,9 @@ export function useCompleteTask() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       queryClient.invalidateQueries({ queryKey: ['gamification'] });
-      toast({ title: "✅ Task completed!", description: "Great job!" });
+      toast({ title: "Task completed!", description: "Great job!" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to complete task", description: error.message, variant: "destructive" });
     },
   });
@@ -146,7 +146,7 @@ export function useDeleteTask() {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
       toast({ title: "Task deleted" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to delete task", description: error.message, variant: "destructive" });
     },
   });
@@ -167,7 +167,7 @@ export function useReorderTasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to reorder tasks", description: error.message, variant: "destructive" });
     },
   });

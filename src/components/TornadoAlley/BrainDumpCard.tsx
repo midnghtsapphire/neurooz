@@ -288,7 +288,7 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
         let idCounter = 0;
 
         // Add projects
-        organized.projects?.forEach((p: any) => {
+        organized.projects?.forEach((p: { name: string; priority?: string; description?: string }) => {
           items.push({
             id: `item-${idCounter++}`,
             title: p.name,
@@ -300,7 +300,7 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
         });
 
         // Add tasks
-        organized.tasks?.forEach((t: any) => {
+        organized.tasks?.forEach((t: { title: string; priority?: string; due_context?: string }) => {
           items.push({
             id: `item-${idCounter++}`,
             title: t.title,
@@ -312,7 +312,7 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
         });
 
         // Add ideas
-        organized.ideas?.forEach((i: any) => {
+        organized.ideas?.forEach((i: { title: string; notes?: string }) => {
           items.push({
             id: `item-${idCounter++}`,
             title: i.title,
@@ -323,7 +323,7 @@ export function BrainDumpCard({ onComplete }: BrainDumpCardProps) {
         });
 
         // Add concerns
-        organized.concerns?.forEach((c: any) => {
+        organized.concerns?.forEach((c: { issue: string; suggested_action?: string }) => {
           items.push({
             id: `item-${idCounter++}`,
             title: c.issue,

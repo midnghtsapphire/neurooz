@@ -51,7 +51,7 @@ export function MACRSReferencePanel({ showExamples = true }: MACRSReferencePanel
   
   // Combined totals by year
   const combinedByYear = new Map<number, number>();
-  let totalOriginal = 80000;
+  const totalOriginal = 80000;
   
   [...tractorSchedule, ...telescopeSchedule, ...snacksSchedule].forEach(entry => {
     const current = combinedByYear.get(entry.year) || 0;

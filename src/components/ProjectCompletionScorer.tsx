@@ -37,7 +37,7 @@ export function ProjectCompletionScorer({ project, actionItems, onClose }: Proje
   const completionRate = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
   
   const suggestedScore = Math.max(0, Math.min(100, 
-    Math.round(completionRate - (setbackCount * 10) - ((project as any).scope_creep_count || 0) * 5)
+    Math.round(completionRate - (setbackCount * 10) - (project.scope_creep_count || 0) * 5)
   ));
 
   const handleSave = async () => {
@@ -46,7 +46,7 @@ export function ProjectCompletionScorer({ project, actionItems, onClose }: Proje
       id: project.id,
       focus_score: focusScore,
       lessons_learned: lessonsLearned,
-    } as any);
+    });
 
     // Save new pattern if entered
     if (newPattern.trim()) {
@@ -99,7 +99,7 @@ export function ProjectCompletionScorer({ project, actionItems, onClose }: Proje
         </Card>
         <Card>
           <CardContent className="pt-4 text-center">
-            <p className="text-2xl font-bold text-orange-600">{(project as any).scope_creep_count || 0}</p>
+            <p className="text-2xl font-bold text-orange-600">{project.scope_creep_count || 0}</p>
             <p className="text-xs text-muted-foreground">Scope Creep</p>
           </CardContent>
         </Card>
