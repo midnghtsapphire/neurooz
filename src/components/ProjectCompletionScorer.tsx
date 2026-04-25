@@ -37,13 +37,15 @@ export function ProjectCompletionScorer({ project, actionItems, onClose }: Proje
   const completionRate = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
   
   const suggestedScore = Math.max(0, Math.min(100, 
-    Math.round(completionRate - (setbackCount * 10))
+    Math.round(completionRate - (setbackCount * 10) - (project.scope_creep_count || 0) * 5)
   ));
 
   const handleSave = async () => {
     // Save score and lessons
     await updateProject.mutateAsync({
       id: project.id,
+      focus_score: focusScore,
+      lessons_learned: lessonsLearned,
     });
 
     // Save new pattern if entered

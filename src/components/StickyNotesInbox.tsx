@@ -65,7 +65,7 @@ export function StickyNotesInbox({ className }: StickyNotesInboxProps) {
   };
 
   const handleMoveToCategory = (noteId: string, category: NoteCategory) => {
-    updateNote.mutate({ id: noteId, content: category });
+    updateNote.mutate({ id: noteId, category });
     toast({ title: `Moved to ${CATEGORIES.find(c => c.id === category)?.label}` });
   };
 
