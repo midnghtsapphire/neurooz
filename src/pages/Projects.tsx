@@ -211,7 +211,12 @@ export default function Projects() {
                     style={{ backgroundColor: selectedProject.color }}
                   />
                   <h1 className="text-xl font-bold">{selectedProject.name}</h1>
-
+                  {selectedProject.focus_score && (
+                    <Badge variant="outline" className="gap-1">
+                      <Trophy className="h-3 w-3" />
+                      {selectedProject.focus_score}/100
+                    </Badge>
+                  )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
