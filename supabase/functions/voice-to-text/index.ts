@@ -25,8 +25,8 @@ serve(async (req) => {
     }
 
     // Transcribe audio via OpenRouter chat completions (Gemini)
-    // NOTE: input_audio format may need updating if OpenRouter doesn't translate
-    // it for Gemini — test after deploying. See PR #14 discussion.
+    // OpenRouter supports input_audio and translates for target providers.
+    // See: https://openrouter.ai/docs/guides/overview/multimodal/audio
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
