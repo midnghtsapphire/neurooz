@@ -84,7 +84,7 @@ Format your response as JSON:
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      console.error("OpenRouter error:", response.status, errorText);
       
       if (response.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }), {
@@ -99,7 +99,7 @@ Format your response as JSON:
         });
       }
       
-      throw new Error(`AI gateway error: ${response.status}`);
+      throw new Error(`OpenRouter error: ${response.status}`);
     }
 
     const data = await response.json();
