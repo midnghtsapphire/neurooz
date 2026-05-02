@@ -93,3 +93,26 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+---
+
+## Test
+
+| Feature | Status | URL |
+|--------|--------|-----|
+| Homepage | ✅ Working | https://neurooz.vercel.app |
+| Oz Engine | ✅ Working (27 tests) | https://neurooz.vercel.app |
+| Cognitive Mode | ✅ Working | https://neurooz.vercel.app |
+| Financial Guardian | ✅ Working | https://neurooz.vercel.app |
+| Mobile Responsive | ✅ Working | https://neurooz.vercel.app |
+
+**Test Command:** `npm test` — 27 tests passing
+
+---
+
+## Deployment
+
+**Production:** https://neurooz.vercel.app
+**Preview:** https://neurooz-git-main.username.vercel.app
+**Build:** `npm run build` ✅ passes
+**Framework:** Vite + React + TypeScript + Tailwind + Supabase
