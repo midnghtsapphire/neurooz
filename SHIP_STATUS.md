@@ -41,3 +41,4 @@
 | NZ-105 | Tailwind animate plugin loading | bug | fixed-deployed | 2026-04-25 | PR #11 |
 | NZ-106 | Focus score badge display | bug | fixed-deployed | 2026-04-25 | PR #11 |
 | NZ-107 | VoidEvent animation phase reset | bug | fixed-deployed | 2026-04-25 | PR #11 |
+| NZ-108 | Scheduled TruffleHog secret scan | bug | fixed-deployed | 2026-07-01 | Removed forced base/head inputs so scheduled gatekeeper scans no longer fail when both refs resolve to main |
