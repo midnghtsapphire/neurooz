@@ -1,5 +1,9 @@
 # Neurooz
 
+
+<!-- AUTO-PACKAGE-BADGES:START -->
+
+<!-- AUTO-PACKAGE-BADGES:END -->
 **ADHD-specific productivity and financial guardian platform** powered by the Oz Engine™ — real-time cognitive mode adaptation meets Financial Guardian protection.
 
 > Built with Vite + TypeScript + React + shadcn-ui + Tailwind + Supabase.
