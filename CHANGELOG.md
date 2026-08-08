@@ -1,5 +1,22 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+- Standard review jury workflows: OpenRouter AI PR review, Jules, Semgrep SAST, CodeQL
+- CONTRIBUTING.md and OVERVIEW.md
+- Dependabot for npm and GitHub Actions
+- Vitest coverage for Financial Guardian impulse detection utilities
+
+### Changed
+- README refreshed (removed Lovable boilerplate; added Test matrix and scripts table)
+- Bumped `vite` to v6 and `react-router-dom` to v7 to clear npm audit findings
+
+### Security
+- `npm audit` now reports 0 vulnerabilities
+
+
+
 All notable changes to Neurooz are documented here.
 
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
