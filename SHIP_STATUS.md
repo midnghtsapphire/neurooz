@@ -42,3 +42,4 @@
 | NZ-106 | Focus score badge display | bug | fixed-deployed | 2026-04-25 | PR #11 |
 | NZ-107 | VoidEvent animation phase reset | bug | fixed-deployed | 2026-04-25 | PR #11 |
 | NZ-108 | Scheduled TruffleHog secret scan | bug | fixed-deployed | 2026-07-01 | Removed forced base/head inputs so scheduled gatekeeper scans no longer fail when both refs resolve to main |
+| NZ-109 | Fleet maintenance review jury + docs | feature | completed | @copilot | 2026-08-08 | WR #16830 — OpenRouter/Jules/Semgrep/CodeQL + CONTRIBUTING + impulse tests |
