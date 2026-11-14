@@ -1,5 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import { PROBLEM_AUDIENCE, PROBLEM_BODY, PROBLEM_HEADLINE } from "@/seo/site";
+import { ProblemStatement } from "@/components/seo/ProblemStatement";
 
 interface AppErrorBoundaryProps {
   children: ReactNode;
@@ -29,11 +29,9 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
 
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-950 p-6 text-white">
-        <div className="max-w-xl text-center">
-          <p className="text-sm font-medium uppercase tracking-wide text-emerald-200">{PROBLEM_AUDIENCE}</p>
-          <h1 className="mt-3 text-3xl font-bold">{PROBLEM_HEADLINE}</h1>
-          <p className="mt-4 text-white/80">{PROBLEM_BODY}</p>
-          <p className="mt-6 text-white/70">
+        <div className="max-w-xl">
+          <ProblemStatement tone="on-dark" />
+          <p className="mt-6 text-center text-white/70">
             This screen hit an error before it could finish drawing. Reloading brings the home page back.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">

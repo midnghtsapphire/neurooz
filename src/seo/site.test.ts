@@ -166,12 +166,15 @@ describe("production pointers", () => {
     const nginx = fs.readFileSync(path.join(root, "nginx.conf"), "utf8");
     expect(nginx).toContain("server_name neurooz.com www.neurooz.com");
     expect(nginx).toContain("try_files $uri $uri/ /index.html;");
+    expect(nginx).toContain("include /etc/nginx/snippets/neurooz-security-headers.conf;");
+    expect(nginx).toContain("/etc/letsencrypt/live/neurooz.com/fullchain.pem");
     expect(nginx).toContain("growlingeyes.com");
 
     const droplet = fs.readFileSync(path.join(root, "deploy-server.sh"), "utf8");
     expect(droplet).toContain("DEPLOY_HOST");
     expect(droplet).toContain("DEPLOY_USER");
     expect(droplet).toContain("rsync -az");
+    expect(droplet).toContain("/etc/letsencrypt/live/neurooz.com");
     expect(droplet).not.toMatch(/BEGIN OPENSSH|sshpass|password=/);
 
     const guide = fs.readFileSync(path.join(root, "DEPLOY.md"), "utf8");

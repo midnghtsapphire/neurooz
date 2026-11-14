@@ -11,16 +11,16 @@
 
 set -e
 
-if [ -n "${DEPLOY_HOST:-}" ]; then
+if [[ -n "${DEPLOY_HOST:-}" ]]; then
   set -euo pipefail
-  if [ -z "${DEPLOY_USER:-}" ]; then
+  if [[ -z "${DEPLOY_USER:-}" ]]; then
     echo "Error: set DEPLOY_USER (the SSH user on the droplet)." >&2
     exit 1
   fi
   DEPLOY_PATH="${DEPLOY_PATH:-/home/ubuntu/neurooz/dist}"
   REMOTE_APP="${DEPLOY_APP_DIR:-/home/ubuntu/neurooz}"
   SSH=(ssh)
-  if [ -n "${DEPLOY_SSH_KEY:-}" ]; then
+  if [[ -n "${DEPLOY_SSH_KEY:-}" ]]; then
     SSH=(ssh -i "$DEPLOY_SSH_KEY" -o IdentitiesOnly=yes)
   fi
 
@@ -31,14 +31,22 @@ if [ -n "${DEPLOY_HOST:-}" ]; then
   "${SSH[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" "mkdir -p '${DEPLOY_PATH}' '${REMOTE_APP}'"
   rsync -az -e "${SSH[*]}" dist/ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
   rsync -az -e "${SSH[*]}" nginx.conf "${DEPLOY_USER}@${DEPLOY_HOST}:${REMOTE_APP}/nginx.conf"
+  rsync -az -e "${SSH[*]}" nginx/neurooz-security-headers.conf "${DEPLOY_USER}@${DEPLOY_HOST}:${REMOTE_APP}/neurooz-security-headers.conf"
 
   SUDO="sudo"
-  if [ "$DEPLOY_USER" = "root" ]; then
+  if [[ "$DEPLOY_USER" == "root" ]]; then
     SUDO=""
   fi
+
+  if ! "${SSH[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" "${SUDO} test -d /etc/letsencrypt/live/neurooz.com"; then
+    echo "Error: no Let's Encrypt certificate for neurooz.com on the droplet." >&2
+    echo "Run certbot on the droplet before this deploy. Do not switch DNS until this script succeeds." >&2
+    exit 1
+  fi
+
   echo "Reloading nginx on the droplet..."
-  "${SSH[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" "${SUDO} cp '${REMOTE_APP}/nginx.conf' /etc/nginx/sites-available/neurooz && ${SUDO} ln -sfn /etc/nginx/sites-available/neurooz /etc/nginx/sites-enabled/neurooz && ${SUDO} nginx -t && ${SUDO} systemctl reload nginx"
-  echo "Droplet copy finished. HTTPS still needs certbot on the server if the certificate is not issued yet."
+  "${SSH[@]}" "${DEPLOY_USER}@${DEPLOY_HOST}" "${SUDO} mkdir -p /etc/nginx/snippets && ${SUDO} cp '${REMOTE_APP}/neurooz-security-headers.conf' /etc/nginx/snippets/neurooz-security-headers.conf && ${SUDO} cp '${REMOTE_APP}/nginx.conf' /etc/nginx/sites-available/neurooz && ${SUDO} ln -sfn /etc/nginx/sites-available/neurooz /etc/nginx/sites-enabled/neurooz && ${SUDO} nginx -t && ${SUDO} systemctl reload nginx"
+  echo "Droplet copy finished."
   exit 0
 fi
 

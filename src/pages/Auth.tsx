@@ -248,9 +248,9 @@ const Auth = () => {
             </div>
 
             {!isSupabaseConfigured && (
-              <p role="status" className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+              <output className="mb-4 block rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
                 Sign-in is offline until Supabase is configured. You can still use the home page in this browser.
-              </p>
+              </output>
             )}
 
             <form onSubmit={handleAuth} className="space-y-5">

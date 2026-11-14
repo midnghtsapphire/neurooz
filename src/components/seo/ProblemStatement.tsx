@@ -1,8 +1,8 @@
 import { PROBLEM_AUDIENCE, PROBLEM_BODY, PROBLEM_HEADLINE } from "@/seo/site";
 
 interface ProblemStatementProps {
-  tone?: "on-dark" | "on-light";
-  id?: string;
+  readonly tone?: "on-dark" | "on-light";
+  readonly id?: string;
 }
 
 export function ProblemStatement({ tone = "on-dark", id }: ProblemStatementProps) {

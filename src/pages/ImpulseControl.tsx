@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Shield, TrendingDown, Brain, Heart, DollarSign, Plus } from "lucide-react";
+import { Shield, TrendingDown, DollarSign, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

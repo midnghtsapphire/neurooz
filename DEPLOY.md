@@ -60,6 +60,17 @@ The canonical URL in the app stays `https://neurooz.com/`.
 
 Use this when Cloudflare is down or you need the site on the droplet instead.
 
+**Do this before the first `npm run deploy:do`, and before any DNS change.** The script refuses to reload nginx when `/etc/letsencrypt/live/neurooz.com` is missing. The public server block uses that certificate, not the self-signed snakeoil certificate.
+
+On the droplet, while port 80 is free:
+
+```bash
+sudo apt-get install -y certbot
+sudo certbot certonly --standalone -d neurooz.com -d www.neurooz.com
+```
+
+Then, from this machine:
+
 ```bash
 export DEPLOY_HOST="the.droplet.ip.or.hostname"
 export DEPLOY_USER="ubuntu"
@@ -69,16 +80,11 @@ export DEPLOY_USER="ubuntu"
 npm run deploy:do
 ```
 
-`deploy:do` runs `deploy-server.sh`. With `DEPLOY_HOST` set, the script builds on your machine, rsyncs `dist/` and `nginx.conf` to the droplet, and reloads nginx. It does not print or store the SSH key. The default path matches the `root` in the neurooz.com server block of `nginx.conf`.
+`deploy:do` exits with an error if that certificate directory is not on the droplet. Do not point DNS at the droplet until `deploy:do` finishes without that error.
 
-On the droplet, once, if HTTPS is not issued yet:
+`deploy:do` builds on your machine, rsyncs `dist/`, `nginx.conf`, and the security-header snippet, then reloads nginx. It does not print or store the SSH key. The default path matches the `root` in the neurooz.com server block of `nginx.conf`.
 
-```bash
-sudo apt-get install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d neurooz.com -d www.neurooz.com
-```
-
-`nginx.conf` still contains the older `growlingeyes.com` server block. The `neurooz.com` block is added after it. Unknown paths use `try_files $uri $uri/ /index.html`, so a refresh on `/tornado-alley` loads the app. Files in `/assets/` are cached for a year because their names include a content hash. `index.html` is not given that long cache.
+`nginx.conf` still contains the older `growlingeyes.com` server block. The `neurooz.com` block is added after it. Unknown paths use `try_files $uri $uri/ /index.html`, so a refresh on `/tornado-alley` loads the app. `/assets/` is cached for a year and still sends the security headers, because a location that sets `Cache-Control` would otherwise drop them. `index.html` is not given that long cache.
 
 If you are already logged into the droplet as root and `DEPLOY_HOST` is unset, `sudo bash deploy-server.sh` still runs the older on-server installer.
 

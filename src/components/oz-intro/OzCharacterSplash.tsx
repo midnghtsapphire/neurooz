@@ -52,7 +52,7 @@ const CHARACTERS = [
   },
   {
     name: "Tornado Alley",
-    alt: "Tornado, the picture of overwhelm",
+    alt: "Tornado of overwhelm",
     image: "/tornado-chaos.png",
     angle: 315,
   },
@@ -223,7 +223,7 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
             >
               <img
                 src="/tornado-chaos.png"
-                alt="Tornado, the picture of overwhelm"
+                alt="Tornado of overwhelm"
                 className="w-96 h-96 object-contain"
               />
             </motion.div>

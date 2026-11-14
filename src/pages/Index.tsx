@@ -29,7 +29,7 @@ const Index = () => {
       }
     );
 
-    loadVisitorSession({
+    void loadVisitorSession({
       configured: true,
       getSession: () => supabase.auth.getSession(),
     }).then((result) => {
