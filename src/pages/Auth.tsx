@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Coffee, DollarSign, Users, Sparkles, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { syncPreLoginBrainDumps, hasPreLoginBrainDumps } from "@/utils/syncPreLoginBrainDumps";
+import { PROBLEM_BODY, PROBLEM_HEADLINE } from "@/seo/site";
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden="true">
@@ -45,6 +46,8 @@ const Auth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (session?.user && event === 'SIGNED_IN') {
@@ -69,12 +72,18 @@ const Auth = () => {
       if (session?.user) {
         navigate("/");
       }
+    }).catch((error: unknown) => {
+      console.error("[Neurooz] Sign-in session lookup failed.", error);
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
   const handleGoogleLogin = async () => {
+    if (!isSupabaseConfigured) {
+      toast.error("Sign-in needs a live Supabase project. The home page still works in this browser.");
+      return;
+    }
     setLoading(true);
     try {
       const redirectTo = `${window.location.origin}/`;
@@ -93,6 +102,10 @@ const Auth = () => {
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured) {
+      toast.error("Sign-in needs a live Supabase project. The home page still works in this browser.");
+      return;
+    }
     setLoading(true);
 
     const validation = authSchema.safeParse({ email, password });
@@ -158,15 +171,28 @@ const Auth = () => {
               <div className="w-12 h-12 rounded-xl bg-primary-foreground/20 flex items-center justify-center">
                 <Coffee className="w-7 h-7 text-primary-foreground" />
               </div>
+              {/*
+                2026-11-14: this screen used to introduce itself as NomadTaxes
+                and as a tax product. The account is for Neurooz.
               <h1 className="text-3xl font-display font-bold text-primary-foreground">
                 NomadTaxes
               </h1>
+              */}
+              <p className="text-3xl font-display font-bold text-primary-foreground">Neurooz</p>
             </div>
+            {/*
             <h2 className="text-4xl xl:text-5xl font-display font-bold text-primary-foreground leading-tight text-balance mb-6">
               Taxes made simple for modern workers
             </h2>
             <p className="text-xl text-primary-foreground/80 leading-relaxed">
               Track your income, manage tax profiles, and stay organized — all in one beautiful place.
+            </p>
+            */}
+            <h1 className="text-4xl xl:text-5xl font-display font-bold text-primary-foreground leading-tight text-balance mb-6">
+              {PROBLEM_HEADLINE}
+            </h1>
+            <p className="text-xl text-primary-foreground/80 leading-relaxed">
+              {PROBLEM_BODY}
             </p>
           </div>
 
@@ -195,13 +221,15 @@ const Auth = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative overflow-hidden">
         <div className="w-full max-w-md relative z-10">
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
-              <Coffee className="w-6 h-6 text-primary-foreground" />
-            </div>
+          <div className="lg:hidden mb-8 text-center">
+            {/*
+              2026-11-14: mobile heading used to say NomadTaxes.
             <h1 className="text-2xl font-display font-bold text-foreground">
               NomadTaxes
             </h1>
+            */}
+            <h1 className="text-2xl font-display font-bold text-foreground">{PROBLEM_HEADLINE}</h1>
+            <p className="mt-3 text-muted-foreground">{PROBLEM_BODY}</p>
           </div>
 
           <div className="animate-fade-in">
@@ -210,11 +238,20 @@ const Auth = () => {
                 {isLogin ? "Welcome back" : "Create your account"}
               </h2>
               <p className="text-muted-foreground">
+                {/*
+                  2026-11-14: previous signup line said "Start managing your taxes the smart way."
+                */}
                 {isLogin
-                  ? "Enter your credentials to access your account"
-                  : "Start managing your taxes the smart way"}
+                  ? "Enter your credentials to come back to the road."
+                  : "Create an account when Supabase is available. The home page works in this browser either way."}
               </p>
             </div>
+
+            {!isSupabaseConfigured && (
+              <p role="status" className="mb-4 rounded-md border border-border bg-muted px-3 py-2 text-sm text-muted-foreground">
+                Sign-in is offline until Supabase is configured. You can still use the home page in this browser.
+              </p>
+            )}
 
             <form onSubmit={handleAuth} className="space-y-5">
               {!isLogin && (

@@ -1,6 +1,16 @@
 # Neurooz — Agent Handoff Document
 
-_Last updated: 2026-04-06 — Post Sprint 1 handoff_
+_Last updated: 2026-11-14 — SEO and GitHub Pages availability_
+
+## 2026-11-14 — SEO and local deploy (draft, not merged)
+
+- Canonical production URL is https://neurooz.com.
+- Primary host is Cloudflare Pages: `npm run deploy:cf` (Wrangler direct upload, not GitHub).
+- Failover is a DigitalOcean droplet: `npm run deploy:do` (local rsync). DNS switch is in DEPLOY.md.
+- Nameservers today are ns45.domaincontrol.com and ns46.domaincontrol.com at GoDaddy.
+- `.github/workflows/deploy.yml` Actions job is commented out (`if: false`). Deploys run on Audrey's machine.
+- `public/CNAME` stays. It is only for GitHub Pages, which is not the host.
+- Home page still renders when Supabase env vars are missing or the session call hangs.
 
 ## Current Sprint Status
 - **Sprint 0** (Foundation): ✅ DONE — docs, CI, env contract, CHANGELOG, BLUEPRINT
@@ -23,6 +33,8 @@ See `docs/planning/NEUROOZ_SCRUM_BACKLOG.md` Sprint 2 section.
 10. S2-010: Tests for financial module
 
 ## Infrastructure
+
+<!-- 2026-11-14: the droplet notes below are historical Actions/on-server context. Production host is Cloudflare Pages. The droplet is the failover, run with npm run deploy:do. See DEPLOY.md. -->
 - **Hosting:** DigitalOcean Droplet (IP TBD — set in GitHub secrets as `DEPLOY_HOST`)
 - **Process manager:** PM2
 - **Web server:** Nginx (config at `nginx.conf`)

@@ -108,12 +108,16 @@ export default function ImpulseControl() {
             </h1>
           </div>
           <p className="text-gray-300 text-lg">
-            Your AI-powered guardian against impulse spending 🧙‍♀️
+            A pause before an impulse purchase, for ADHD minds that spend before the thought finishes.
           </p>
+          {/*
+            2026-11-14: retired "Your AI-powered guardian against impulse spending".
+            The check on this page runs in the browser from the purchase you type in.
+          */}
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card className="p-4 bg-gradient-to-br from-emerald-900/50 to-teal-900/50 border-emerald-500/50">
             <div className="flex items-center gap-3">
               <TrendingDown className="w-8 h-8 text-emerald-400" />
@@ -133,25 +137,30 @@ export default function ImpulseControl() {
                 </p>
               </div>
             </div>
-          </Card>
-          <Card className="p-4 bg-gradient-to-br from-blue-900/50 to-cyan-900/50 border-blue-500/50">
-            <div className="flex items-center gap-3">
-              <Brain className="w-8 h-8 text-blue-400" />
-              <div>
-                <p className="text-sm text-gray-400">Success Rate</p>
-                <p className="text-2xl font-bold">87%</p>
+            </Card>
+            {/*
+              2026-11-14: retired a hardcoded 87% success rate and a 12-day streak.
+              Those numbers were not measured. The two cards above count only
+              purchases parked in this browser session.
+            <Card className="p-4 bg-gradient-to-br from-blue-900/50 to-cyan-900/50 border-blue-500/50">
+              <div className="flex items-center gap-3">
+                <Brain className="w-8 h-8 text-blue-400" />
+                <div>
+                  <p className="text-sm text-gray-400">Success Rate</p>
+                  <p className="text-2xl font-bold">87%</p>
+                </div>
               </div>
-            </div>
-          </Card>
-          <Card className="p-4 bg-gradient-to-br from-pink-900/50 to-rose-900/50 border-pink-500/50">
-            <div className="flex items-center gap-3">
-              <Heart className="w-8 h-8 text-pink-400" />
-              <div>
-                <p className="text-sm text-gray-400">Streak</p>
-                <p className="text-2xl font-bold">12 days</p>
+            </Card>
+            <Card className="p-4 bg-gradient-to-br from-pink-900/50 to-rose-900/50 border-pink-500/50">
+              <div className="flex items-center gap-3">
+                <Heart className="w-8 h-8 text-pink-400" />
+                <div>
+                  <p className="text-sm text-gray-400">Streak</p>
+                  <p className="text-2xl font-bold">12 days</p>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+            */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

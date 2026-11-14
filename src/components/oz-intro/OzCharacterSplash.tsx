@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { ProblemStatement } from "@/components/seo/ProblemStatement";
 
 interface OzCharacterSplashProps {
   onComplete: () => void;
@@ -9,41 +10,49 @@ interface OzCharacterSplashProps {
 const CHARACTERS = [
   {
     name: "Dorothy",
+    alt: "Dorothy in a green jacket, the figure for getting grounded",
     image: "/dorothy-casual-green.jpg",
     angle: 0,
   },
   {
     name: "Scarecrow",
+    alt: "Scarecrow, the figure for a crowded mind",
     image: "/scarecrow-hacker.png",
     angle: 45,
   },
   {
     name: "Tin Man",
+    alt: "Tin Man, the figure for feelings and impulse spending",
     image: "/tinman-cyborg.png",
     angle: 90,
   },
   {
     name: "Lion",
+    alt: "Cowardly Lion, the figure for starting when fear says not to",
     image: "/lion-cosplay-warrior.png",
     angle: 135,
   },
   {
     name: "Glinda",
+    alt: "Glinda, the figure in the light gown",
     image: "/glinda-good-witch-final.webp",
     angle: 180,
   },
   {
     name: "Bad Witch",
+    alt: "Witch in a tall hat",
     image: "/bad-witch-tall-hat.webp",
     angle: 225,
   },
   {
     name: "Toto",
+    alt: "Toto, the companion figure",
     image: "/toto-guy-dog-cosplay.png",
     angle: 270,
   },
   {
     name: "Tornado Alley",
+    alt: "Tornado, the picture of overwhelm",
     image: "/tornado-chaos.png",
     angle: 315,
   },
@@ -62,14 +71,24 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Emerald Gateway Background */}
-      <div 
+    <div className="relative flex min-h-screen flex-col items-center justify-start overflow-x-hidden px-6 pb-16 pt-20">
+      {/*
+        2026-11-14: the gateway moved to an img so it has alt text.
+        The previous background was a CSS image with no accessible name.
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: 'url(/emerald-gateway-bg.png)' }}
       />
+      */}
+      <img
+        src="/emerald-gateway-bg.png"
+        alt="Emerald gateway at the start of the road"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
       {/* Subtle dark overlay for contrast */}
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+      <main id="main-content" className="relative z-30 flex w-full flex-col items-center">
+        <ProblemStatement id="problem" />
 
       {/* Main container */}
       <div className="relative w-full max-w-4xl aspect-square flex items-center justify-center">
@@ -100,7 +119,7 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
             >
               <img
                 src="/oz-wizard-center.jpg"
-                alt="Oz"
+                alt="Wizard at the center of the Neurooz circle"
                 className="w-full h-full object-cover object-top"
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-t from-emerald-900/40 to-transparent" />
@@ -136,7 +155,7 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
               <div className={`relative ${character.name === "Tornado Alley" ? "w-36 h-36 md:w-44 md:h-44" : "w-28 h-28 md:w-36 md:h-36"}`}>
                 <img
                   src={character.image}
-                  alt={character.name}
+                  alt={character.alt}
                   className="w-full h-full rounded-full object-cover object-center border-4 border-emerald-400 shadow-2xl hover:border-yellow-400 transition-all duration-300 hover:scale-110 cursor-pointer"
                   style={{ boxShadow: '0 0 30px rgba(52, 211, 153, 0.9), 0 0 60px rgba(163, 230, 53, 0.5), inset 0 0 15px rgba(52, 211, 153, 0.3)' }}
                 />
@@ -204,7 +223,7 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
             >
               <img
                 src="/tornado-chaos.png"
-                alt="Tornado"
+                alt="Tornado, the picture of overwhelm"
                 className="w-96 h-96 object-contain"
               />
             </motion.div>
@@ -282,6 +301,7 @@ export function OzCharacterSplash({ onComplete }: OzCharacterSplashProps) {
           Skip
         </button>
       )}
+      </main>
     </div>
   );
 }

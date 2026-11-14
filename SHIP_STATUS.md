@@ -28,6 +28,7 @@
 | NZ-008 | Financial Guardian (Sprint 2) | feature | active | @midnghtsapphire | none | 2026-04-25 | Next sprint per roadmap |
 | NZ-009 | Creative asset pipeline (logo, favicon, app icons) | feature | active | @midnghtsapphire | none | 2026-04-25 | Modern Oz characters exist, need logo/favicon |
 | NZ-010 | Ship Everything structure | feature | implementing | @midnghtsapphire | none | 2026-04-25 | This PR |
+| NZ-111 | SEO and local Cloudflare / droplet deploy | feature | implementing | @midnghtsapphire | none | 2026-11-14 | Draft PR. Canonical URL https://neurooz.com. Actions deploy commented out. Not run against Cloudflare or the droplet. |
 
 ## Completed / Terminal
 

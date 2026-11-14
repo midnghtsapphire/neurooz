@@ -1,44 +1,55 @@
 name: Deploy
 
+# 2026-11-14: this Actions job is commented out. Deploys run locally, per owner
+# rule. GitHub Actions on this account fail with startup_failure, and GitHub
+# Pages is not the target. Primary: npm run deploy:cf (Cloudflare Pages).
+# Failover: npm run deploy:do (DigitalOcean droplet). See DEPLOY.md.
+# workflow_dispatch is only here so the file stays valid. Do not run it.
+
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
+    if: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-      - name: Create dist archive
-        run: tar -czf dist.tar.gz dist/
-      - name: Deploy to DigitalOcean
-        uses: appleboy/scp-action@v1.0.0
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: dist.tar.gz
-          target: /tmp/
-      - name: Extract and serve
-        uses: appleboy/ssh-action@v1.2.5
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            tar -xzf /tmp/dist.tar.gz -C /var/www/neurooz/ --strip-components=1
-            rm /tmp/dist.tar.gz
-            nginx -s reload
+      - name: Deploy is local
+        run: echo "This job is disabled. Deploy from your machine. See DEPLOY.md."
+      # 2026-11-14: previous DigitalOcean Actions deploy. The droplet behind
+      # DEPLOY_HOST was returning a Cloudways 403 from Actions. Kept in place.
+      # Do not delete these steps.
+      # - uses: actions/checkout@v7
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
+      # - name: Install dependencies
+      #   run: npm ci
+      # - name: Build
+      #   run: npm run build
+      #   env:
+      #     VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      #     VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      # - name: Create dist archive
+      #   run: tar -czf dist.tar.gz dist/
+      # - name: Deploy to DigitalOcean
+      #   uses: appleboy/scp-action@v1.0.0
+      #   with:
+      #     host: ${{ secrets.DEPLOY_HOST }}
+      #     username: ${{ secrets.DEPLOY_USER }}
+      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
+      #     source: dist.tar.gz
+      #     target: /tmp/
+      # - name: Extract and serve
+      #   uses: appleboy/ssh-action@v1.2.5
+      #   with:
+      #     host: ${{ secrets.DEPLOY_HOST }}
+      #     username: ${{ secrets.DEPLOY_USER }}
+      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
+      #     script: |
+      #       tar -xzf /tmp/dist.tar.gz -C /var/www/neurooz/ --strip-components=1
+      #       rm /tmp/dist.tar.gz
+      #       nginx -s reload
