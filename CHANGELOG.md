@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- 2026-11-14: Added `.circleci/config.yml` mirroring Actions CI (typecheck, lint, test, build) plus `trivy-fs`. Actions workflows unchanged. CircleCI project must still be followed.
 - Standard review jury workflows: OpenRouter AI PR review, Jules, Semgrep SAST, CodeQL
 - CONTRIBUTING.md and OVERVIEW.md
 - Dependabot for npm and GitHub Actions
