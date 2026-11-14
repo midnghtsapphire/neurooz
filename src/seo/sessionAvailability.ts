@@ -12,7 +12,11 @@ export function withTimeout<T>(promise: Promise<T>, ms: number, label: string): 
       },
       (error: unknown) => {
         clearTimeout(timer);
-        reject(error instanceof Error ? error : new Error(typeof error === "string" ? error : "unknown error"));
+        if (error instanceof Error) {
+          reject(error);
+          return;
+        }
+        reject(new Error(typeof error === "string" ? error : "unknown error"));
       },
     );
   });
