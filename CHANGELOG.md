@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- 2026-11-14: Added `.circleci/config.yml` mirroring Actions CI (typecheck, lint, test, build) plus `trivy-fs`. Actions workflows unchanged. CircleCI project must still be followed.
 - SEO shell for https://neurooz.com: title, description, canonical URL, Open Graph, Twitter card, JSON-LD, sitemap, and robots.txt
 - Per-route titles for the main public pages, and a landing heading that states the ADHD / neurodivergent problem
 - App error boundary, session timeout when Supabase is missing or down, and content-hashed build assets

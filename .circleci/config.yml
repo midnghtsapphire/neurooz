@@ -1,0 +1,69 @@
+# CircleCI lane for neurooz. Mirrors .github/workflows/ci.yml
+# (typecheck, lint, test, build) so those gates can run while
+# GitHub-hosted Actions are billing-locked. The Actions workflows
+# (ci.yml, semgrep.yml, deploy.yml, codeql.yml) are unchanged.
+# Official free Trivy v0.76.2 reuses the scan settings from
+# midnghtsapphire/revvel-standards .github/workflows/trivy.yml.
+#
+# This config is inert until the GitHub repo is followed as a CircleCI
+# project. Agents must not set that up in the browser.
+
+version: 2.1
+
+jobs:
+  lint-typecheck-test-build:
+    docker:
+      - image: cimg/node:20.19
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Type check
+          command: npm run typecheck
+      - run:
+          name: Lint
+          command: npm run lint
+      - run:
+          name: Test
+          command: npm test
+      - run:
+          name: Production build
+          command: |
+            if [ -z "${VITE_SUPABASE_URL:-}" ] || [ -z "${VITE_SUPABASE_ANON_KEY:-}" ]; then
+              echo "VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are unset in CircleCI."
+              echo "Build needs those project env vars (same names as the Actions secrets)."
+              echo "Running the build with empty placeholders so type-checked code still compiles."
+            fi
+            VITE_SUPABASE_URL="${VITE_SUPABASE_URL:-}"
+            VITE_SUPABASE_ANON_KEY="${VITE_SUPABASE_ANON_KEY:-}"
+            npm run build
+
+  trivy-fs:
+    docker:
+      - image: cimg/base:2024.11
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install Trivy v0.76.2
+          command: |
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/v0.76.2/contrib/install.sh | sh -s -- -b /tmp/trivy-bin v0.76.2
+      - run:
+          name: Trivy filesystem scan (vuln, misconfig, secret)
+          no_output_timeout: 20m
+          environment:
+            TRIVY_BIN: /tmp/trivy-bin/trivy
+            TRIVY_TABLE_OUT: /tmp/trivy-report.txt
+          command: bash .circleci/scripts/trivy-fs.sh
+      - store_artifacts:
+          path: /tmp/trivy-report.txt
+          destination: trivy-fs
+
+workflows:
+  ci:
+    jobs:
+      - lint-typecheck-test-build
+      - trivy-fs
