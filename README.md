@@ -8,6 +8,12 @@
 
 > Built with Vite + TypeScript + React + shadcn-ui + Tailwind + Supabase.
 
+## Live Deployment
+
+https://neurooz.com
+
+Primary host is Cloudflare Pages (`npm run deploy:cf`). Failover is a DigitalOcean droplet (`npm run deploy:do`). Both run from your machine. See [DEPLOY.md](./DEPLOY.md) for GoDaddy DNS (`ns45.domaincontrol.com`, `ns46.domaincontrol.com`), the Cloudflare custom domain, and how to switch hosts.
+
 ## Quick start
 
 ```bash
@@ -34,7 +40,9 @@ See [`.env.example`](./.env.example) for Supabase, Stripe, and OpenRouter variab
 | `npm run test:watch` | Vitest watch mode |
 | `npm run test:coverage` | Vitest + v8 coverage |
 | `npm run check` | typecheck + lint + test |
-| `npm run deploy` | `gh-pages` publish of `dist/` |
+| `npm run deploy:cf` | Build and upload `dist/` to Cloudflare Pages (`neurooz`) |
+| `npm run deploy:do` | Build and rsync `dist/` to the DigitalOcean droplet |
+| `npm run deploy` | Old GitHub Pages publish (`gh-pages`). Not the production path. |
 
 ## Test
 
@@ -49,7 +57,7 @@ See [`.env.example`](./.env.example) for Supabase, Stripe, and OpenRouter variab
 | Homepage (local) | ✅ | `npm run dev` → http://localhost:8080 |
 | Cognitive Growth dashboard | ✅ | http://localhost:8080/cognitive-growth |
 | Impulse Control | ✅ | http://localhost:8080/impulse-control |
-| Production deploy | ⏳ | Configure Vercel/GitHub Pages + live Supabase project |
+| Production deploy | Cloudflare Pages | `npm run deploy:cf` → https://neurooz.com |
 
 ## Review jury (required workflows)
 
@@ -66,6 +74,7 @@ See [`.env.example`](./.env.example) for Supabase, Stripe, and OpenRouter variab
 
 | Resource | Description |
 |----------|-------------|
+| [DEPLOY.md](./DEPLOY.md) | Cloudflare primary, DigitalOcean failover, DNS switch |
 | [OVERVIEW.md](./OVERVIEW.md) | Product pillars, stack, monetization |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | Branch conventions, secrets, kill switch |
 | [docs/](./docs/README.md) | Full documentation index |
@@ -89,6 +98,14 @@ See [`.env.example`](./.env.example) for Supabase, Stripe, and OpenRouter variab
 
 ## Deployment
 
+Production is Cloudflare Pages. The droplet is the failover. Commands and the DNS switch are in [DEPLOY.md](./DEPLOY.md). GitHub Actions deploy is commented out in `.github/workflows/deploy.yml` (2026-11-14) because deploys run locally.
+
+<!--
+2026-11-14: the previous production note pointed at a paused Vercel app.
+https://neurooz.vercel.app is not the canonical URL. An earlier note in this
+branch called GitHub Pages the host. Pages is not the target. The Actions
+droplet job is commented out. Kept for history:
+
 **Preferred:** connect this repo to Vercel (framework preset: Vite) and set the env vars from `.env.example`.
 
 **GitHub Pages alternative:**
@@ -99,6 +116,7 @@ npm run deploy   # publishes dist/ via gh-pages
 ```
 
 Production URL (once configured): `https://neurooz.vercel.app` (or the custom domain on the GitHub Pages / Vercel project).
+-->
 
 ## License
 

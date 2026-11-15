@@ -52,6 +52,7 @@ import NotFound from "./pages/NotFound";
 import Epstein from "./pages/Epstein";
 import CognitiveGrowth from "./pages/CognitiveGrowth";
 import { OzEngineProvider } from "@/modules/oz-engine";
+import { RouteMeta } from "@/components/seo/RouteMeta";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <RouteMeta />
           <a href="#main-content" className="skip-to-content">
             Skip to main content
           </a>

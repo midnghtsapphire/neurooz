@@ -25,6 +25,7 @@
 | D-001 | Vite + React + TypeScript + shadcn-ui + Tailwind + Supabase | [CONFIRMED] | 2026-04-25 | Established stack |
 | D-002 | Dev server on port 8080 (not 5173) | [CONFIRMED] | 2026-04-25 | Vite config specifies 8080 |
 | D-003 | App renders without Supabase credentials using placeholder fallback | [CONFIRMED] | 2026-04-25 | console.warn when missing, doesn't crash |
+| D-015 | Canonical production URL is https://neurooz.com | [CONFIRMED] | 2026-11-14 | Owner instruction. Primary host is Cloudflare Pages. DigitalOcean droplet is failover. The paused Vercel URL is not production. |
 
 ### Theme & UX
 
