@@ -3,12 +3,19 @@
 ## [Unreleased]
 
 ### Added
+- SEO shell for https://neurooz.com: title, description, canonical URL, Open Graph, Twitter card, JSON-LD, sitemap, and robots.txt
+- Per-route titles for the main public pages, and a landing heading that states the ADHD / neurodivergent problem
+- App error boundary, session timeout when Supabase is missing or down, and content-hashed build assets
+- Local deploy scripts: `deploy:cf` (Cloudflare Pages) and `deploy:do` (DigitalOcean rsync). See DEPLOY.md
 - Standard review jury workflows: OpenRouter AI PR review, Jules, Semgrep SAST, CodeQL
 - CONTRIBUTING.md and OVERVIEW.md
 - Dependabot for npm and GitHub Actions
 - Vitest coverage for Financial Guardian impulse detection utilities
 
 ### Changed
+- Canonical production URL in the README and package.json homepage is https://neurooz.com
+- GitHub Actions deploy job commented out (2026-11-14). Deploys are local
+- `@vitejs/plugin-react-swc` bumped to v4 so `npm ci` resolves with Vite 8
 - README refreshed (removed Lovable boilerplate; added Test matrix and scripts table)
 - Bumped `vite` to v6 and `react-router-dom` to v7 to clear npm audit findings
 

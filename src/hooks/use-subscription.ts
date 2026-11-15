@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured, supabase } from "@/integrations/supabase/client";
+import { SESSION_LOOKUP_TIMEOUT_MS, withTimeout } from "@/seo/sessionAvailability";
 
 interface SubscriptionStatus {
   subscribed: boolean;
@@ -15,7 +16,7 @@ export const useSubscription = () => {
     priceId: null,
     subscriptionEnd: null,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(isSupabaseConfigured);
   const [error, setError] = useState<string | null>(null);
 
   const checkSubscription = useCallback(async () => {
@@ -23,7 +24,11 @@ export const useSubscription = () => {
       setIsLoading(true);
       setError(null);
       
-      const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await withTimeout(
+        supabase.auth.getSession(),
+        SESSION_LOOKUP_TIMEOUT_MS,
+        "Supabase session lookup",
+      );
       
       if (!session) {
         setSubscription({
@@ -58,6 +63,8 @@ export const useSubscription = () => {
   }, []);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
     checkSubscription();
 
     // Listen for auth changes

@@ -1,0 +1,3 @@
+# Cloudflare Pages SPA fallback. A real file, including /assets/*, is served as itself.
+# Deep links such as /tornado-alley receive index.html with status 200.
+/*    /index.html   200

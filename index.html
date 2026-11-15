@@ -16,6 +16,8 @@
       // When the single page app is loaded further down in this file,
       // the correct url will be waiting in the browser's history for
       // the single page app to route accordingly.
+      // Keep this rewrite in sync with src/seo/spaRedirect.ts.
+      // pathSegmentsToKeep is 0 in public/404.html because https://neurooz.com is the site root.
       (function(l) {
         if (l.search[1] === '/' ) {
           var decoded = l.search.slice(1).split('&').map(function(s) { 
@@ -31,24 +33,89 @@
     
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/neurooz-logo.png" />
-    
+
+    <!--
+      2026-11-14: previous title and share tags described generic AI productivity,
+      tax tools, and a third-party image host. Kept here. The live tags below
+      state who Neurooz is for and point at the logo in public/.
     <title>Neurooz - AI-Powered Productivity & Business Management</title>
     <meta name="description" content="Neurooz - Transform chaos into clarity with AI-powered productivity, business management, and tax tools" />
-    <meta name="author" content="Neurooz" />
-
     <meta property="og:title" content="Neurooz - AI-Powered Productivity & Business Management" />
     <meta property="og:description" content="Transform chaos into clarity with Neurooz - AI-powered productivity, business management, and tax tools" />
-    <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Neurooz" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    -->
+
+    <title>Neurooz — when your ADHD brain feels like a tornado</title>
+    <meta name="description" content="Neurooz is for ADHD and neurodivergent minds. Capture a tornado of thoughts, pause impulse spending, and take one small next step when starting feels too big." />
+    <meta name="author" content="Neurooz" />
+    <link rel="canonical" href="https://neurooz.com/" />
+
+    <meta property="og:title" content="Neurooz — when your ADHD brain feels like a tornado" />
+    <meta property="og:description" content="Neurooz is for ADHD and neurodivergent minds. Capture a tornado of thoughts, pause impulse spending, and take one small next step when starting feels too big." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://neurooz.com/" />
+    <meta property="og:image" content="https://neurooz.com/neurooz-logo.png" />
+    <meta property="og:image:alt" content="Neurooz logo" />
+    <meta property="og:image:width" content="1440" />
+    <meta property="og:image:height" content="1536" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Neurooz" />
+    <meta name="twitter:title" content="Neurooz — when your ADHD brain feels like a tornado" />
+    <meta name="twitter:description" content="Neurooz is for ADHD and neurodivergent minds. Capture a tornado of thoughts, pause impulse spending, and take one small next step when starting feels too big." />
+    <meta name="twitter:image" content="https://neurooz.com/neurooz-logo.png" />
+    <meta name="twitter:image:alt" content="Neurooz logo" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://neurooz.com/#organization",
+          "name": "Neurooz",
+          "url": "https://neurooz.com/",
+          "logo": "https://neurooz.com/neurooz-logo.png"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://neurooz.com/#website",
+          "name": "Neurooz",
+          "url": "https://neurooz.com/",
+          "description": "Neurooz is for ADHD and neurodivergent minds. Capture a tornado of thoughts, pause impulse spending, and take one small next step when starting feels too big.",
+          "publisher": { "@id": "https://neurooz.com/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Neurooz",
+          "applicationCategory": "LifestyleApplication",
+          "operatingSystem": "Web",
+          "url": "https://neurooz.com/",
+          "image": "https://neurooz.com/neurooz-logo.png",
+          "description": "Neurooz is for ADHD and neurodivergent minds. Capture a tornado of thoughts, pause impulse spending, and take one small next step when starting feels too big."
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>
+    <noscript>
+      <main>
+        <p>For ADHD, autism, AuDHD, and other neurodivergent minds</p>
+        <h1>When your brain feels like a tornado</h1>
+        <p>Neurooz is a productivity and financial-guardian app for the moments thoughts will not stay put, a task feels too big to start, and money leaves before you can stop it. Dump the storm, hold the impulse, and take one small step.</p>
+        <p><a href="https://neurooz.com/">https://neurooz.com/</a></p>
+      </main>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <!--
+      2026-11-14: retired the Twitter widgets script. It is a third-party marketing
+      embed and is not part of the product.
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    -->
 </body>
 </html>
