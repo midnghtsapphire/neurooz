@@ -1,0 +1,6 @@
+# 2026-11-16 kimi-agent: pin LF line endings repo-wide.
+# Why: public/sitemap.xml was checked out with CRLF on Windows (core.autocrlf=true)
+# while src/seo/site.ts renderSitemap() emits \n, so site.test.ts failed with an
+# invisible diff (identical-looking lines, different bytes). Additive file; nothing deleted.
+# If a file legitimately needs CRLF, add an exception line below.
+* text=auto eol=lf
